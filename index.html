@@ -1,0 +1,1985 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>CrossLink — Bushing Pipeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+
+  <style>
+/* Cast Parts Bushing Tracker — wireframe styles
+   Vibe: warm paper, sketchy lines, one orange accent, monospace annotations */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --paper:   #fffef5;
+  --paper-2: #faf8ec;
+  --paper-3: #f3efde;
+  --ink:     #1a1713;
+  --ink-2:   #4a423a;
+  --ink-3:   #8a7f72;
+  --line:    #2a2420;
+  --accent:  #d97757;
+  --accent-2:#b9562f;
+  --warn:    #c8923a;
+  --ok:      #5d7a3a;
+
+  --hand: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --title: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); font-family: var(--hand); }
+body {
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(217,119,87,0.04), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(217,119,87,0.03), transparent 40%);
+  min-height: 100vh;
+}
+
+/* Top bar */
+.topbar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 24px;
+  border-bottom: 1.5px solid var(--line);
+  background: var(--paper);
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar .brand { font-family: var(--title); font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.topbar .brand span { font-family: var(--mono); font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 1px; margin-left: 8px; }
+.topbar .crumbs { font-family: var(--mono); font-size: 12px; color: var(--ink-3); flex: 1; }
+.topbar .crumbs a { color: var(--ink-2); text-decoration: none; border-bottom: 1px dotted var(--ink-3); cursor: pointer; }
+.topbar .crumbs a:hover { color: var(--accent-2); }
+.topbar .presence { display: flex; gap: 4px; align-items: center; }
+.topbar .presence-label { font-family: var(--mono); font-size: 10px; color: var(--ink-3); margin-right: 6px; text-transform: uppercase; }
+
+/* Nav tabs */
+.navtabs { display: flex; gap: 4px; padding: 0 24px; border-bottom: 1.5px solid var(--line); background: var(--paper); }
+.navtab {
+  font-family: var(--hand); font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
+  padding: 10px 18px 8px; cursor: pointer;
+  border: 1.5px solid transparent; border-bottom: none;
+  margin-bottom: -1.5px;
+  color: var(--ink-2);
+  background: transparent;
+  position: relative;
+}
+.navtab:hover { color: var(--ink); }
+.navtab.active {
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink);
+  border-radius: 8px 10px 0 0;
+}
+.navtab.active::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1.5px; height: 3px; background: var(--paper);
+}
+
+/* Avatars */
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  border: 1.5px solid var(--line);
+  background: var(--paper-2);
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.avatar.sm { width: 22px; height: 22px; font-size: 9px; }
+.avatar.lg { width: 40px; height: 40px; font-size: 13px; }
+.avatar.viewing { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ok); }
+
+.avatar.mike     { background: #f4d9c4; }
+.avatar.fahim    { background: #c9e0e8; }
+.avatar.ahmad    { background: #d2e3c1; }
+.avatar.jianming { background: #dfd0e8; }
+
+/* Sketchy card */
+.sketch {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 6px 10px 6px 12px;
+  padding: 16px;
+  position: relative;
+}
+.sketch.paper-2 { background: var(--paper-2); }
+.sketch.paper-3 { background: var(--paper-3); }
+.sketch.dashed { border-style: dashed; }
+.sketch.accent { border-color: var(--accent-2); }
+
+.sketch h3 { font-family: var(--title); font-size: 18px; margin: 0 0 4px; font-weight: 700; letter-spacing: -0.01em; }
+.sketch h4 { font-family: var(--hand); font-size: 12px; margin: 0 0 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--ink-3); }
+.sketch .sublabel { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 1px; }
+
+/* Priority + stage pills */
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 2px 8px; border: 1.2px solid var(--line); border-radius: 10px;
+  text-transform: uppercase; letter-spacing: .5px;
+  background: var(--paper);
+}
+.pill.stage-new      { background: #fff; }
+.pill.stage-eng      { background: #e4ebd6; }
+.pill.stage-drawing  { background: #d7e5ec; }
+.pill.stage-approved { background: #cfe5d0; }
+.pill.stage-costing  { background: #e3d5ed; }
+.pill.stage-pricing  { background: #f3d9c1; }
+.pill.stage-quoted   { background: #f6e0ae; }
+.pill.stage-po       { background: #1a1713; color: #fffef5; border-color: #1a1713; }
+
+.pill.prio-high { background: var(--accent); color: #fff; border-color: var(--accent-2); }
+.pill.prio-med  { background: var(--paper); color: var(--ink); }
+.pill.prio-low  { background: var(--paper-3); color: var(--ink-3); }
+
+.pill.overdue { background: var(--accent); color: white; border-color: var(--accent-2); }
+.pill.tier-A { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pill.tier-B { background: var(--paper-3); }
+.pill.tier-C { background: var(--paper); color: var(--ink-3); }
+
+/* Monospace tag */
+.mono { font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+.mono-sm { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+
+/* Annotation arrow/note */
+.note {
+  font-family: var(--hand); font-size: 13px; color: var(--accent-2);
+  font-style: italic;
+}
+
+/* Buttons */
+button.btn {
+  font-family: var(--hand); font-size: 13px; font-weight: 600;
+  background: var(--paper); color: var(--ink);
+  border: 1.5px solid var(--line); border-radius: 4px 10px 6px 12px;
+  padding: 6px 14px; cursor: pointer;
+  transition: transform .08s;
+}
+button.btn:hover { background: var(--paper-2); transform: translate(-1px,-1px); box-shadow: 2px 2px 0 var(--line); }
+button.btn.primary { background: var(--accent); color: white; border-color: var(--accent-2); }
+button.btn.primary:hover { background: var(--accent-2); }
+button.btn.sm { font-size: 12px; padding: 3px 10px; }
+
+/* Scrollbar polish */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--ink-3); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Layout */
+.content { padding: 20px 24px 80px; max-width: 1600px; margin: 0 auto; }
+.row { display: flex; gap: 16px; }
+.col { display: flex; flex-direction: column; gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+
+/* Dashboard v1 — lanes by person */
+.lane {
+  background: var(--paper-2);
+  border: 1.5px solid var(--line);
+  border-radius: 8px 12px 8px 14px;
+  padding: 12px;
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 300px;
+}
+.lane-header { display: flex; align-items: center; gap: 10px; padding-bottom: 8px; border-bottom: 1.2px dashed var(--ink-3); }
+.lane-header .name { font-family: var(--title); font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+.lane-header .role { font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; }
+.lane-header .count { margin-left: auto; font-family: var(--mono); font-size: 11px; background: var(--paper); border: 1.2px solid var(--line); padding: 2px 8px; border-radius: 10px; }
+
+.inquiry-card {
+  background: var(--paper);
+  border: 1.2px solid var(--line);
+  border-radius: 4px 8px 4px 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: transform .08s;
+  position: relative;
+}
+.inquiry-card:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink-3); }
+.inquiry-card.overdue { border-color: var(--accent-2); border-left-width: 4px; }
+.inquiry-card.stuck { background: repeating-linear-gradient(135deg, var(--paper) 0 6px, var(--paper-3) 6px 7px); }
+.inquiry-card .top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+.inquiry-card .account { font-family: var(--hand); font-weight: 600; font-size: 13px; }
+.inquiry-card .part { font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+.inquiry-card .bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 11px; font-family: var(--mono); color: var(--ink-3); }
+.inquiry-card .newdot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); position: absolute; top: 8px; right: 8px; }
+
+/* Activity feed */
+.activity-item {
+  display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--ink-3);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-item .body { flex: 1; }
+.activity-item .meta { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+.activity-item .text { font-family: var(--hand); font-size: 13px; margin-top: 2px; line-height: 1.5; }
+
+/* Dashboard v2 — list view */
+.tbl { width: 100%; border-collapse: collapse; font-family: var(--hand); font-size: 13px; }
+.tbl th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-3); text-align: left; padding: 10px 10px; border-bottom: 1.5px solid var(--line); font-weight: 500; }
+.tbl td { padding: 10px 10px; border-bottom: 1px dashed var(--ink-3); vertical-align: middle; }
+.tbl tbody tr:hover { background: var(--paper-2); cursor: pointer; }
+.tbl tbody tr.overdue-row td:first-child { border-left: 3px solid var(--accent-2); }
+
+/* Dashboard v3 — kanban */
+.kanban { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+.kanban-col {
+  min-width: 220px; flex: 1;
+  background: var(--paper-2);
+  border: 1.2px solid var(--line);
+  border-radius: 6px 10px;
+  padding: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.kanban-col .col-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; padding-bottom: 6px; border-bottom: 1px dashed var(--ink-3); }
+.kanban-col .col-head .lbl { font-family: var(--mono); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.kanban-col .col-head .ct { font-family: var(--mono); font-size: 11px; background: var(--paper); border: 1px solid var(--line); padding: 1px 6px; border-radius: 8px; }
+
+/* Accounts list */
+.account-card {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 6px 12px 6px 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform .08s;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.account-card:hover { transform: translate(-2px,-2px); box-shadow: 3px 3px 0 var(--ink-3); }
+.account-card { position: relative; }
+.account-card .head { display: flex; align-items: flex-start; gap: 8px; padding-right: 70px; min-height: 32px; }
+.account-card .name { font-family: var(--title); font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+.account-card .head .pill { position: absolute; top: 14px; right: 14px; }
+.account-card .loc { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+.account-card .stats { display: flex; gap: 12px; font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+.account-card .stats b { color: var(--ink); font-size: 14px; font-family: var(--hand); font-weight: 600; }
+.account-card .stage-bar { display: flex; gap: 3px; }
+.account-card .stage-bar .seg { height: 6px; flex: 1; background: var(--paper-3); border-radius: 2px; }
+.account-card .stage-bar .seg.filled { background: var(--ink); }
+.account-card .stage-bar .seg.accent { background: var(--accent); }
+
+/* Account detail */
+.project-block {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 6px 12px 6px 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.project-block .phead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1.2px dashed var(--ink-3); }
+.project-block .pname { font-family: var(--title); font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+.project-block .pmeta { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+/* Inquiry detail */
+.inquiry-detail { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+.stage-track {
+  display: flex; align-items: center; gap: 4px;
+  padding: 16px; background: var(--paper-2);
+  border: 1.5px solid var(--line); border-radius: 8px;
+  overflow-x: auto;
+}
+.stage-track .step {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  flex: 1; min-width: 80px;
+  position: relative;
+}
+.stage-track .dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--line); background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+}
+.stage-track .step.done .dot { background: var(--ink); color: var(--paper); }
+.stage-track .step.current .dot { background: var(--accent); color: white; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(217,119,87,0.2); }
+.stage-track .step .lbl { font-family: var(--mono); font-size: 9px; text-align: center; color: var(--ink-3); text-transform: uppercase; letter-spacing: .5px; max-width: 80px; }
+.stage-track .step.current .lbl { color: var(--ink); font-weight: 700; }
+.stage-track .connector { flex: 0 0 auto; width: 20px; height: 1.5px; background: var(--line); margin-top: -16px; }
+.stage-track .connector.done { background: var(--ink); height: 2px; }
+
+.fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+.field .k { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink-3); letter-spacing: 1px; }
+.field .v { font-family: var(--hand); font-size: 14px; font-weight: 600; margin-top: 2px; }
+.field .v.mono { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+
+.thread-item { display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px dashed var(--ink-3); }
+.thread-item .body { flex: 1; }
+.thread-item .hdr { display: flex; gap: 8px; align-items: baseline; }
+.thread-item .who { font-family: var(--hand); font-weight: 600; font-size: 13px; }
+.thread-item .when { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
+.thread-item .txt { font-family: var(--hand); font-size: 14px; margin-top: 2px; line-height: 1.5; }
+
+.composer { display: flex; gap: 8px; margin-top: 12px; }
+.composer textarea {
+  flex: 1; font-family: var(--hand); font-size: 13px;
+  border: 1.5px solid var(--line); border-radius: 4px 8px 4px 10px;
+  padding: 8px 10px; background: var(--paper);
+  resize: vertical; min-height: 40px;
+}
+
+/* Tweaks panel */
+.tweaks-panel {
+  position: fixed; bottom: 16px; right: 16px;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 6px 14px 6px 14px;
+  padding: 14px 16px;
+  box-shadow: 4px 4px 0 var(--ink-3);
+  z-index: 100;
+  width: 260px;
+  display: none;
+}
+.tweaks-panel.open { display: block; }
+.tweaks-panel h4 { font-family: var(--title); font-size: 15px; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.01em; text-transform: none; color: var(--ink); }
+.tweaks-panel label { display: block; font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink-3); margin: 10px 0 4px; letter-spacing: 1px; }
+.tweaks-panel .seg { display: flex; gap: 0; border: 1.5px solid var(--line); border-radius: 4px; overflow: hidden; }
+.tweaks-panel .seg button { flex: 1; background: var(--paper); border: none; padding: 6px 4px; font-family: var(--hand); font-size: 12px; font-weight: 500; cursor: pointer; color: var(--ink-2); }
+.tweaks-panel .seg button.active { background: var(--ink); color: var(--paper); }
+.tweaks-panel .seg button + button { border-left: 1px solid var(--line); }
+
+/* Helpful misc */
+.empty { padding: 20px; text-align: center; color: var(--ink-3); font-family: var(--hand); font-size: 13px; }
+.hr-dashed { border: none; border-top: 1.2px dashed var(--ink-3); margin: 14px 0; }
+
+/* Dense mode */
+body.dense .inquiry-card { padding: 7px 10px; }
+body.dense .sketch { padding: 12px; }
+body.dense .project-block { padding: 12px; }
+body.dense .account-card { padding: 12px; }
+
+/* Presence hidden */
+body.hide-presence .avatar.viewing { box-shadow: none; }
+body.hide-presence .topbar .presence { display: none; }
+
+/* Mini-legend strip used at top of dashboard */
+.legend { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-family: var(--mono); font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 1px; }
+.legend .item { display: inline-flex; gap: 4px; align-items: center; }
+
+/* Dashboard KPI cards */
+.kpi { background: var(--paper); border: 1.5px solid var(--line); border-radius: 6px 10px 6px 10px; padding: 14px; }
+.kpi .big { font-family: var(--title); font-size: 32px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+.kpi .lbl { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink-3); letter-spacing: 1px; margin-top: 6px; }
+.kpi.accent { background: var(--accent); color: white; border-color: var(--accent-2); }
+.kpi.accent .lbl { color: rgba(255,255,255,0.85); }
+
+/* Scribbled underline for links */
+a.scribble { color: var(--accent-2); text-decoration: none; border-bottom: 1.5px solid var(--accent-2); cursor: pointer; }
+a.scribble:hover { background: rgba(217,119,87,0.1); }
+
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-10px); }
+  40%      { transform: translateX(10px); }
+  60%      { transform: translateX(-6px); }
+  80%      { transform: translateX(6px); }
+}
+.pin-dots { display:flex; gap:14px; justify-content:center; }
+.pin-dot  { width:14px; height:14px; border-radius:50%; border:2px solid var(--line); background:transparent; transition:background .12s; }
+.pin-dot.filled { background:var(--ink); }
+.pin-pad  { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:220px; }
+.pin-key  {
+  height:56px; font-family:var(--title); font-size:22px; font-weight:600;
+  border:1.5px solid var(--line); border-radius:4px 8px 4px 8px;
+  background:var(--paper); color:var(--ink); cursor:pointer; transition:transform .08s, background .08s;
+}
+.pin-key:hover  { background:var(--paper-2); transform:translate(-1px,-1px); box-shadow:2px 2px 0 var(--ink-3); }
+.pin-key.del    { font-size:18px; }
+.pin-key.empty  { border-color:transparent; background:transparent; cursor:default; pointer-events:none; }
+.login-wrap     { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px; }
+.profile-grid   { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+.profile-card   {
+  background:var(--paper); border:1.5px solid var(--line);
+  border-radius:6px 14px 6px 14px; padding:22px 28px;
+  cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:10px;
+  transition:transform .08s; min-width:110px;
+}
+.profile-card:hover { transform:translate(-2px,-2px); box-shadow:3px 3px 0 var(--ink-3); }
+.loader { display:flex; align-items:center; justify-content:center; height:100vh; font-family:var(--mono); font-size:13px; color:var(--ink-3); }
+
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Firebase init + seed data -->
+  <script>
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAscaA0slb9Q5GqwVhiu7hdwD6UZRoPFQ4",
+    authDomain:        "cp-tracker-e0be3.firebaseapp.com",
+    projectId:         "cp-tracker-e0be3",
+    storageBucket:     "cp-tracker-e0be3.firebasestorage.app",
+    messagingSenderId: "95734243152",
+    appId:             "1:95734243152:web:31737b4b776048afdd5655"
+  };
+  firebase.initializeApp(firebaseConfig);
+  window.db = firebase.firestore();
+
+    window.TWEAK_DEFAULTS = {
+      "dashboardVariant": "lanes",
+      "density": "comfortable",
+      "showPresence": true,
+      "startView": "dashboard"
+    };
+// Seed data for the Cast Parts Bushing tracker wireframe
+// Stages flow: new -> eng -> drawing -> approved -> costing -> pricing -> quoted -> po
+window.STAGES = [
+  { id: 'new',      label: 'New Inquiry',        owner: 'Fahim',    short: 'NEW' },
+  { id: 'eng',      label: 'Engineering Review', owner: 'Ahmad',    short: 'ENG' },
+  { id: 'drawing',  label: 'Drawing Presented',  owner: 'Fahim',    short: 'DWG' },
+  { id: 'approved', label: 'Customer Approved',  owner: 'Fahim',    short: 'APV' },
+  { id: 'costing',  label: 'Costing',            owner: 'Jianming', short: 'COST' },
+  { id: 'pricing',  label: 'Sales Pricing',      owner: 'Mike',     short: 'PRICE' },
+  { id: 'quoted',   label: 'Quote Issued',       owner: 'Fahim',    short: 'QTE' },
+  { id: 'po',       label: 'PO Received',        owner: 'Mike',     short: 'PO' }
+];
+
+window.TEAM = [
+  { id: 'mike',     name: 'Mike',     role: 'Sales (Senior)',   initials: 'MK', hue: 28  },
+  { id: 'fahim',    name: 'Fahim',    role: 'Sales / Service',  initials: 'FH', hue: 195 },
+  { id: 'ahmad',    name: 'Ahmad',    role: 'Engineering',      initials: 'AH', hue: 135 },
+  { id: 'jianming', name: 'Jianming', role: 'Purchasing',       initials: 'JM', hue: 280 }
+];
+
+// Helper: days ago -> ISO-ish label
+const d = (daysAgo) => {
+  const t = new Date(2026, 3, 17); // April 17, 2026
+  t.setDate(t.getDate() - daysAgo);
+  return t.toISOString().slice(0,10);
+};
+
+window.ACCOUNTS = [
+  {
+    id: 'vantran', name: 'VanTran', tier: 'A', type: 'active', location: 'Waco, TX',
+    notes: 'Repeat customer. Prefers email updates. Dave in procurement is main contact.',
+    projects: [
+      {
+        id: 'vt-25kva', name: '25 kVA Pole-Mount Program', opened: d(42),
+        inquiries: [
+          { id: 'VT-1042', part: 'HV-BSH-25-A', qty: 40, stage: 'po',      priority: 'high', due: d(-14), updated: d(1), updatedBy: 'mike',
+            specs: '25 kV class, porcelain, ANSI cantilever 2500 lb',
+            target: '$185/ea', cost: '$142', price: '$192', leadtime: '8-10 wk',
+            drawing: 'DWG-HV25A-R3',
+            activity: [
+              { by:'mike',  at:d(1),  text:'PO #VT-88214 received. Handing to ops for production slotting.' },
+              { by:'fahim', at:d(3),  text:'Customer verbally confirmed. PO expected Friday.' },
+              { by:'fahim', at:d(9),  text:'Quote VT-Q1042 issued. Lead time 8-10 wk from PO.' },
+              { by:'mike',  at:d(11), text:'Priced at $192/ea. 26% margin acceptable given repeat volume.' },
+              { by:'jianming', at:d(14), text:'Costing complete. Foundry A quoted $142/ea FOB Waco.' }
+            ] },
+          { id: 'VT-1051', part: 'HV-BSH-25-B', qty: 12, stage: 'pricing', priority: 'med',  due: d(-2),  updated: d(0), updatedBy: 'jianming',
+            specs: '25 kV class, silicone rubber housing, lighter cantilever',
+            target: '$210/ea', cost: '$168', price: '—', leadtime: '—',
+            drawing: 'DWG-HV25B-R1',
+            waitingOn: 'mike',
+            activity: [
+              { by:'jianming', at:d(0), text:'Cost back from Foundry B: $168/ea. Foundry A declined (capacity).' },
+              { by:'fahim',    at:d(4), text:'Ahmad signed off on drawing. Sent to Jianming for cost.' },
+              { by:'ahmad',    at:d(5), text:'Drawing R1 ok. Flagged gasket spec as non-standard.' }
+            ] },
+          { id: 'VT-1058', part: 'HV-BSH-25-C', qty: 8,  stage: 'costing', priority: 'low',  due: d(12), updated: d(2), updatedBy: 'jianming',
+            specs: '25 kV, epoxy cast, short barrel variant',
+            target: '$240/ea', cost: '—', price: '—', leadtime: '—',
+            activity: [
+              { by:'jianming', at:d(2), text:'Out to Foundry A and C. Expect cost next week.' },
+              { by:'ahmad',    at:d(6), text:'Drawing approved by customer. Over to purchasing.' }
+            ] }
+        ]
+      },
+      {
+        id: 'vt-spare', name: 'Spare Parts / Misc', opened: d(120),
+        inquiries: [
+          { id: 'VT-1061', part: 'LV-GSKT-08', qty: 200, stage: 'new', priority: 'low', due: d(-20), updated: d(0), updatedBy: 'fahim',
+            specs: 'Replacement gaskets for legacy bushings',
+            activity: [ { by:'fahim', at:d(0), text:'Dave emailed re: replacement gaskets. Need to check if we can source.' } ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'hitachi-qc', name: 'Hitachi QC', tier: 'A', type: 'prospect', location: 'Guelph, ON',
+    notes: 'Strict spec compliance. Require full test reports with every shipment.',
+    projects: [
+      {
+        id: 'hqc-138', name: '138 kV Bushing Qualification', opened: d(60),
+        inquiries: [
+          { id: 'HQC-2201', part: 'HV-BSH-138-STD', qty: 6, stage: 'eng', priority: 'high', due: d(5), updated: d(1), updatedBy: 'ahmad',
+            specs: '138 kV, IEEE C57.19.01, partial discharge < 10 pC',
+            target: '—', cost: '—', price: '—', leadtime: '—',
+            waitingOn: 'ahmad',
+            activity: [
+              { by:'ahmad', at:d(1), text:'Reviewing IEEE spec. Need to confirm PD test capability with foundry.' },
+              { by:'fahim', at:d(3), text:'Forwarded full RFQ package to Ahmad. Customer wants prelim drawing in 2 wk.' },
+              { by:'mike',  at:d(3), text:'Priority. This is the qualification batch — if we nail it, follow-on is 200 units/yr.' }
+            ] },
+          { id: 'HQC-2208', part: 'HV-BSH-138-GRD', qty: 2, stage: 'new', priority: 'med', due: d(-1), updated: d(0), updatedBy: 'fahim',
+            specs: 'Grounding bushing, 138 kV',
+            waitingOn: 'mike',
+            activity: [
+              { by:'fahim', at:d(0), text:'Inquiry in. Need Mike to confirm scope before I reply to customer.' }
+            ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'hitachi-alamo', name: 'Hitachi ALAMO', tier: 'A', type: 'active', location: 'Alamo, TN',
+    notes: 'Large-frame power transformer plant. High-volume potential.',
+    projects: [
+      {
+        id: 'hal-230', name: '230 kV Program', opened: d(95),
+        inquiries: [
+          { id: 'HAL-3301', part: 'HV-BSH-230-OIP', qty: 4, stage: 'drawing', priority: 'high', due: d(7), updated: d(0), updatedBy: 'fahim',
+            specs: 'Oil-impregnated paper, 230 kV, extended creepage',
+            drawing: 'DWG-HV230-OIP-R2',
+            waitingOn: 'client',
+            activity: [
+              { by:'fahim', at:d(0), text:'Drawing R2 sent to customer. Waiting on approval.' },
+              { by:'ahmad', at:d(2), text:'R2 addresses creepage concerns from R1 markup.' },
+              { by:'ahmad', at:d(8), text:'R1 ready. Fahim to send.' }
+            ] },
+          { id: 'HAL-3312', part: 'HV-BSH-230-RIP', qty: 4, stage: 'approved', priority: 'high', due: d(-3), updated: d(2), updatedBy: 'fahim',
+            specs: 'Resin-impregnated, 230 kV',
+            drawing: 'DWG-HV230-RIP-R1',
+            waitingOn: 'jianming',
+            activity: [
+              { by:'fahim', at:d(2), text:'Customer approved R1. Handing to Jianming.' },
+              { by:'ahmad', at:d(5), text:'Drawing R1 issued.' }
+            ] }
+        ]
+      },
+      {
+        id: 'hal-misc', name: 'Retrofit / Misc', opened: d(30),
+        inquiries: [
+          { id: 'HAL-3320', part: 'HV-BSH-115-RETRO', qty: 3, stage: 'quoted', priority: 'med', due: d(-18), updated: d(4), updatedBy: 'fahim',
+            specs: '115 kV retrofit, legacy flange pattern',
+            price: '$1,840/ea', leadtime: '12 wk',
+            activity: [
+              { by:'fahim', at:d(4), text:'Quote HAL-Q3320 issued. Customer reviewing.' }
+            ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'hitachi-mo', name: 'Hitachi MO', tier: 'B', type: 'prospect', location: 'Jefferson City, MO',
+    notes: 'Newer relationship. Good for mid-volume jobs.',
+    projects: [
+      {
+        id: 'hmo-69', name: '69 kV Standard', opened: d(45),
+        inquiries: [
+          { id: 'HMO-4401', part: 'HV-BSH-69-STD', qty: 20, stage: 'costing', priority: 'med', due: d(-9), updated: d(5), updatedBy: 'jianming',
+            specs: '69 kV, porcelain, standard flange',
+            target: '$320/ea',
+            waitingOn: 'jianming',
+            activity: [
+              { by:'jianming', at:d(5), text:'Only one quote back so far. Chasing Foundry C.' },
+              { by:'fahim',    at:d(10), text:'Drawing approved. Over to costing.' }
+            ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'siemens-ca', name: 'Siemens Canada', tier: 'A', type: 'prospect', location: 'Trois-Rivières, QC',
+    notes: 'Bilingual comms preferred. Formal RFQ process.',
+    projects: [
+      {
+        id: 'sca-dist', name: 'Distribution Class Program', opened: d(20),
+        inquiries: [
+          { id: 'SCA-5501', part: 'DIST-BSH-15', qty: 150, stage: 'eng', priority: 'high', due: d(4), updated: d(0), updatedBy: 'ahmad',
+            specs: '15 kV distribution, volume program',
+            waitingOn: 'ahmad',
+            activity: [
+              { by:'ahmad', at:d(0), text:'Looking at tooling amortization. Will discuss with Jianming.' },
+              { by:'mike',  at:d(2), text:'150 units is a real program. Ahmad please prioritize.' }
+            ] },
+          { id: 'SCA-5504', part: 'DIST-BSH-25', qty: 75, stage: 'new', priority: 'med', due: d(0), updated: d(0), updatedBy: 'fahim',
+            specs: '25 kV distribution, same family',
+            waitingOn: 'mike',
+            activity: [
+              { by:'fahim', at:d(0), text:'Companion inquiry to SCA-5501. Awaiting Mike scope review.' }
+            ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'sunbelt', name: 'Sunbelt', tier: 'B', type: 'active', location: 'Temple, GA',
+    notes: 'Rebuild shop. Often needs odd legacy parts.',
+    projects: [
+      {
+        id: 'sb-legacy', name: 'Legacy Rebuilds', opened: d(75),
+        inquiries: [
+          { id: 'SB-6601', part: 'LGCY-BSH-46', qty: 2, stage: 'pricing', priority: 'low', due: d(-25), updated: d(7), updatedBy: 'mike',
+            specs: '46 kV vintage, pattern on file',
+            cost: '$880',
+            waitingOn: 'mike',
+            activity: [
+              { by:'mike',     at:d(7), text:'Thinking $1,250 — need to confirm freight.' },
+              { by:'jianming', at:d(14), text:'Cost $880/ea. Freight TBD.' }
+            ] },
+          { id: 'SB-6605', part: 'LGCY-GSKT-46', qty: 10, stage: 'po', priority: 'low', due: d(-60), updated: d(12), updatedBy: 'mike',
+            specs: 'Companion gasket set',
+            price: '$42/ea', leadtime: '4 wk',
+            activity: [ { by:'mike', at:d(12), text:'PO SB-44821 received.' } ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'shsole', name: 'SH Sole Tech Co', tier: 'C', type: 'prospect', location: 'Busan, KR',
+    notes: 'Export. Time zone matters — reply windows are tight.',
+    projects: [
+      {
+        id: 'shs-export', name: 'Export Inquiries', opened: d(15),
+        inquiries: [
+          { id: 'SHS-7701', part: 'HV-BSH-72-EXP', qty: 30, stage: 'new', priority: 'med', due: d(-1), updated: d(1), updatedBy: 'fahim',
+            specs: '72.5 kV, IEC 60137',
+            waitingOn: 'mike',
+            activity: [
+              { by:'fahim', at:d(1), text:'New inquiry. IEC spec — need Mike to confirm if we pursue.' }
+            ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'teamchain', name: 'Teamchain', tier: 'C', type: 'prospect', location: 'Houston, TX',
+    notes: 'Distributor. Price-sensitive.',
+    projects: [
+      {
+        id: 'tc-stock', name: 'Stock Items', opened: d(55),
+        inquiries: [
+          { id: 'TC-8801', part: 'HV-BSH-15-STK', qty: 50, stage: 'quoted', priority: 'low', due: d(-15), updated: d(9), updatedBy: 'fahim',
+            specs: '15 kV stock item',
+            price: '$78/ea', leadtime: 'stock',
+            activity: [ { by:'fahim', at:d(9), text:'Quote issued. No response yet.' } ] }
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'ces', name: 'CES Transformers', tier: 'B', type: 'prospect', location: 'Lethbridge, AB',
+    notes: 'Canadian prairies. Straightforward buyer.',
+    projects: [
+      {
+        id: 'ces-34', name: '34.5 kV Line', opened: d(38),
+        inquiries: [
+          { id: 'CES-9901', part: 'HV-BSH-34-STD', qty: 16, stage: 'drawing', priority: 'med', due: d(-6), updated: d(3), updatedBy: 'fahim',
+            specs: '34.5 kV, standard flange',
+            drawing: 'DWG-HV34-STD-R1',
+            waitingOn: 'client',
+            activity: [
+              { by:'fahim', at:d(3), text:'Drawing R1 to customer. Awaiting approval.' },
+              { by:'ahmad', at:d(6), text:'R1 issued.' }
+            ] },
+          { id: 'CES-9907', part: 'HV-BSH-34-HD', qty: 4, stage: 'eng', priority: 'low', due: d(-8), updated: d(11), updatedBy: 'ahmad',
+            specs: 'Heavy-duty cantilever variant',
+            waitingOn: 'ahmad',
+            activity: [
+              { by:'ahmad', at:d(11), text:'Cantilever spec is non-standard. Need to discuss with Fahim.' }
+            ] }
+        ]
+      }
+    ]
+  }
+];
+
+// Pre-compute useful aggregates
+window.DATA_UTILS = {
+  allInquiries() {
+    const out = [];
+    for (const a of window.ACCOUNTS) {
+      for (const p of a.projects) {
+        if (p.archived) continue;
+        for (const i of p.inquiries) {
+          if (i.archived) continue;
+          out.push({ ...i, accountId: a.id, accountName: a.name, projectId: p.id, projectName: p.name, tier: a.tier });
+        }
+      }
+    }
+    return out;
+  },
+  stageById(id) { return window.STAGES.find(s => s.id === id); },
+  teamById(id) { return window.TEAM.find(t => t.id === id); },
+  daysSince(dateStr) {
+    const today = new Date(2026, 3, 17);
+    const then = new Date(dateStr);
+    return Math.round((today - then) / (1000*60*60*24));
+  }
+};
+
+window.ACCOUNTS_SEED = JSON.parse(JSON.stringify(window.ACCOUNTS));
+
+  </script>
+
+  <script type="text/babel">
+
+const { useState, useEffect, useMemo, useRef } = React;
+
+function cls(...a) { return a.filter(Boolean).join(' '); }
+function daysSince(dateStr) { return window.DATA_UTILS.daysSince(dateStr); }
+function stage(id) { return window.DATA_UTILS.stageById(id); }
+function person(id) { return window.DATA_UTILS.teamById(id); }
+
+function dueLabel(due) {
+  const ds = daysSince(due);
+  if (ds > 0) return `${ds}d overdue`;
+  if (ds === 0) return 'due today';
+  return `due in ${-ds}d`;
+}
+function isOverdue(inq) { return daysSince(inq.due) > 0 && inq.stage !== 'po'; }
+function isStuck(inq)   { return daysSince(inq.updated) > 5 && !['po'].includes(inq.stage); }
+function owedBy(inq) {
+  if (inq.waitingOn === 'client') return null;
+  if (inq.waitingOn) return inq.waitingOn;
+  const s = stage(inq.stage);
+  return s ? s.owner.toLowerCase() : null;
+}
+
+function Avatar({ personId, size='md', viewing=false, title }) {
+  const p = person(personId);
+  if (!p) return null;
+  return (
+    <div className={cls('avatar', size==='sm'&&'sm', size==='lg'&&'lg', p.id, viewing&&'viewing')}
+         title={title || `${p.name} — ${p.role}${viewing?' (online)':''}`}>
+      {p.initials}
+    </div>
+  );
+}
+
+function StagePill({ stageId }) {
+  const s = stage(stageId);
+  if (!s) return null;
+  return <span className={`pill stage-${stageId}`}>{s.short}</span>;
+}
+function PriorityPill({ priority }) {
+  return <span className={`pill prio-${priority}`}>{priority}</span>;
+}
+function TierPill({ tier }) {
+  return <span className={`pill tier-${tier}`}>Tier {tier}</span>;
+}
+
+function InquiryCard({ inq, onClick, showUnread=true }) {
+  const overdue = isOverdue(inq);
+  const stuck   = isStuck(inq);
+  const owed    = owedBy(inq);
+  const unread  = daysSince(inq.updated) <= 1 && showUnread;
+  return (
+    <div className={cls('inquiry-card', overdue&&'overdue', stuck&&'stuck')} onClick={onClick}>
+      {unread && <div className="newdot" />}
+      <div className="top">
+        <StagePill stageId={inq.stage} />
+        <PriorityPill priority={inq.priority} />
+        <span className="mono-sm">#{inq.id}</span>
+      </div>
+      <div className="account">{inq.accountName}</div>
+      <div className="part">{inq.part} · qty {inq.qty}</div>
+      <div className="bottom">
+        <span>{owed ? <>&#8594; {person(owed)?.name||owed}</> : inq.waitingOn==='client' ? '→ customer' : '—'}</span>
+        <span className={overdue?'note':''} style={overdue?{color:'#b9562f'}:{}}>
+          {dueLabel(inq.due)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function StageTrack({ currentStageId }) {
+  const curIdx = window.STAGES.findIndex(s => s.id === currentStageId);
+  return (
+    <div className="stage-track">
+      {window.STAGES.map((s, i) => {
+        const done    = i < curIdx;
+        const current = i === curIdx;
+        return (
+          <React.Fragment key={s.id}>
+            <div className={cls('step', done&&'done', current&&'current')}>
+              <div className="dot">{i+1}</div>
+              <div className="lbl">{s.label}</div>
+            </div>
+            {i < window.STAGES.length-1 && <div className={cls('connector', done&&'done')} />}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+}
+
+function ActivityThread({ activity }) {
+  if (!activity?.length) return <div className="empty">No activity yet.</div>;
+  return (
+    <div>
+      {activity.map((a, i) => {
+        const p = person(a.by);
+        return (
+          <div key={i} className="thread-item">
+            <Avatar personId={a.by} size="sm" />
+            <div className="body">
+              <div className="hdr">
+                <span className="who">{p?.name||a.by}</span>
+                <span className="when">{a.at}</span>
+              </div>
+              <div className="txt">{a.text}</div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function TopBar({ crumbs, currentUser, onlineUsers, onLogout }) {
+  return (
+    <div className="topbar">
+      <div className="brand">CrossLink <span>Bushing Pipeline</span></div>
+      <div className="crumbs">
+        {crumbs.map((c, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <span> / </span>}
+            {c.onClick ? <a onClick={c.onClick}>{c.label}</a> : <span>{c.label}</span>}
+          </React.Fragment>
+        ))}
+      </div>
+      <div className="presence">
+        <span className="presence-label">online</span>
+        {window.TEAM.map(t => (
+          <Avatar key={t.id} personId={t.id} size="sm" viewing={!!(onlineUsers&&onlineUsers[t.id])} />
+        ))}
+      </div>
+      {currentUser && (
+        <div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8,paddingLeft:12,borderLeft:'1px dashed var(--ink-3)'}}>
+          <Avatar personId={currentUser.id} size="sm" />
+          <span style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)'}}>{currentUser.name}</span>
+          <button className="btn sm" onClick={onLogout} style={{fontSize:10,padding:'2px 8px'}}>sign out</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NavTabs({ current, onChange }) {
+  const tabs = [
+    { id:'dashboard', label:'Dashboard' },
+    { id:'accounts',  label:'Accounts'  },
+    { id:'all',       label:'All Inquiries' }
+  ];
+  return (
+    <div className="navtabs">
+      {tabs.map(t => (
+        <button key={t.id}
+                className={cls('navtab', current===t.id&&'active')}
+                onClick={() => onChange(t.id)}>
+          {t.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+window.Wire = { cls, daysSince, stage, person, dueLabel, isOverdue, isStuck, owedBy,
+                Avatar, StagePill, PriorityPill, TierPill, InquiryCard, StageTrack,
+                ActivityThread, TopBar, NavTabs };
+
+  </script>
+
+  <script type="text/babel">
+// Dashboard views — 3 variations
+const { useState: useStateD, useMemo: useMemoD } = React;
+const { Avatar: AvD, StagePill: SPD, PriorityPill: PPD, InquiryCard: ICD,
+        cls: clsD, daysSince: dsD, isOverdue: odD, isStuck: stkD, owedBy: owD,
+        person: persD } = window.Wire;
+
+// ========== DASHBOARD V1: Swim lanes by person ==========
+function DashboardLanes({ onOpenInquiry }) {
+  const all = useMemoD(() => window.DATA_UTILS.allInquiries(), []);
+
+  const byPerson = useMemoD(() => {
+    const map = {};
+    for (const t of window.TEAM) map[t.id] = [];
+    for (const inq of all) {
+      if (inq.stage === 'po') continue; // completed
+      const owed = owD(inq);
+      if (owed && map[owed]) map[owed].push(inq);
+    }
+    // sort: overdue first, then by due date
+    for (const k of Object.keys(map)) {
+      map[k].sort((a,b) => {
+        const ao = odD(a) ? 0 : 1;
+        const bo = odD(b) ? 0 : 1;
+        if (ao !== bo) return ao - bo;
+        return dsD(a.due) > dsD(b.due) ? -1 : 1;
+      });
+    }
+    return map;
+  }, [all]);
+
+  const waitingOnClient = all.filter(i => i.waitingOn === 'client');
+  const recentActivity = useMemoD(() => {
+    const items = [];
+    for (const inq of all) {
+      for (const a of inq.activity || []) {
+        items.push({ ...a, inq });
+      }
+    }
+    items.sort((a,b) => a.at < b.at ? 1 : -1);
+    return items.slice(0, 8);
+  }, [all]);
+
+  return (
+    <div className="col">
+      {/* KPI strip */}
+      <div className="grid-4">
+        <KPI big={all.filter(i => odD(i)).length} lbl="overdue" accent />
+        <KPI big={all.filter(i => i.stage === 'new').length} lbl="new · needs triage" />
+        <KPI big={all.filter(i => stkD(i)).length} lbl="stuck > 5 days" />
+        <KPI big={all.filter(i => i.stage === 'po').length} lbl="PO received" />
+      </div>
+
+      <div className="sketch">
+        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: 8}}>
+          <h3>Who owes what</h3>
+          <div className="legend">
+            <span className="item"><span className="pill prio-high">HIGH</span> priority</span>
+            <span className="item" style={{color:'#b9562f'}}>■ red left edge = overdue</span>
+            <span className="item">░ hatched = stuck &gt; 5 days</span>
+          </div>
+        </div>
+        <div className="grid-4">
+          {window.TEAM.map(p => (
+            <div key={p.id} className="lane">
+              <div className="lane-header">
+                <AvD personId={p.id} size="lg" />
+                <div>
+                  <div className="name">{p.name}</div>
+                  <div className="role">{p.role}</div>
+                </div>
+                <div className="count">{byPerson[p.id].length}</div>
+              </div>
+              {byPerson[p.id].length === 0
+                ? <div className="empty">all clear ✓</div>
+                : byPerson[p.id].map(inq => (
+                  <ICD key={inq.id} inq={inq} onClick={() => onOpenInquiry(inq)} />
+                ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid-2">
+        <div className="sketch">
+          <h3>Waiting on customer</h3>
+          <div className="mono-sm" style={{marginBottom: 10}}>Nothing for us to action — but follow up if stale.</div>
+          {waitingOnClient.length === 0
+            ? <div className="empty">none</div>
+            : <div className="col" style={{gap: 8}}>
+                {waitingOnClient.map(inq => (
+                  <ICD key={inq.id} inq={inq} onClick={() => onOpenInquiry(inq)} />
+                ))}
+              </div>}
+        </div>
+
+        <div className="sketch">
+          <h3>Recent activity</h3>
+          <div className="mono-sm" style={{marginBottom: 6}}>Last 8 updates across all inquiries</div>
+          {recentActivity.map((a, i) => (
+            <div key={i} className="activity-item">
+              <AvD personId={a.by} size="sm" />
+              <div className="body">
+                <div className="meta">
+                  {persD(a.by)?.name || a.by} · {a.at} · <a className="scribble" onClick={() => onOpenInquiry(a.inq)}>
+                    {a.inq.accountName} / {a.inq.id}
+                  </a>
+                </div>
+                <div className="text">{a.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function KPI({ big, lbl, accent }) {
+  return (
+    <div className={clsD('kpi', accent && 'accent')}>
+      <div className="big">{big}</div>
+      <div className="lbl">{lbl}</div>
+    </div>
+  );
+}
+
+// ========== DASHBOARD V2: Single prioritized action list ==========
+function DashboardList({ onOpenInquiry }) {
+  const all = useMemoD(() => window.DATA_UTILS.allInquiries(), []);
+  const [filter, setFilter] = useStateD('all');
+
+  const active = all.filter(i => i.stage !== 'po');
+  const scored = useMemoD(() => {
+    const withScore = active.map(inq => {
+      let score = 0;
+      if (odD(inq)) score += 100 + dsD(inq.due);
+      if (inq.priority === 'high') score += 40;
+      if (inq.priority === 'med') score += 15;
+      if (stkD(inq)) score += 20;
+      if (inq.stage === 'new') score += 10;
+      return { ...inq, score };
+    });
+    withScore.sort((a,b) => b.score - a.score);
+    return withScore;
+  }, [active]);
+
+  const filtered = useMemoD(() => {
+    if (filter === 'all') return scored;
+    if (filter === 'client') return scored.filter(i => i.waitingOn === 'client');
+    return scored.filter(i => owD(i) === filter);
+  }, [scored, filter]);
+
+  return (
+    <div className="col">
+      <div className="grid-4">
+        <KPI big={all.filter(i => odD(i)).length} lbl="overdue" accent />
+        <KPI big={all.filter(i => i.stage === 'new').length} lbl="new · needs triage" />
+        <KPI big={all.filter(i => stkD(i)).length} lbl="stuck > 5 days" />
+        <KPI big={all.filter(i => i.waitingOn === 'client').length} lbl="waiting on customer" />
+      </div>
+
+      <div className="sketch">
+        <div style={{display:'flex', alignItems:'center', gap: 12, marginBottom: 12, flexWrap:'wrap'}}>
+          <h3 style={{margin: 0}}>Prioritized action queue</h3>
+          <div className="mono-sm">filter by owner:</div>
+          <FilterBtn active={filter==='all'} onClick={() => setFilter('all')}>all</FilterBtn>
+          {window.TEAM.map(t => (
+            <FilterBtn key={t.id} active={filter===t.id} onClick={() => setFilter(t.id)}>
+              <AvD personId={t.id} size="sm" /> <span>{t.name}</span>
+            </FilterBtn>
+          ))}
+          <FilterBtn active={filter==='client'} onClick={() => setFilter('client')}>customer</FilterBtn>
+        </div>
+
+        <table className="tbl">
+          <thead>
+            <tr>
+              <th>inq #</th>
+              <th>account / part</th>
+              <th>stage</th>
+              <th>priority</th>
+              <th>owes</th>
+              <th>due</th>
+              <th>last update</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(inq => {
+              const owed = owD(inq);
+              return (
+                <tr key={inq.id} className={odD(inq) ? 'overdue-row' : ''} onClick={() => onOpenInquiry(inq)}>
+                  <td className="mono">#{inq.id}</td>
+                  <td>
+                    <div style={{fontWeight:700}}>{inq.accountName}</div>
+                    <div className="mono-sm">{inq.part} · qty {inq.qty}</div>
+                  </td>
+                  <td><SPD stageId={inq.stage} /></td>
+                  <td><PPD priority={inq.priority} /></td>
+                  <td>{owed ? <div style={{display:'flex',alignItems:'center',gap:6}}><AvD personId={owed} size="sm" /><span>{persD(owed)?.name}</span></div> : (inq.waitingOn === 'client' ? <span className="mono-sm">customer</span> : '—')}</td>
+                  <td className={odD(inq) ? 'note' : ''}>{window.Wire.dueLabel(inq.due)}</td>
+                  <td className="mono-sm">{inq.updated} · {persD(inq.updatedBy)?.name}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function FilterBtn({ active, onClick, children }) {
+  return (
+    <button className={clsD('btn', 'sm')}
+            style={active ? {background: '#1a1713', color:'#fffef5'} : {}}
+            onClick={onClick}>
+      <span style={{display:'inline-flex', gap:4, alignItems:'center'}}>{children}</span>
+    </button>
+  );
+}
+
+// ========== DASHBOARD V3: Pipeline kanban ==========
+function DashboardKanban({ onOpenInquiry }) {
+  const all = useMemoD(() => window.DATA_UTILS.allInquiries(), []);
+  const active = all.filter(i => i.stage !== 'po');
+
+  const byStage = useMemoD(() => {
+    const m = {};
+    for (const s of window.STAGES) m[s.id] = [];
+    for (const inq of active) m[inq.stage]?.push(inq);
+    for (const k of Object.keys(m)) {
+      m[k].sort((a,b) => dsD(a.due) > dsD(b.due) ? -1 : 1);
+    }
+    return m;
+  }, [active]);
+
+  const recentActivity = useMemoD(() => {
+    const items = [];
+    for (const inq of all) for (const a of inq.activity || []) items.push({ ...a, inq });
+    items.sort((a,b) => a.at < b.at ? 1 : -1);
+    return items.slice(0, 6);
+  }, [all]);
+
+  return (
+    <div className="col">
+      <div className="grid-4">
+        <KPI big={all.filter(i => odD(i)).length} lbl="overdue" accent />
+        <KPI big={all.filter(i => i.stage === 'new').length} lbl="new · needs triage" />
+        <KPI big={all.filter(i => stkD(i)).length} lbl="stuck > 5 days" />
+        <KPI big={all.filter(i => i.stage === 'po').length} lbl="PO received" />
+      </div>
+
+      <div className="sketch">
+        <h3>Pipeline — by stage</h3>
+        <div className="mono-sm" style={{marginBottom: 10}}>Click a card to open the inquiry.</div>
+        <div className="kanban">
+          {window.STAGES.filter(s => s.id !== 'po').map(s => (
+            <div key={s.id} className="kanban-col">
+              <div className="col-head">
+                <div className="lbl">{s.label}</div>
+                <div className="ct">{byStage[s.id].length}</div>
+              </div>
+              <div className="mono-sm" style={{marginBottom: 4, fontSize: 9}}>owner: {s.owner}</div>
+              {byStage[s.id].length === 0
+                ? <div className="empty" style={{padding: 12, fontSize: 13}}>—</div>
+                : byStage[s.id].map(inq => <ICD key={inq.id} inq={inq} onClick={() => onOpenInquiry(inq)} />)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="sketch">
+        <h3>Recent activity</h3>
+        {recentActivity.map((a, i) => (
+          <div key={i} className="activity-item">
+            <AvD personId={a.by} size="sm" />
+            <div className="body">
+              <div className="meta">
+                {persD(a.by)?.name || a.by} · {a.at} · <a className="scribble" onClick={() => onOpenInquiry(a.inq)}>
+                  {a.inq.accountName} / {a.inq.id}
+                </a>
+              </div>
+              <div className="text">{a.text}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+window.Dashboards = { DashboardLanes, DashboardList, DashboardKanban };
+
+  </script>
+
+  <script type="text/babel">
+
+const { useState: useStateA, useMemo: useMemoA } = React;
+const { Avatar: Av2, StagePill: SP2, PriorityPill: PP2, TierPill: TP2,
+        InquiryCard: IC2, StageTrack: ST2, ActivityThread: AT2,
+        cls: cls2, daysSince: ds2, isOverdue: od2, isStuck: stk2, owedBy: ow2,
+        person: pers2, stage: stg2, dueLabel: dl2 } = window.Wire;
+
+function AccountCard({ acc, onOpenAccount }) {
+  const allInq = acc.projects.filter(p=>!p.archived).flatMap(p=>p.inquiries.filter(i=>!i.archived));
+  const active  = allInq.filter(i=>i.stage!=='po');
+  const overdue = allInq.filter(i=>od2(i)).length;
+  const newCt   = allInq.filter(i=>i.stage==='new').length;
+  const stageCounts = {};
+  for (const i of active) stageCounts[i.stage] = (stageCounts[i.stage]||0)+1;
+  return (
+    <div className="account-card" onClick={()=>onOpenAccount(acc.id)}>
+      <div className="head">
+        <div className="name">{acc.name}</div>
+        <TP2 tier={acc.tier} />
+      </div>
+      <div className="loc">
+        {acc.location}
+        {acc.type==='prospect' && <span className="pill" style={{background:'#fffef5',borderColor:'#b9562f',color:'#b9562f',fontSize:9,marginLeft:8}}>PROSPECT</span>}
+      </div>
+      <div className="stats">
+        <div><b>{acc.projects.filter(p=>!p.archived).length}</b> projects</div>
+        <div><b>{allInq.length}</b> inquiries</div>
+        {overdue>0 && <div style={{color:'#b9562f'}}><b>{overdue}</b> overdue</div>}
+        {newCt>0   && <div><b>{newCt}</b> new</div>}
+      </div>
+      <div>
+        <div className="mono-sm" style={{marginBottom:4}}>active pipeline</div>
+        <div className="stage-bar">
+          {window.STAGES.filter(s=>s.id!=='po').map(s=>{
+            const c = stageCounts[s.id]||0;
+            return <div key={s.id} className={cls2('seg',c>0&&'filled',c>0&&overdue>0&&'accent')} title={`${s.label}: ${c}`} />;
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccountsList({ onOpenAccount }) {
+  const [seg, setSeg] = useStateA('all');
+  const accounts = window.ACCOUNTS;
+  const activeAccounts = accounts.filter(a=>a.type==='active');
+  const prospects      = accounts.filter(a=>a.type==='prospect');
+  const showActive   = seg==='all'||seg==='active';
+  const showProspects= seg==='all'||seg==='prospects';
+  return (
+    <div className="col">
+      <div className="sketch paper-2">
+        <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
+          <div style={{flex:1,minWidth:200}}>
+            <h3>Accounts & Prospects</h3>
+            <div className="mono-sm">Prospects have open inquiries but no PO yet. Active = PO received.</div>
+          </div>
+          <div className="seg" style={{display:'flex',border:'1.5px solid #2a2420',borderRadius:4,overflow:'hidden'}}>
+            {[{id:'all',lbl:`All (${accounts.length})`},{id:'active',lbl:`Active (${activeAccounts.length})`},{id:'prospects',lbl:`Prospects (${prospects.length})`}].map(o=>(
+              <button key={o.id} onClick={()=>setSeg(o.id)} style={{background:seg===o.id?'#1a1713':'#fffef5',color:seg===o.id?'#fffef5':'#1a1713',border:'none',padding:'6px 14px',cursor:'pointer',fontSize:12,fontWeight:600,fontFamily:'inherit',borderRight:'1px solid #2a2420'}}>{o.lbl}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      {showActive && (
+        <div>
+          <div style={{display:'flex',alignItems:'baseline',gap:10,marginBottom:10}}>
+            <h3 style={{margin:0,fontSize:15,fontWeight:700,letterSpacing:'-0.01em'}}>Active accounts</h3>
+            <span className="mono-sm">customers with a PO on record</span>
+          </div>
+          {activeAccounts.length===0
+            ? <div className="empty">No active accounts yet.</div>
+            : <div className="grid-auto">{activeAccounts.map(acc=><AccountCard key={acc.id} acc={acc} onOpenAccount={onOpenAccount}/>)}</div>}
+        </div>
+      )}
+      {showProspects && (
+        <div style={{marginTop:showActive?16:0}}>
+          <div style={{display:'flex',alignItems:'baseline',gap:10,marginBottom:10}}>
+            <h3 style={{margin:0,fontSize:15,fontWeight:700,letterSpacing:'-0.01em'}}>Prospects</h3>
+            <span className="mono-sm">inquiring / quoting — no PO yet</span>
+          </div>
+          {prospects.length===0
+            ? <div className="empty">No prospects.</div>
+            : <div className="grid-auto">{prospects.map(acc=><AccountCard key={acc.id} acc={acc} onOpenAccount={onOpenAccount}/>)}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AccountDetail({ accountId, onOpenInquiry, onDeleteInquiry, onArchiveInquiry, onDeleteProject, onArchiveProject }) {
+  const acc = window.ACCOUNTS.find(a=>a.id===accountId);
+  if (!acc) return <div className="empty">Account not found</div>;
+  const [showArchivedProjs,  setShowArchivedProjs]  = useStateA(false);
+  const [showArchivedInqMap, setShowArchivedInqMap] = useStateA({});
+  const toggleInqArchived = (projId) => setShowArchivedInqMap(m=>({...m,[projId]:!m[projId]}));
+  const activeProjects  = acc.projects.filter(p=>!p.archived);
+  const archivedProjects= acc.projects.filter(p=> p.archived);
+  const allActiveInq    = activeProjects.flatMap(p=>p.inquiries.filter(i=>!i.archived));
+  const overdue         = allActiveInq.filter(i=>od2(i));
+  return (
+    <div className="col">
+      <div className="sketch">
+        <div style={{display:'flex',alignItems:'baseline',gap:16,flexWrap:'wrap'}}>
+          <h3 style={{fontSize:24,margin:0,fontWeight:700,letterSpacing:'-0.02em'}}>{acc.name}</h3>
+          <TP2 tier={acc.tier}/>
+          {acc.type==='prospect' && <span className="pill" style={{background:'#fffef5',borderColor:'#b9562f',color:'#b9562f'}}>PROSPECT</span>}
+          {acc.type==='active'   && <span className="pill" style={{background:'#1a1713',color:'#fffef5',borderColor:'#1a1713'}}>ACTIVE</span>}
+          <span className="mono">{acc.location}</span>
+        </div>
+        <div className="note" style={{marginTop:8,maxWidth:800}}>"{acc.notes}"</div>
+        <div className="grid-4" style={{marginTop:16}}>
+          <KPIsm big={activeProjects.length} lbl="projects"/>
+          <KPIsm big={allActiveInq.length} lbl="active inquiries"/>
+          <KPIsm big={allActiveInq.filter(i=>i.stage!=='po').length} lbl="open"/>
+          <KPIsm big={overdue.length} lbl="overdue" accent={overdue.length>0}/>
+        </div>
+      </div>
+
+      {activeProjects.map(proj=>{
+        const activeInqs  = proj.inquiries.filter(i=>!i.archived);
+        const archivedInqs= proj.inquiries.filter(i=> i.archived);
+        const showArchInqs= showArchivedInqMap[proj.id];
+        return (
+          <div key={proj.id} className="project-block">
+            <div className="phead">
+              <div>
+                <div className="pname">{proj.name}</div>
+                <div className="pmeta">opened {proj.opened} · {activeInqs.length} active{archivedInqs.length>0?`, ${archivedInqs.length} archived`:''}</div>
+              </div>
+              <div style={{display:'flex',gap:6,flexWrap:'wrap',alignItems:'center'}}>
+                <button className="btn sm">+ inquiry</button>
+                <button className="btn sm"
+                  onClick={()=>{if(window.confirm(`Archive project "${proj.name}"?\nAll its inquiries will be archived too.`))onArchiveProject(proj.id);}}>
+                  ✓ archive project
+                </button>
+                <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f'}}
+                  onClick={()=>{if(window.confirm(`Delete project "${proj.name}" and all ${proj.inquiries.length} inquiries?\nCannot be undone.`))onDeleteProject(proj.id);}}>
+                  ✕ delete project
+                </button>
+              </div>
+            </div>
+
+            {activeInqs.length===0 && archivedInqs.length===0 && <div className="empty">No inquiries in this project.</div>}
+
+            {activeInqs.length>0 && (
+              <div className="grid-auto">
+                {activeInqs.map(inq=>(
+                  <div key={inq.id}>
+                    <IC2 inq={{...inq,accountName:acc.name}}
+                         onClick={()=>onOpenInquiry({...inq,accountName:acc.name,accountId:acc.id,projectName:proj.name,projectId:proj.id})}/>
+                    <div style={{display:'flex',gap:4,marginTop:4}}>
+                      <button className="btn sm" style={{flex:1,fontSize:11}}
+                        onClick={()=>{if(window.confirm(`Archive inquiry #${inq.id} as complete?`))onArchiveInquiry(inq.id);}}>
+                        ✓ archive
+                      </button>
+                      <button className="btn sm" style={{flex:1,fontSize:11,color:'#b9562f',borderColor:'#b9562f'}}
+                        onClick={()=>{if(window.confirm(`Delete inquiry #${inq.id}?\nCannot be undone.`))onDeleteInquiry(inq.id);}}>
+                        ✕ delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {archivedInqs.length>0 && (
+              <div style={{marginTop:10}}>
+                <button className="btn sm" onClick={()=>toggleInqArchived(proj.id)}>
+                  {showArchInqs?'▴ hide archived':`▾ ${archivedInqs.length} archived inquiry${archivedInqs.length!==1?'s':''}`}
+                </button>
+                {showArchInqs && (
+                  <div className="grid-auto" style={{marginTop:8,opacity:0.65}}>
+                    {archivedInqs.map(inq=>(
+                      <div key={inq.id}>
+                        <div style={{marginBottom:3}}><span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72',fontSize:9}}>ARCHIVED</span></div>
+                        <IC2 inq={{...inq,accountName:acc.name}}
+                             onClick={()=>onOpenInquiry({...inq,accountName:acc.name,accountId:acc.id,projectName:proj.name,projectId:proj.id})}/>
+                        <div style={{display:'flex',gap:4,marginTop:4}}>
+                          <button className="btn sm" style={{flex:1,fontSize:11,color:'#b9562f',borderColor:'#b9562f'}}
+                            onClick={()=>{if(window.confirm(`Permanently delete archived inquiry #${inq.id}?`))onDeleteInquiry(inq.id);}}>
+                            ✕ delete permanently
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {archivedProjects.length>0 && (
+        <div>
+          <button className="btn sm" onClick={()=>setShowArchivedProjs(v=>!v)} style={{marginBottom:8}}>
+            {showArchivedProjs?'▴ hide archived projects':`▾ ${archivedProjects.length} archived project${archivedProjects.length!==1?'s':''}`}
+          </button>
+          {showArchivedProjs && archivedProjects.map(proj=>(
+            <div key={proj.id} className="project-block" style={{opacity:0.6}}>
+              <div className="phead">
+                <div>
+                  <span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72',fontSize:9,marginRight:8}}>ARCHIVED</span>
+                  <span className="pname" style={{fontSize:15}}>{proj.name}</span>
+                  <div className="pmeta">{proj.inquiries.length} inquiries</div>
+                </div>
+                <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f'}}
+                  onClick={()=>{if(window.confirm(`Permanently delete archived project "${proj.name}"?`))onDeleteProject(proj.id);}}>
+                  ✕ delete permanently
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function KPIsm({ big, lbl, accent }) {
+  return (
+    <div className="kpi" style={accent?{background:'#d97757',color:'white',borderColor:'#b9562f'}:{}}>
+      <div className="big" style={{fontSize:32}}>{big}</div>
+      <div className="lbl" style={accent?{color:'rgba(255,255,255,0.85)'}:{}}>{lbl}</div>
+    </div>
+  );
+}
+
+function InquiryDetail({ inquiry, onOpenAccount, onDeleteInquiry, onArchiveInquiry, onPostActivity }) {
+  const inq     = inquiry;
+  const s       = stg2(inq.stage);
+  const owed    = ow2(inq);
+  const overdue = od2(inq);
+  const [draft, setDraft] = useStateA('');
+
+  function postUpdate() {
+    if (!draft.trim()) return;
+    const today = new Date().toISOString().slice(0,10);
+    const item  = { by: window.CURRENT_USER?.id||'fahim', at: today, text: draft.trim() };
+    onPostActivity(inq.id, item);
+    setDraft('');
+  }
+
+  return (
+    <div className="col">
+      <div className="sketch">
+        <div style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap',marginBottom:8}}>
+          <SP2 stageId={inq.stage}/>
+          <PP2 priority={inq.priority}/>
+          <span className="mono">#{inq.id}</span>
+          {inq.archived && <span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72'}}>ARCHIVED</span>}
+          {overdue && !inq.archived && <span className="pill overdue">{window.Wire.dueLabel(inq.due)}</span>}
+          {stk2(inq) && !inq.archived && <span className="pill prio-med">stuck {ds2(inq.updated)}d</span>}
+        </div>
+        <h3 style={{fontSize:30,margin:'4px 0 2px'}}>{inq.part} — {inq.accountName}</h3>
+        <div className="mono" style={{marginBottom:16}}>
+          <a className="scribble" onClick={()=>onOpenAccount(inq.accountId)}>{inq.accountName}</a>
+          {' / '}{inq.projectName}
+        </div>
+        <ST2 currentStageId={inq.stage}/>
+        {!inq.archived && (
+          <div style={{marginTop:16,padding:12,background:'#faf8ec',border:'1.2px dashed #2a2420',borderRadius:6}}>
+            <div className="mono-sm" style={{marginBottom:4}}>currently waiting on</div>
+            {inq.waitingOn==='client' ? (
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <div className="avatar lg" style={{background:'#f3efde'}}>CX</div>
+                <div>
+                  <div style={{fontWeight:600,fontSize:15}}>Customer</div>
+                  <div className="mono-sm">nothing for us — follow up if stale</div>
+                </div>
+              </div>
+            ) : owed ? (
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <Av2 personId={owed} size="lg"/>
+                <div>
+                  <div style={{fontWeight:600,fontSize:15}}>{pers2(owed)?.name}</div>
+                  <div className="mono-sm">{pers2(owed)?.role} · stage owner: {s?.label}</div>
+                </div>
+                <div style={{marginLeft:'auto',display:'flex',gap:8}}>
+                  <button className="btn sm">reassign</button>
+                  <button className="btn sm primary">advance stage →</button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+      </div>
+
+      <div className="inquiry-detail">
+        <div className="col">
+          <div className="sketch">
+            <h4>Inquiry details</h4>
+            <div className="fields-grid">
+              <Field k="part #"            v={inq.part}         mono/>
+              <Field k="quantity"          v={inq.qty}/>
+              <Field k="specs"             v={inq.specs||'—'}/>
+              <Field k="drawing rev"       v={inq.drawing||'not yet issued'} mono/>
+              <Field k="target price"      v={inq.target||'—'}/>
+              <Field k="cost"              v={inq.cost||'—'}/>
+              <Field k="price to customer" v={inq.price||'—'}/>
+              <Field k="lead time"         v={inq.leadtime||'—'}/>
+              <Field k="due date"          v={inq.due} mono/>
+              <Field k="last updated"      v={`${inq.updated} · ${pers2(inq.updatedBy)?.name}`} mono/>
+            </div>
+          </div>
+          <div className="sketch">
+            <h4>Updates & discussion</h4>
+            <div className="composer">
+              <Av2 personId={window.CURRENT_USER?.id||'fahim'} size="sm"/>
+              <textarea placeholder="post an update…" value={draft} onChange={e=>setDraft(e.target.value)}
+                        onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))postUpdate();}}/>
+              <button className="btn primary" onClick={postUpdate}>post</button>
+            </div>
+            <div style={{marginTop:12}}>
+              <AT2 activity={inq.activity||[]}/>
+            </div>
+          </div>
+        </div>
+
+        <div className="col">
+          <div className="sketch paper-2">
+            <h4>Quick actions</h4>
+            <div className="col" style={{gap:8}}>
+              {!inq.archived ? (
+                <>
+                  <button className="btn">@ mention teammate</button>
+                  <button className="btn">attach drawing / doc</button>
+                  <button className="btn">set priority</button>
+                  <button className="btn">change due date</button>
+                  <button className="btn">mark blocked</button>
+                  <hr className="hr-dashed"/>
+                  <button className="btn primary" style={{background:'#5d7a3a',borderColor:'#3d5a1a'}}
+                    onClick={()=>{if(window.confirm('Archive this inquiry as complete?\nIt will be hidden from the active pipeline but kept for reference.'))onArchiveInquiry(inq.id);}}>
+                    ✓ archive as complete
+                  </button>
+                  <button className="btn" style={{color:'#b9562f',borderColor:'#b9562f'}}
+                    onClick={()=>{if(window.confirm(`Permanently delete inquiry #${inq.id}?\nThis cannot be undone.`))onDeleteInquiry(inq.id);}}>
+                    ✕ delete inquiry
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="mono-sm" style={{padding:'8px 0',color:'#8a7f72'}}>This inquiry has been archived.</div>
+                  <button className="btn" style={{color:'#b9562f',borderColor:'#b9562f'}}
+                    onClick={()=>{if(window.confirm(`Permanently delete archived inquiry #${inq.id}?`))onDeleteInquiry(inq.id);}}>
+                    ✕ delete permanently
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+          <div className="sketch">
+            <h4>Who's here</h4>
+            <div className="mono-sm" style={{marginBottom:8}}>people currently on this inquiry</div>
+            <div style={{display:'flex',gap:6,alignItems:'center'}}>
+              <Av2 personId="fahim" viewing/><Av2 personId="mike" viewing/>
+              <span className="mono-sm" style={{marginLeft:8}}>+ 0 others</span>
+            </div>
+          </div>
+          <div className="sketch">
+            <h4>Related on this account</h4>
+            <RelatedInquiries accountId={inq.accountId} currentId={inq.id}/>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Field({ k, v, mono }) {
+  return (
+    <div className="field">
+      <div className="k">{k}</div>
+      <div className={cls2('v',mono&&'mono')}>{v}</div>
+    </div>
+  );
+}
+
+function RelatedInquiries({ accountId, currentId }) {
+  const acc = window.ACCOUNTS.find(a=>a.id===accountId);
+  if (!acc) return null;
+  const other = acc.projects.flatMap(p=>p.inquiries.map(i=>({...i,projectName:p.name}))).filter(i=>i.id!==currentId&&!i.archived).slice(0,4);
+  if (!other.length) return <div className="empty">none</div>;
+  return (
+    <div className="col" style={{gap:6}}>
+      {other.map(i=>(
+        <div key={i.id} style={{display:'flex',gap:8,alignItems:'center',padding:'6px 0',borderBottom:'1px dashed #8a7f72'}}>
+          <SP2 stageId={i.stage}/><span className="mono-sm">#{i.id}</span>
+          <span style={{flex:1,fontSize:13}}>{i.part}</span>
+          <span className="mono-sm">{dl2(i.due)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AllInquiries({ onOpenInquiry }) {
+  const all = useMemoA(()=>window.DATA_UTILS.allInquiries(),[]);
+  const [stageF, setStageF] = useStateA('all');
+  const [ownerF, setOwnerF] = useStateA('all');
+  const filtered = all.filter(i=>{
+    if (stageF!=='all'&&i.stage!==stageF) return false;
+    if (ownerF==='all') return true;
+    if (ownerF==='client') return i.waitingOn==='client';
+    return ow2(i)===ownerF;
+  });
+  return (
+    <div className="col">
+      <div className="sketch">
+        <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center'}}>
+          <h3 style={{margin:0}}>All inquiries</h3>
+          <span className="mono-sm">{filtered.length} of {all.length}</span>
+          <div style={{marginLeft:'auto',display:'flex',gap:6,flexWrap:'wrap'}}>
+            <select value={stageF} onChange={e=>setStageF(e.target.value)} style={{fontSize:13,padding:'4px 8px',border:'1.5px solid #2a2420',borderRadius:4,background:'#fffef5'}}>
+              <option value="all">all stages</option>
+              {window.STAGES.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}
+            </select>
+            <select value={ownerF} onChange={e=>setOwnerF(e.target.value)} style={{fontSize:13,padding:'4px 8px',border:'1.5px solid #2a2420',borderRadius:4,background:'#fffef5'}}>
+              <option value="all">all owners</option>
+              {window.TEAM.map(t=><option key={t.id} value={t.id}>{t.name}</option>)}
+              <option value="client">customer</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div className="sketch">
+        <table className="tbl">
+          <thead><tr><th>inq #</th><th>account</th><th>part / qty</th><th>stage</th><th>priority</th><th>owes</th><th>due</th><th>updated</th></tr></thead>
+          <tbody>
+            {filtered.map(inq=>{
+              const owed=ow2(inq);
+              return (
+                <tr key={inq.id} className={od2(inq)?'overdue-row':''} onClick={()=>onOpenInquiry(inq)}>
+                  <td className="mono">#{inq.id}</td>
+                  <td style={{fontWeight:700}}>{inq.accountName}</td>
+                  <td><span className="mono-sm">{inq.part} · {inq.qty}</span></td>
+                  <td><SP2 stageId={inq.stage}/></td>
+                  <td><PP2 priority={inq.priority}/></td>
+                  <td>{owed?<div style={{display:'flex',alignItems:'center',gap:6}}><Av2 personId={owed} size="sm"/><span>{pers2(owed)?.name}</span></div>:(inq.waitingOn==='client'?<span className="mono-sm">customer</span>:'—')}</td>
+                  <td className={od2(inq)?'note':''}>{dl2(inq.due)}</td>
+                  <td className="mono-sm">{inq.updated}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+window.Views = { AccountsList, AccountDetail, InquiryDetail, AllInquiries };
+
+  </script>
+
+  <script type="text/babel">
+
+function LoginScreen({ onLogin }) {
+  const [selected, setSelected] = React.useState(null);
+  const [pin,      setPin]      = React.useState('');
+  const [shake,    setShake]    = React.useState(false);
+
+  // ── CHANGE PINS HERE ──────────────────────────────────────────────────────
+  const PINS = { mike:'1111', fahim:'2222', ahmad:'3333', jianming:'4444' };
+  // ─────────────────────────────────────────────────────────────────────────
+
+  function handleDigit(d) {
+    if (pin.length >= 4) return;
+    const next = pin + d;
+    setPin(next);
+    if (next.length === 4) {
+      if (next === PINS[selected.id]) {
+        onLogin(selected);
+      } else {
+        setShake(true);
+        setTimeout(() => { setPin(''); setShake(false); }, 650);
+      }
+    }
+  }
+
+  return (
+    <div className="login-wrap">
+      <div style={{textAlign:'center'}}>
+        <div style={{fontFamily:'var(--title)',fontSize:30,fontWeight:700,letterSpacing:'-0.02em'}}>CrossLink</div>
+        <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'2px',marginTop:4}}>Cast Parts · Bushing Pipeline</div>
+      </div>
+
+      {!selected ? (
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:20}}>
+          <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'1px'}}>who are you?</div>
+          <div className="profile-grid">
+            {window.TEAM.map(t => (
+              <button key={t.id} className="profile-card" onClick={() => setSelected(t)}>
+                <div className={`avatar lg ${t.id}`}>{t.initials}</div>
+                <div style={{fontFamily:'var(--title)',fontWeight:700,fontSize:15}}>{t.name}</div>
+                <div style={{fontFamily:'var(--mono)',fontSize:10,color:'var(--ink-3)',textTransform:'uppercase'}}>{t.role}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:22}}>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+            <div className={`avatar lg ${selected.id}`}>{selected.initials}</div>
+            <div>
+              <div style={{fontFamily:'var(--title)',fontWeight:700,fontSize:18}}>{selected.name}</div>
+              <button onClick={() => { setSelected(null); setPin(''); }}
+                      style={{fontFamily:'var(--mono)',fontSize:10,color:'var(--ink-3)',background:'none',border:'none',cursor:'pointer',padding:0,textDecoration:'underline'}}>
+                not you?
+              </button>
+            </div>
+          </div>
+
+          <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'1px'}}>enter your pin</div>
+
+          <div className="pin-dots" style={{animation: shake ? 'shake 0.5s' : 'none'}}>
+            {[0,1,2,3].map(i => (
+              <div key={i} className={`pin-dot${i < pin.length ? ' filled' : ''}`} />
+            ))}
+          </div>
+
+          <div className="pin-pad">
+            {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
+              <button key={i}
+                      className={`pin-key${d===''?' empty':''} ${d==='⌫'?'del':''}`}
+                      onClick={() => d === '⌫' ? setPin(p => p.slice(0,-1)) : d !== '' ? handleDigit(d) : null}>
+                {d}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+  </script>
+
+  <script type="text/babel">
+
+const { useState, useEffect, useRef } = React;
+const { TopBar, NavTabs } = window.Wire;
+const { DashboardLanes, DashboardList, DashboardKanban } = window.Dashboards;
+const { AccountsList, AccountDetail, InquiryDetail, AllInquiries } = window.Views;
+
+const LS_KEY    = 'bushingTracker.route.v1';
+const USER_KEY  = 'bushingTracker.user.v1';
+const DOC_REF   = window.db.collection('tracker').doc('main');
+const PRES_COL  = () => window.db.collection('presence');
+
+function loadRoute()   { try { return JSON.parse(localStorage.getItem(LS_KEY)) || null; } catch { return null; } }
+function saveRoute(r)  { localStorage.setItem(LS_KEY, JSON.stringify(r)); }
+function loadUser()    { try { return JSON.parse(localStorage.getItem(USER_KEY)) || null; } catch { return null; } }
+
+function App() {
+  const [currentUser,  setCurrentUser]  = useState(loadUser);
+  const [accounts,     setAccounts]     = useState(window.ACCOUNTS);
+  const [loading,      setLoading]      = useState(true);
+  const [onlineUsers,  setOnlineUsers]  = useState({});
+  const [revision,     setRevision]     = useState(0);
+  const skipNextSnap   = useRef(false);
+
+  const init   = loadRoute() || { view: window.TWEAK_DEFAULTS.startView, accountId: null, inquiry: null };
+  const [route,      setRoute]      = useState(init);
+  const [tweaks,     setTweaks]     = useState({ ...window.TWEAK_DEFAULTS });
+  const [tweaksOpen, setTweaksOpen] = useState(false);
+
+  // ── Firestore: accounts real-time listener ─────────────────────────────────
+  useEffect(() => {
+    const unsub = DOC_REF.onSnapshot(snap => {
+      if (snap.metadata.hasPendingWrites) return;
+      if (skipNextSnap.current) { skipNextSnap.current = false; return; }
+      if (!snap.exists) {
+        DOC_REF.set({ accounts: window.ACCOUNTS_SEED });
+        setLoading(false);
+        return;
+      }
+      const data = snap.data();
+      window.ACCOUNTS = data.accounts;
+      setAccounts(data.accounts);
+      setRevision(r => r + 1);
+      setLoading(false);
+    }, err => { console.error('Firestore error:', err); setLoading(false); });
+    return () => unsub();
+  }, []);
+
+  // ── Presence: write ours, read everyone's ─────────────────────────────────
+  useEffect(() => {
+    if (!currentUser) return;
+    const presRef = PRES_COL().doc(currentUser.id);
+    const write   = () => presRef.set({ userId: currentUser.id, lastSeen: new Date().toISOString(), view: route.view });
+    write();
+    const interval = setInterval(write, 90000);
+
+    const unsubs = window.TEAM.map(t =>
+      PRES_COL().doc(t.id).onSnapshot(snap => {
+        if (!snap.exists) return;
+        const d  = snap.data();
+        const ok = d.lastSeen && (Date.now() - new Date(d.lastSeen).getTime()) < 3 * 60 * 1000;
+        setOnlineUsers(p => ({ ...p, [t.id]: ok }));
+      })
+    );
+    return () => { unsubs.forEach(u => u()); clearInterval(interval); };
+  }, [currentUser, route.view]);
+
+  useEffect(() => { saveRoute(route); }, [route]);
+  useEffect(() => {
+    document.body.classList.toggle('dense',         tweaks.density === 'dense');
+    document.body.classList.toggle('hide-presence', !tweaks.showPresence);
+  }, [tweaks]);
+
+  function login(user) {
+    window.CURRENT_USER = user;
+    setCurrentUser(user);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+  function logout() {
+    if (currentUser) PRES_COL().doc(currentUser.id).delete();
+    window.CURRENT_USER = null;
+    setCurrentUser(null);
+    localStorage.removeItem(USER_KEY);
+  }
+
+  function mutate(updaterFn) {
+    setAccounts(prev => {
+      const next = updaterFn(prev);
+      window.ACCOUNTS = next;
+      skipNextSnap.current = true;
+      DOC_REF.set({ accounts: next });
+      return next;
+    });
+    setRevision(r => r + 1);
+  }
+
+  function deleteInquiry(inquiryId) {
+    mutate(accts => accts.map(a => ({
+      ...a, projects: a.projects.map(p => ({
+        ...p, inquiries: p.inquiries.filter(i => i.id !== inquiryId)
+      }))
+    })));
+    if (route.view === 'inquiry' && route.inquiry?.id === inquiryId)
+      setRoute({ view: 'account', accountId: route.inquiry.accountId, inquiry: null });
+  }
+  function archiveInquiry(inquiryId) {
+    mutate(accts => accts.map(a => ({
+      ...a, projects: a.projects.map(p => ({
+        ...p, inquiries: p.inquiries.map(i => i.id === inquiryId
+          ? { ...i, archived: true, archivedAt: new Date().toISOString().slice(0,10) } : i)
+      }))
+    })));
+    if (route.view === 'inquiry' && route.inquiry?.id === inquiryId)
+      setRoute({ view: 'account', accountId: route.inquiry.accountId, inquiry: null });
+  }
+  function deleteProject(projectId) {
+    mutate(accts => accts.map(a => ({ ...a, projects: a.projects.filter(p => p.id !== projectId) })));
+  }
+  function archiveProject(projectId) {
+    mutate(accts => accts.map(a => ({
+      ...a, projects: a.projects.map(p => p.id === projectId
+        ? { ...p, archived: true, inquiries: p.inquiries.map(i => ({...i, archived:true})) } : p)
+    })));
+  }
+  function postActivity(inquiryId, item) {
+    mutate(accts => accts.map(a => ({
+      ...a, projects: a.projects.map(p => ({
+        ...p, inquiries: p.inquiries.map(i => i.id === inquiryId
+          ? { ...i, activity: [item, ...(i.activity||[])], updated: item.at, updatedBy: item.by } : i)
+      }))
+    })));
+  }
+
+  function updateTweak(k, v) { setTweaks(t => ({ ...t, [k]: v })); }
+  function goDashboard() { setRoute({ view:'dashboard', accountId:null, inquiry:null }); }
+  function goAccounts()  { setRoute({ view:'accounts',  accountId:null, inquiry:null }); }
+  function goAll()       { setRoute({ view:'all',       accountId:null, inquiry:null }); }
+  function openAccount(id){ setRoute({ view:'account', accountId:id, inquiry:null }); }
+  function openInquiry(inq) {
+    let full = inq;
+    if (!inq.accountName) {
+      outer: for (const a of window.ACCOUNTS) for (const p of a.projects) for (const i of p.inquiries)
+        if (i.id === inq.id) { full = {...i, accountId:a.id, accountName:a.name, projectId:p.id, projectName:p.name}; break outer; }
+    }
+    setRoute({ view:'inquiry', accountId:full.accountId, inquiry:full });
+  }
+
+  // Resolve current inquiry from live accounts (keeps it fresh)
+  function resolveInquiry(routeInquiry) {
+    if (!routeInquiry) return null;
+    for (const a of accounts) for (const p of a.projects) for (const i of p.inquiries)
+      if (i.id === routeInquiry.id)
+        return { ...i, accountId:a.id, accountName:a.name, projectId:p.id, projectName:p.name };
+    return routeInquiry; // fallback
+  }
+
+  const crumbs = [];
+  if (route.view==='dashboard') { crumbs.push({label:'Dashboard'}); }
+  else if (route.view==='accounts') { crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Accounts'}); }
+  else if (route.view==='all')      { crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'All Inquiries'}); }
+  else if (route.view==='account')  {
+    const acc = accounts.find(a=>a.id===route.accountId);
+    crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Accounts',onClick:goAccounts},{label:acc?.name||'—'});
+  } else if (route.view==='inquiry') {
+    const acc = accounts.find(a=>a.id===route.inquiry?.accountId);
+    crumbs.push(
+      {label:'Dashboard',onClick:goDashboard},{label:'Accounts',onClick:goAccounts},
+      {label:acc?.name||'—',onClick:()=>openAccount(acc?.id)},
+      {label:'#'+route.inquiry?.id}
+    );
+  }
+
+  const navCurrent = route.view==='dashboard'?'dashboard':(route.view==='accounts'||route.view==='account')?'accounts':'all';
+  function onNav(id) {
+    if (id==='dashboard') goDashboard(); else if (id==='accounts') goAccounts(); else goAll();
+  }
+
+  const mutations = { onDeleteInquiry:deleteInquiry, onArchiveInquiry:archiveInquiry,
+                      onDeleteProject:deleteProject,  onArchiveProject:archiveProject,
+                      onPostActivity:postActivity };
+
+  if (!currentUser) return <LoginScreen onLogin={login} />;
+  if (loading) return <div className="loader">connecting…</div>;
+
+  const liveInquiry = resolveInquiry(route.inquiry);
+
+  return (
+    <div>
+      <TopBar crumbs={crumbs} currentUser={currentUser} onlineUsers={onlineUsers} onLogout={logout}/>
+      <NavTabs current={navCurrent} onChange={onNav}/>
+      <div className="content">
+        {route.view==='dashboard' && (
+          <React.Fragment key={`dash-${revision}`}>
+            {tweaks.dashboardVariant==='lanes'  ? <DashboardLanes  onOpenInquiry={openInquiry}/> :
+             tweaks.dashboardVariant==='list'   ? <DashboardList   onOpenInquiry={openInquiry}/> :
+                                                  <DashboardKanban onOpenInquiry={openInquiry}/>}
+          </React.Fragment>
+        )}
+        {route.view==='accounts' && <AccountsList onOpenAccount={openAccount}/>}
+        {route.view==='all'      && <AllInquiries key={`all-${revision}`} onOpenInquiry={openInquiry}/>}
+        {route.view==='account'  && <AccountDetail accountId={route.accountId} onOpenInquiry={openInquiry} {...mutations}/>}
+        {route.view==='inquiry'  && liveInquiry && <InquiryDetail key={liveInquiry.id} inquiry={liveInquiry} onOpenAccount={openAccount} {...mutations}/>}
+      </div>
+
+      <div style={{position:'fixed',bottom:16,right:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8}}>
+        <button className="btn sm" onClick={()=>setTweaksOpen(o=>!o)}>{tweaksOpen?'✕ close':'⚙ tweaks'}</button>
+        {tweaksOpen && (
+          <div style={{background:'var(--paper)',border:'2px solid var(--line)',borderRadius:'6px 14px 6px 14px',padding:'14px 16px',boxShadow:'4px 4px 0 #8a7f72',width:260}}>
+            <h4 style={{fontFamily:'var(--title)',fontSize:15,fontWeight:700,margin:'0 0 8px',letterSpacing:'-0.01em',color:'var(--ink)'}}>Tweaks</h4>
+            <div className="mono-sm" style={{marginBottom:4,marginTop:8}}>DASHBOARD LAYOUT</div>
+            <div className="seg">
+              {['lanes','list','kanban'].map(v=>(
+                <button key={v} className={tweaks.dashboardVariant===v?'active':''} onClick={()=>updateTweak('dashboardVariant',v)}>
+                  {v==='lanes'?'by person':v==='list'?'priority list':'by stage'}
+                </button>
+              ))}
+            </div>
+            <div className="mono-sm" style={{marginBottom:4,marginTop:10}}>DENSITY</div>
+            <div className="seg">
+              {['comfortable','dense'].map(v=>(
+                <button key={v} className={tweaks.density===v?'active':''} onClick={()=>updateTweak('density',v)}>{v}</button>
+              ))}
+            </div>
+            <div className="mono-sm" style={{marginBottom:4,marginTop:10}}>PRESENCE</div>
+            <div className="seg">
+              <button className={tweaks.showPresence?'active':''} onClick={()=>updateTweak('showPresence',true)}>shown</button>
+              <button className={!tweaks.showPresence?'active':''} onClick={()=>updateTweak('showPresence',false)}>hidden</button>
+            </div>
+            <div className="mono-sm" style={{marginTop:14,paddingTop:10,borderTop:'1px dashed #8a7f72'}}>live · firebase · crosslink</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+  </script>
+</body>
+</html>
