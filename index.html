@@ -6,16 +6,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Firebase compat SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
-
   <style>
 /* Cast Parts Bushing Tracker — wireframe styles
    Vibe: warm paper, sketchy lines, one orange accent, monospace annotations */
@@ -379,61 +374,66 @@ a.scribble { color: var(--accent-2); text-decoration: none; border-bottom: 1.5px
 a.scribble:hover { background: rgba(217,119,87,0.1); }
 
 
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  20%      { transform: translateX(-10px); }
-  40%      { transform: translateX(10px); }
-  60%      { transform: translateX(-6px); }
-  80%      { transform: translateX(6px); }
-}
-.pin-dots { display:flex; gap:14px; justify-content:center; }
-.pin-dot  { width:14px; height:14px; border-radius:50%; border:2px solid var(--line); background:transparent; transition:background .12s; }
-.pin-dot.filled { background:var(--ink); }
-.pin-pad  { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:220px; }
-.pin-key  {
-  height:56px; font-family:var(--title); font-size:22px; font-weight:600;
-  border:1.5px solid var(--line); border-radius:4px 8px 4px 8px;
-  background:var(--paper); color:var(--ink); cursor:pointer; transition:transform .08s, background .08s;
-}
-.pin-key:hover  { background:var(--paper-2); transform:translate(-1px,-1px); box-shadow:2px 2px 0 var(--ink-3); }
-.pin-key.del    { font-size:18px; }
-.pin-key.empty  { border-color:transparent; background:transparent; cursor:default; pointer-events:none; }
-.login-wrap     { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:32px; }
-.profile-grid   { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
-.profile-card   {
-  background:var(--paper); border:1.5px solid var(--line);
-  border-radius:6px 14px 6px 14px; padding:22px 28px;
-  cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:10px;
-  transition:transform .08s; min-width:110px;
-}
-.profile-card:hover { transform:translate(-2px,-2px); box-shadow:3px 3px 0 var(--ink-3); }
-.loader { display:flex; align-items:center; justify-content:center; height:100vh; font-family:var(--mono); font-size:13px; color:var(--ink-3); }
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.pin-dots{display:flex;gap:14px;justify-content:center}.pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:transparent;transition:background .12s}.pin-dot.filled{background:var(--ink)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:220px}
+.pin-key{height:56px;font-family:var(--title);font-size:22px;font-weight:600;border:1.5px solid var(--line);border-radius:4px 8px 4px 8px;background:var(--paper);color:var(--ink);cursor:pointer;transition:transform .08s,background .08s}
+.pin-key:hover{background:var(--paper-2);transform:translate(-1px,-1px);box-shadow:2px 2px 0 var(--ink-3)}.pin-key.del{font-size:18px}.pin-key.empty{border-color:transparent;background:transparent;cursor:default;pointer-events:none}
+.login-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.profile-grid{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.profile-card{background:var(--paper);border:1.5px solid var(--line);border-radius:6px 14px 6px 14px;padding:22px 28px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .08s;min-width:110px}
+.profile-card:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink-3)}
+.loader{display:flex;align-items:center;justify-content:center;height:100vh;font-family:var(--mono);font-size:13px;color:var(--ink-3)}
+.form-input,.form-select,.form-textarea{width:100%;font-family:var(--hand);font-size:13px;border:1.5px solid var(--line);border-radius:4px 8px 4px 8px;padding:8px 10px;background:var(--paper);color:var(--ink);box-sizing:border-box}
+.form-textarea{resize:vertical;min-height:60px}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--accent-2);box-shadow:0 0 0 2px rgba(217,119,87,0.15)}
+.form-label{display:block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);margin-bottom:4px}
+.form-row{margin-bottom:14px}.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;padding-top:14px;border-top:1px dashed var(--ink-3)}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.modal-overlay{position:fixed;inset:0;background:rgba(26,23,19,0.55);display:flex;align-items:center;justify-content:center;z-index:500;padding:20px}
+.modal-box{background:var(--paper);border:1.5px solid var(--line);border-radius:6px 14px 6px 14px;padding:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:6px 6px 0 var(--ink-3)}
+/* Inquiry type badges */
+.pill.type-rfq{background:#e8f0e0;color:#3d5a1a;border-color:#5d7a3a}
+.pill.type-info{background:#e3edf8;color:#1a3d6a;border-color:#3a6aaa}
+.pill.type-project{background:#f5ece0;color:#6a3d1a;border-color:#aa6a3a}
+/* Info stage pills */
+.pill.stage-open{background:#fff3cd;color:#92600a;border-color:#d97757}
+.pill.stage-actioning{background:#d6eaf8;color:#1a5276;border-color:#5dade2}
+.pill.stage-closed{background:#d5f5e3;color:#1e8449;border-color:#52be80}
+/* Project stage pills */
+.pill.stage-discovery{background:#fde8e8;color:#922b21;border-color:#ec7063}
+.pill.stage-engaged{background:#f3e5f5;color:#6c3483;border-color:#af7ac5}
+.pill.stage-proposal{background:#e8ecf8;color:#1b2a6b;border-color:#7986cb}
+.pill.stage-negotiation{background:#fef9e7;color:#9a7d0a;border-color:#f0c040}
+.pill.stage-closed-won{background:#d5f5e3;color:#1e8449;border-color:#52be80}
+.pill.stage-closed-lost{background:#fde8e8;color:#922b21;border-color:#ec7063}
+/* Type picker cards in modal */
+.type-pick-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:4px}
+.type-pick-card{border:1.5px solid var(--line);border-radius:6px 12px 6px 12px;padding:16px 12px;cursor:pointer;background:var(--paper-2);transition:transform .08s,box-shadow .08s;text-align:center}
+.type-pick-card:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink-3);background:var(--paper)}
+.type-pick-card .tpc-icon{font-size:24px;margin-bottom:6px}
+.type-pick-card .tpc-name{font-weight:700;font-size:13px;margin-bottom:4px}
+.type-pick-card .tpc-desc{font-family:var(--mono);font-size:10px;color:var(--ink-3);line-height:1.4}
+/* Meeting items */
+.meeting-item{padding:10px 0;border-bottom:1px dashed #c0b8a8;display:flex;gap:12px;align-items:flex-start}
+.meeting-item .mdate{font-family:var(--mono);font-size:11px;color:var(--ink-3);min-width:88px;flex-shrink:0;padding-top:2px}
+.meeting-item .mnotes{font-size:13px;flex:1;line-height:1.4}
+/* Info/Project detail status row */
+.status-bar{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap}
+.status-bar .sbtn{padding:6px 14px;font-size:12px;border-radius:4px 8px 4px 8px;border:1.5px solid var(--line);background:var(--paper-2);cursor:pointer;font-family:var(--hand);font-weight:600}
+.status-bar .sbtn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
   </style>
 </head>
 <body>
   <div id="root"></div>
-
-  <!-- Firebase init + seed data -->
   <script>
 
-  const firebaseConfig = {
-    apiKey:            "AIzaSyAscaA0slb9Q5GqwVhiu7hdwD6UZRoPFQ4",
-    authDomain:        "cp-tracker-e0be3.firebaseapp.com",
-    projectId:         "cp-tracker-e0be3",
-    storageBucket:     "cp-tracker-e0be3.firebasestorage.app",
-    messagingSenderId: "95734243152",
-    appId:             "1:95734243152:web:31737b4b776048afdd5655"
-  };
+  const firebaseConfig={apiKey:"AIzaSyAscaA0slb9Q5GqwVhiu7hdwD6UZRoPFQ4",authDomain:"cp-tracker-e0be3.firebaseapp.com",projectId:"cp-tracker-e0be3",storageBucket:"cp-tracker-e0be3.firebasestorage.app",messagingSenderId:"95734243152",appId:"1:95734243152:web:31737b4b776048afdd5655"};
   firebase.initializeApp(firebaseConfig);
-  window.db = firebase.firestore();
+  window.db=firebase.firestore();
 
-    window.TWEAK_DEFAULTS = {
-      "dashboardVariant": "lanes",
-      "density": "comfortable",
-      "showPresence": true,
-      "startView": "dashboard"
-    };
+    window.TWEAK_DEFAULTS={"dashboardVariant":"lanes","density":"comfortable","showPresence":true,"startView":"dashboard"};
 // Seed data for the Cast Parts Bushing tracker wireframe
 // Stages flow: new -> eng -> drawing -> approved -> costing -> pricing -> quoted -> po
 window.STAGES = [
@@ -445,6 +445,19 @@ window.STAGES = [
   { id: 'pricing',  label: 'Sales Pricing',      owner: 'Mike',     short: 'PRICE' },
   { id: 'quoted',   label: 'Quote Issued',       owner: 'Fahim',    short: 'QTE' },
   { id: 'po',       label: 'PO Received',        owner: 'Mike',     short: 'PO' }
+];
+window.INFO_STAGES = [
+  { id: 'open',       label: 'Open',       short: 'OPEN',   owner: 'Fahim' },
+  { id: 'actioning',  label: 'Actioning',  short: 'ACTION', owner: 'Fahim' },
+  { id: 'resolved',   label: 'Resolved',   short: 'DONE',   owner: 'Fahim' },
+];
+window.PROJECT_STAGES = [
+  { id: 'discovery',   label: 'Discovery',    short: 'DISC',  owner: 'Mike' },
+  { id: 'engaged',     label: 'Engaged',      short: 'ENG',   owner: 'Mike' },
+  { id: 'proposal',    label: 'Proposal',     short: 'PROP',  owner: 'Mike' },
+  { id: 'negotiation', label: 'Negotiation',  short: 'NEGO',  owner: 'Mike' },
+  { id: 'closed-won',  label: 'Closed — Won', short: 'WON',   owner: 'Mike' },
+  { id: 'closed-lost', label: 'Closed — Lost',short: 'LOST',  owner: 'Mike' },
 ];
 
 window.TEAM = [
@@ -722,7 +735,7 @@ window.DATA_UTILS = {
     }
     return out;
   },
-  stageById(id) { return window.STAGES.find(s => s.id === id); },
+  stageById(id) { return window.STAGES.find(s=>s.id===id)||window.INFO_STAGES.find(s=>s.id===id)||window.PROJECT_STAGES.find(s=>s.id===id)||null; },
   teamById(id) { return window.TEAM.find(t => t.id === id); },
   daysSince(dateStr) {
     const today = new Date(2026, 3, 17);
@@ -734,378 +747,264 @@ window.DATA_UTILS = {
 window.ACCOUNTS_SEED = JSON.parse(JSON.stringify(window.ACCOUNTS));
 
   </script>
-
   <script type="text/babel">
-
 const { useState, useEffect, useMemo, useRef } = React;
-
-function cls(...a) { return a.filter(Boolean).join(' '); }
-function daysSince(dateStr) { return window.DATA_UTILS.daysSince(dateStr); }
-function stage(id) { return window.DATA_UTILS.stageById(id); }
-function person(id) { return window.DATA_UTILS.teamById(id); }
-
-function dueLabel(due) {
-  const ds = daysSince(due);
-  if (ds > 0) return `${ds}d overdue`;
-  if (ds === 0) return 'due today';
-  return `due in ${-ds}d`;
+function cls(...a){return a.filter(Boolean).join(' ')}
+function daysSince(d){return window.DATA_UTILS.daysSince(d)}
+function stage(id){return window.DATA_UTILS.stageById(id)}
+function person(id){return window.DATA_UTILS.teamById(id)}
+function dueLabel(due){const ds=daysSince(due);if(ds>0)return`${ds}d overdue`;if(ds===0)return'due today';return`due in ${-ds}d`}
+function isComplete(inq){const t=inq.type||'rfq';return t==='rfq'?inq.stage==='po':t==='info'?inq.status==='resolved':['closed-won','closed-lost'].includes(inq.projectStage)}
+function isOverdue(inq){return!!inq.due&&daysSince(inq.due)>0&&!isComplete(inq)}
+function isStuck(inq){return daysSince(inq.updated)>5&&!isComplete(inq)}
+function owedBy(inq){if(inq.waitingOn==='client')return null;if(inq.waitingOn)return inq.waitingOn;if(inq.assignedTo)return inq.assignedTo;const s=stage(inq.stage);return s?s.owner.toLowerCase():null}
+function Avatar({personId,size='md',viewing=false,title}){const p=person(personId);if(!p)return null;return<div className={cls('avatar',size==='sm'&&'sm',size==='lg'&&'lg',p.id,viewing&&'viewing')} title={title||`${p.name} — ${p.role}${viewing?' (online)':''}`}>{p.initials}</div>}
+function StagePill({stageId}){const s=stage(stageId);if(!s)return null;return<span className={`pill stage-${stageId}`}>{s.short}</span>}
+function PriorityPill({priority}){return<span className={`pill prio-${priority}`}>{priority}</span>}
+function TierPill({tier}){return<span className={`pill tier-${tier}`}>Tier {tier}</span>}
+function InquiryCard({inq,onClick,showUnread=true}){
+  const type=inq.type||'rfq';
+  const overdue=type==='rfq'&&isOverdue(inq),stuck=isStuck(inq),owed=owedBy(inq),unread=daysSince(inq.updated)<=1&&showUnread;
+  const typeLabel={rfq:'RFQ',info:'INFO',project:'KEY OPP'}[type]||type.toUpperCase();
+  const stageId=type==='info'?(inq.status||'open'):type==='project'?(inq.projectStage||'discovery'):inq.stage;
+  return(<div className={cls('inquiry-card',overdue&&'overdue',stuck&&'stuck')} onClick={onClick}>
+    {unread&&<div className="newdot"/>}
+    <div className="top"><StagePill stageId={stageId}/><span className={`pill type-${type}`} style={{fontSize:9}}>{typeLabel}</span>{type==='rfq'&&<PriorityPill priority={inq.priority}/>}<span className="mono-sm">#{inq.id}</span></div>
+    <div className="account">{inq.accountName}</div>
+    {type==='rfq'&&<div className="part">{inq.rfqName||inq.part||'RFQ'}{(inq.parts&&inq.parts.length>0)?<span className="mono-sm"> · {inq.parts.length} part{inq.parts.length>1?'s':''}</span>:inq.qty?<span className="mono-sm"> · qty {inq.qty}</span>:''}</div>}
+    {type==='info'&&<div className="part" style={{fontStyle:'italic',color:'var(--ink-2)'}}>{(inq.subject||'(no subject)').slice(0,60)}</div>}
+    {type==='project'&&<div className="part">{inq.projectTitle||'Key Project'}{inq.potentialRevenue?<span className="mono-sm"> · {inq.potentialRevenue}</span>:''}</div>}
+    <div className="bottom">
+      {type==='info'
+        ?<span>{inq.assignedTo?<>&#8594; {person(inq.assignedTo)?.name||inq.assignedTo}</>:'unassigned'}</span>
+        :<span>{owed?<>&#8594; {person(owed)?.name||owed}</>:inq.waitingOn==='client'?'→ customer':'—'}</span>}
+      {inq.due&&<span className={overdue?'note':''} style={overdue?{color:'#b9562f'}:{}}>{dueLabel(inq.due)}</span>}
+    </div>
+  </div>);
 }
-function isOverdue(inq) { return daysSince(inq.due) > 0 && inq.stage !== 'po'; }
-function isStuck(inq)   { return daysSince(inq.updated) > 5 && !['po'].includes(inq.stage); }
-function owedBy(inq) {
-  if (inq.waitingOn === 'client') return null;
-  if (inq.waitingOn) return inq.waitingOn;
-  const s = stage(inq.stage);
-  return s ? s.owner.toLowerCase() : null;
+function StageTrack({currentStageId,stages}){
+  const arr=stages||window.STAGES;
+  const curIdx=arr.findIndex(s=>s.id===currentStageId);
+  return(<div className="stage-track">{arr.map((s,i)=>{const done=i<curIdx,current=i===curIdx;return(<React.Fragment key={s.id}><div className={cls('step',done&&'done',current&&'current')}><div className="dot">{i+1}</div><div className="lbl">{s.label}</div></div>{i<arr.length-1&&<div className={cls('connector',done&&'done')}/>}</React.Fragment>);})}</div>);
+}
+function ActivityThread({activity}){
+  if(!activity?.length)return<div className="empty">No activity yet.</div>;
+  return(<div>{activity.map((a,i)=>{const p=person(a.by);return(<div key={i} className="thread-item"><Avatar personId={a.by} size="sm"/><div className="body"><div className="hdr"><span className="who">{p?.name||a.by}</span><span className="when">{a.at}</span></div><div className="txt">{a.text}</div></div></div>);})}</div>);
+}
+function Modal({title,onClose,children,width=520}){
+  useEffect(()=>{const h=e=>{if(e.key==='Escape')onClose()};document.addEventListener('keydown',h);return()=>document.removeEventListener('keydown',h);},[]);
+  return(<div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}><div className="modal-box" style={{maxWidth:width}}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}><h3 style={{margin:0,fontSize:18}}>{title}</h3><button className="btn sm" onClick={onClose}>✕</button></div>{children}</div></div>);
+}
+function TopBar({crumbs,currentUser,onlineUsers,onLogout}){
+  return(<div className="topbar">
+    <div className="brand">CrossLink <span>Bushing Pipeline</span></div>
+    <div className="crumbs">{crumbs.map((c,i)=>(<React.Fragment key={i}>{i>0&&<span> / </span>}{c.onClick?<a onClick={c.onClick}>{c.label}</a>:<span>{c.label}</span>}</React.Fragment>))}</div>
+    <div className="presence"><span className="presence-label">online</span>{window.TEAM.map(t=><Avatar key={t.id} personId={t.id} size="sm" viewing={!!(onlineUsers&&onlineUsers[t.id])}/>)}</div>
+    {currentUser&&(<div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8,paddingLeft:12,borderLeft:'1px dashed var(--ink-3)'}}><Avatar personId={currentUser.id} size="sm"/><span style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)'}}>{currentUser.name}</span><button className="btn sm" onClick={onLogout} style={{fontSize:10,padding:'2px 8px'}}>sign out</button></div>)}
+  </div>);
+}
+function NavTabs({current,onChange}){
+  const tabs=[{id:'dashboard',label:'Dashboard'},{id:'accounts',label:'Accounts'},{id:'all',label:'All Inquiries'},{id:'keyprojects',label:'Key Projects'}];
+  return(<div className="navtabs">{tabs.map(t=><button key={t.id} className={cls('navtab',current===t.id&&'active')} onClick={()=>onChange(t.id)}>{t.label}</button>)}</div>);
+}
+window.Wire={cls,daysSince,stage,person,dueLabel,isComplete,isOverdue,isStuck,owedBy,Avatar,StagePill,PriorityPill,TierPill,InquiryCard,StageTrack,ActivityThread,Modal,TopBar,NavTabs};
+</script>
+  <script type="text/babel">
+const { useState: useStateD, useMemo: useMemoD } = React;
+const { Avatar: AvD, StagePill: SPD, PriorityPill: PPD, InquiryCard: ICD,
+        cls: clsD, daysSince: dsD, isComplete: icD, isOverdue: odD, isStuck: stkD, owedBy: owD,
+        person: persD } = window.Wire;
+
+function parsePrice(str){
+  if(!str||str==='—')return 0;
+  const m=String(str).match(/[\d,]+\.?\d*/);
+  return m?parseFloat(m[0].replace(/,/g,'')):0;
+}
+function inquiryRevenue(inq){
+  const p=parsePrice(inq.price);
+  return p*(parseInt(inq.qty)||0);
+}
+function fmtMoney(n){
+  if(!n)return'$0';
+  if(n>=1000000)return`$${(n/1000000).toFixed(1)}M`;
+  if(n>=1000)return`$${(n/1000).toFixed(0)}K`;
+  return`$${Math.round(n).toLocaleString()}`;
 }
 
-function Avatar({ personId, size='md', viewing=false, title }) {
-  const p = person(personId);
-  if (!p) return null;
-  return (
-    <div className={cls('avatar', size==='sm'&&'sm', size==='lg'&&'lg', p.id, viewing&&'viewing')}
-         title={title || `${p.name} — ${p.role}${viewing?' (online)':''}`}>
-      {p.initials}
+function KPI({big,lbl,accent}){
+  return(
+    <div className={clsD('kpi',accent&&'accent')}>
+      <div className="big">{big}</div><div className="lbl">{lbl}</div>
     </div>
   );
 }
 
-function StagePill({ stageId }) {
-  const s = stage(stageId);
-  if (!s) return null;
-  return <span className={`pill stage-${stageId}`}>{s.short}</span>;
-}
-function PriorityPill({ priority }) {
-  return <span className={`pill prio-${priority}`}>{priority}</span>;
-}
-function TierPill({ tier }) {
-  return <span className={`pill tier-${tier}`}>Tier {tier}</span>;
-}
-
-function InquiryCard({ inq, onClick, showUnread=true }) {
-  const overdue = isOverdue(inq);
-  const stuck   = isStuck(inq);
-  const owed    = owedBy(inq);
-  const unread  = daysSince(inq.updated) <= 1 && showUnread;
-  return (
-    <div className={cls('inquiry-card', overdue&&'overdue', stuck&&'stuck')} onClick={onClick}>
-      {unread && <div className="newdot" />}
-      <div className="top">
-        <StagePill stageId={inq.stage} />
-        <PriorityPill priority={inq.priority} />
-        <span className="mono-sm">#{inq.id}</span>
+function RevenuePipeline({onOpenInquiry}){
+  const all=useMemoD(()=>window.DATA_UTILS.allInquiries(),[]);
+  const active=all.filter(i=>!icD(i));
+  const withRev=active.map(i=>({...i,rev:inquiryRevenue(i)})).filter(i=>i.rev>0).sort((a,b)=>b.rev-a.rev);
+  const totalPipeline=withRev.reduce((s,i)=>s+i.rev,0);
+  const totalQuoted=withRev.filter(i=>i.stage==='quoted').reduce((s,i)=>s+i.rev,0);
+  const largest=withRev[0]?.rev||0;
+  return(
+    <div className="sketch">
+      <div style={{display:'flex',alignItems:'baseline',gap:12,marginBottom:12}}>
+        <h3 style={{margin:0}}>Revenue pipeline</h3>
+        <span className="mono-sm">qty × target/quoted price · excludes PO received · {withRev.length} priced inquiries</span>
       </div>
-      <div className="account">{inq.accountName}</div>
-      <div className="part">{inq.part} · qty {inq.qty}</div>
-      <div className="bottom">
-        <span>{owed ? <>&#8594; {person(owed)?.name||owed}</> : inq.waitingOn==='client' ? '→ customer' : '—'}</span>
-        <span className={overdue?'note':''} style={overdue?{color:'#b9562f'}:{}}>
-          {dueLabel(inq.due)}
-        </span>
+      <div className="grid-4" style={{marginBottom:16}}>
+        <KPI big={fmtMoney(totalPipeline)} lbl="total pipeline"/>
+        <KPI big={fmtMoney(totalQuoted)} lbl="at quote stage" accent={totalQuoted>0}/>
+        <KPI big={fmtMoney(largest)} lbl="largest opportunity"/>
+        <KPI big={withRev.length} lbl="priced inquiries"/>
       </div>
-    </div>
-  );
-}
-
-function StageTrack({ currentStageId }) {
-  const curIdx = window.STAGES.findIndex(s => s.id === currentStageId);
-  return (
-    <div className="stage-track">
-      {window.STAGES.map((s, i) => {
-        const done    = i < curIdx;
-        const current = i === curIdx;
-        return (
-          <React.Fragment key={s.id}>
-            <div className={cls('step', done&&'done', current&&'current')}>
-              <div className="dot">{i+1}</div>
-              <div className="lbl">{s.label}</div>
-            </div>
-            {i < window.STAGES.length-1 && <div className={cls('connector', done&&'done')} />}
-          </React.Fragment>
-        );
-      })}
-    </div>
-  );
-}
-
-function ActivityThread({ activity }) {
-  if (!activity?.length) return <div className="empty">No activity yet.</div>;
-  return (
-    <div>
-      {activity.map((a, i) => {
-        const p = person(a.by);
-        return (
-          <div key={i} className="thread-item">
-            <Avatar personId={a.by} size="sm" />
-            <div className="body">
-              <div className="hdr">
-                <span className="who">{p?.name||a.by}</span>
-                <span className="when">{a.at}</span>
-              </div>
-              <div className="txt">{a.text}</div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function TopBar({ crumbs, currentUser, onlineUsers, onLogout }) {
-  return (
-    <div className="topbar">
-      <div className="brand">CrossLink <span>Bushing Pipeline</span></div>
-      <div className="crumbs">
-        {crumbs.map((c, i) => (
-          <React.Fragment key={i}>
-            {i > 0 && <span> / </span>}
-            {c.onClick ? <a onClick={c.onClick}>{c.label}</a> : <span>{c.label}</span>}
-          </React.Fragment>
-        ))}
-      </div>
-      <div className="presence">
-        <span className="presence-label">online</span>
-        {window.TEAM.map(t => (
-          <Avatar key={t.id} personId={t.id} size="sm" viewing={!!(onlineUsers&&onlineUsers[t.id])} />
-        ))}
-      </div>
-      {currentUser && (
-        <div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8,paddingLeft:12,borderLeft:'1px dashed var(--ink-3)'}}>
-          <Avatar personId={currentUser.id} size="sm" />
-          <span style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)'}}>{currentUser.name}</span>
-          <button className="btn sm" onClick={onLogout} style={{fontSize:10,padding:'2px 8px'}}>sign out</button>
-        </div>
+      {withRev.length===0?(
+        <div className="empty">No priced inquiries yet — pipeline value appears once a price is entered on an inquiry.</div>
+      ):(
+        <table className="tbl">
+          <thead>
+            <tr><th>inquiry</th><th>account / rfq</th><th>stage</th><th>qty</th><th>unit price</th><th style={{textAlign:'right'}}>potential</th></tr>
+          </thead>
+          <tbody>
+            {withRev.slice(0,10).map(inq=>(
+              <tr key={inq.id} onClick={()=>onOpenInquiry(inq)} style={{cursor:'pointer'}}>
+                <td className="mono">#{inq.id}</td>
+                <td><div style={{fontWeight:700}}>{inq.accountName}</div><div className="mono-sm">{inq.rfqName||inq.part||'—'} · {inq.projectName}</div></td>
+                <td><SPD stageId={inq.stage}/></td>
+                <td className="mono">{inq.qty||'—'}</td>
+                <td className="mono-sm">{inq.price||'—'}</td>
+                <td style={{fontWeight:700,fontFamily:'var(--mono)',fontSize:13,textAlign:'right',color:inq.stage==='quoted'?'var(--ok)':'var(--ink)'}}>{fmtMoney(inq.rev)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
 }
 
-function NavTabs({ current, onChange }) {
-  const tabs = [
-    { id:'dashboard', label:'Dashboard' },
-    { id:'accounts',  label:'Accounts'  },
-    { id:'all',       label:'All Inquiries' }
-  ];
-  return (
-    <div className="navtabs">
-      {tabs.map(t => (
-        <button key={t.id}
-                className={cls('navtab', current===t.id&&'active')}
-                onClick={() => onChange(t.id)}>
-          {t.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-window.Wire = { cls, daysSince, stage, person, dueLabel, isOverdue, isStuck, owedBy,
-                Avatar, StagePill, PriorityPill, TierPill, InquiryCard, StageTrack,
-                ActivityThread, TopBar, NavTabs };
-
-  </script>
-
-  <script type="text/babel">
-// Dashboard views — 3 variations
-const { useState: useStateD, useMemo: useMemoD } = React;
-const { Avatar: AvD, StagePill: SPD, PriorityPill: PPD, InquiryCard: ICD,
-        cls: clsD, daysSince: dsD, isOverdue: odD, isStuck: stkD, owedBy: owD,
-        person: persD } = window.Wire;
-
-// ========== DASHBOARD V1: Swim lanes by person ==========
-function DashboardLanes({ onOpenInquiry }) {
-  const all = useMemoD(() => window.DATA_UTILS.allInquiries(), []);
-
-  const byPerson = useMemoD(() => {
-    const map = {};
-    for (const t of window.TEAM) map[t.id] = [];
-    for (const inq of all) {
-      if (inq.stage === 'po') continue; // completed
-      const owed = owD(inq);
-      if (owed && map[owed]) map[owed].push(inq);
+function DashboardLanes({onOpenInquiry}){
+  const all=useMemoD(()=>window.DATA_UTILS.allInquiries(),[]);
+  const byPerson=useMemoD(()=>{
+    const map={};
+    for(const t of window.TEAM)map[t.id]=[];
+    for(const inq of all){
+      if(icD(inq))continue;
+      const owed=owD(inq);
+      if(owed&&map[owed])map[owed].push(inq);
     }
-    // sort: overdue first, then by due date
-    for (const k of Object.keys(map)) {
-      map[k].sort((a,b) => {
-        const ao = odD(a) ? 0 : 1;
-        const bo = odD(b) ? 0 : 1;
-        if (ao !== bo) return ao - bo;
-        return dsD(a.due) > dsD(b.due) ? -1 : 1;
-      });
-    }
+    for(const k of Object.keys(map))map[k].sort((a,b)=>{const ao=odD(a)?0:1,bo=odD(b)?0:1;if(ao!==bo)return ao-bo;return dsD(a.due)>dsD(b.due)?-1:1});
     return map;
-  }, [all]);
-
-  const waitingOnClient = all.filter(i => i.waitingOn === 'client');
-  const recentActivity = useMemoD(() => {
-    const items = [];
-    for (const inq of all) {
-      for (const a of inq.activity || []) {
-        items.push({ ...a, inq });
-      }
-    }
-    items.sort((a,b) => a.at < b.at ? 1 : -1);
-    return items.slice(0, 8);
-  }, [all]);
-
-  return (
+  },[all]);
+  const waitingOnClient=all.filter(i=>i.waitingOn==='client');
+  const recentActivity=useMemoD(()=>{
+    const items=[];
+    for(const inq of all)for(const a of inq.activity||[])items.push({...a,inq});
+    items.sort((a,b)=>a.at<b.at?1:-1);return items.slice(0,8);
+  },[all]);
+  return(
     <div className="col">
-      {/* KPI strip */}
       <div className="grid-4">
-        <KPI big={all.filter(i => odD(i)).length} lbl="overdue" accent />
-        <KPI big={all.filter(i => i.stage === 'new').length} lbl="new · needs triage" />
-        <KPI big={all.filter(i => stkD(i)).length} lbl="stuck > 5 days" />
-        <KPI big={all.filter(i => i.stage === 'po').length} lbl="PO received" />
+        <KPI big={all.filter(i=>odD(i)).length} lbl="overdue" accent/>
+        <KPI big={all.filter(i=>i.stage==='new').length} lbl="new · needs triage"/>
+        <KPI big={all.filter(i=>stkD(i)).length} lbl="stuck > 5 days"/>
+        <KPI big={all.filter(i=>i.stage==='po').length} lbl="PO received"/>
       </div>
-
       <div className="sketch">
-        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom: 8}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
           <h3>Who owes what</h3>
           <div className="legend">
             <span className="item"><span className="pill prio-high">HIGH</span> priority</span>
-            <span className="item" style={{color:'#b9562f'}}>■ red left edge = overdue</span>
-            <span className="item">░ hatched = stuck &gt; 5 days</span>
+            <span className="item" style={{color:'#b9562f'}}>■ red edge = overdue</span>
+            <span className="item">░ hatched = stuck</span>
           </div>
         </div>
         <div className="grid-4">
-          {window.TEAM.map(p => (
+          {window.TEAM.map(p=>(
             <div key={p.id} className="lane">
               <div className="lane-header">
-                <AvD personId={p.id} size="lg" />
-                <div>
-                  <div className="name">{p.name}</div>
-                  <div className="role">{p.role}</div>
-                </div>
+                <AvD personId={p.id} size="lg"/>
+                <div><div className="name">{p.name}</div><div className="role">{p.role}</div></div>
                 <div className="count">{byPerson[p.id].length}</div>
               </div>
-              {byPerson[p.id].length === 0
-                ? <div className="empty">all clear ✓</div>
-                : byPerson[p.id].map(inq => (
-                  <ICD key={inq.id} inq={inq} onClick={() => onOpenInquiry(inq)} />
-                ))}
+              {byPerson[p.id].length===0?<div className="empty">all clear ✓</div>
+                :byPerson[p.id].map(inq=><ICD key={inq.id} inq={inq} onClick={()=>onOpenInquiry(inq)}/>)}
             </div>
           ))}
         </div>
       </div>
-
       <div className="grid-2">
         <div className="sketch">
           <h3>Waiting on customer</h3>
-          <div className="mono-sm" style={{marginBottom: 10}}>Nothing for us to action — but follow up if stale.</div>
-          {waitingOnClient.length === 0
-            ? <div className="empty">none</div>
-            : <div className="col" style={{gap: 8}}>
-                {waitingOnClient.map(inq => (
-                  <ICD key={inq.id} inq={inq} onClick={() => onOpenInquiry(inq)} />
-                ))}
-              </div>}
+          <div className="mono-sm" style={{marginBottom:10}}>Nothing for us to action — but follow up if stale.</div>
+          {waitingOnClient.length===0?<div className="empty">none</div>
+            :<div className="col" style={{gap:8}}>{waitingOnClient.map(inq=><ICD key={inq.id} inq={inq} onClick={()=>onOpenInquiry(inq)}/>)}</div>}
         </div>
-
         <div className="sketch">
           <h3>Recent activity</h3>
-          <div className="mono-sm" style={{marginBottom: 6}}>Last 8 updates across all inquiries</div>
-          {recentActivity.map((a, i) => (
+          <div className="mono-sm" style={{marginBottom:6}}>Last 8 updates across all inquiries</div>
+          {recentActivity.map((a,i)=>(
             <div key={i} className="activity-item">
-              <AvD personId={a.by} size="sm" />
+              <AvD personId={a.by} size="sm"/>
               <div className="body">
-                <div className="meta">
-                  {persD(a.by)?.name || a.by} · {a.at} · <a className="scribble" onClick={() => onOpenInquiry(a.inq)}>
-                    {a.inq.accountName} / {a.inq.id}
-                  </a>
-                </div>
+                <div className="meta">{persD(a.by)?.name||a.by} · {a.at} · <a className="scribble" onClick={()=>onOpenInquiry(a.inq)}>{a.inq.accountName} / {a.inq.id}</a></div>
                 <div className="text">{a.text}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
+      <RevenuePipeline onOpenInquiry={onOpenInquiry}/>
     </div>
   );
 }
 
-function KPI({ big, lbl, accent }) {
-  return (
-    <div className={clsD('kpi', accent && 'accent')}>
-      <div className="big">{big}</div>
-      <div className="lbl">{lbl}</div>
-    </div>
-  );
-}
-
-// ========== DASHBOARD V2: Single prioritized action list ==========
-function DashboardList({ onOpenInquiry }) {
-  const all = useMemoD(() => window.DATA_UTILS.allInquiries(), []);
-  const [filter, setFilter] = useStateD('all');
-
-  const active = all.filter(i => i.stage !== 'po');
-  const scored = useMemoD(() => {
-    const withScore = active.map(inq => {
-      let score = 0;
-      if (odD(inq)) score += 100 + dsD(inq.due);
-      if (inq.priority === 'high') score += 40;
-      if (inq.priority === 'med') score += 15;
-      if (stkD(inq)) score += 20;
-      if (inq.stage === 'new') score += 10;
-      return { ...inq, score };
-    });
-    withScore.sort((a,b) => b.score - a.score);
-    return withScore;
-  }, [active]);
-
-  const filtered = useMemoD(() => {
-    if (filter === 'all') return scored;
-    if (filter === 'client') return scored.filter(i => i.waitingOn === 'client');
-    return scored.filter(i => owD(i) === filter);
-  }, [scored, filter]);
-
-  return (
+function DashboardList({onOpenInquiry}){
+  const all=useMemoD(()=>window.DATA_UTILS.allInquiries(),[]);
+  const [filter,setFilter]=useStateD('all');
+  const active=all.filter(i=>!icD(i));
+  const scored=useMemoD(()=>{
+    const ws=active.map(inq=>{let s=0;if(odD(inq))s+=100+dsD(inq.due);if(inq.priority==='high')s+=40;if(inq.priority==='med')s+=15;if(stkD(inq))s+=20;if(inq.stage==='new')s+=10;return{...inq,score:s}});
+    ws.sort((a,b)=>b.score-a.score);return ws;
+  },[active]);
+  const filtered=useMemoD(()=>{
+    if(filter==='all')return scored;
+    if(filter==='client')return scored.filter(i=>i.waitingOn==='client');
+    return scored.filter(i=>owD(i)===filter);
+  },[scored,filter]);
+  return(
     <div className="col">
       <div className="grid-4">
-        <KPI big={all.filter(i => odD(i)).length} lbl="overdue" accent />
-        <KPI big={all.filter(i => i.stage === 'new').length} lbl="new · needs triage" />
-        <KPI big={all.filter(i => stkD(i)).length} lbl="stuck > 5 days" />
-        <KPI big={all.filter(i => i.waitingOn === 'client').length} lbl="waiting on customer" />
+        <KPI big={all.filter(i=>odD(i)).length} lbl="overdue" accent/>
+        <KPI big={all.filter(i=>i.stage==='new').length} lbl="new · needs triage"/>
+        <KPI big={all.filter(i=>stkD(i)).length} lbl="stuck > 5 days"/>
+        <KPI big={all.filter(i=>i.waitingOn==='client').length} lbl="waiting on customer"/>
       </div>
-
       <div className="sketch">
-        <div style={{display:'flex', alignItems:'center', gap: 12, marginBottom: 12, flexWrap:'wrap'}}>
-          <h3 style={{margin: 0}}>Prioritized action queue</h3>
-          <div className="mono-sm">filter by owner:</div>
-          <FilterBtn active={filter==='all'} onClick={() => setFilter('all')}>all</FilterBtn>
-          {window.TEAM.map(t => (
-            <FilterBtn key={t.id} active={filter===t.id} onClick={() => setFilter(t.id)}>
-              <AvD personId={t.id} size="sm" /> <span>{t.name}</span>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:12,flexWrap:'wrap'}}>
+          <h3 style={{margin:0}}>Prioritized action queue</h3>
+          <div className="mono-sm">filter:</div>
+          <FilterBtn active={filter==='all'} onClick={()=>setFilter('all')}>all</FilterBtn>
+          {window.TEAM.map(t=>(
+            <FilterBtn key={t.id} active={filter===t.id} onClick={()=>setFilter(t.id)}>
+              <AvD personId={t.id} size="sm"/> <span>{t.name}</span>
             </FilterBtn>
           ))}
-          <FilterBtn active={filter==='client'} onClick={() => setFilter('client')}>customer</FilterBtn>
+          <FilterBtn active={filter==='client'} onClick={()=>setFilter('client')}>customer</FilterBtn>
         </div>
-
         <table className="tbl">
-          <thead>
-            <tr>
-              <th>inq #</th>
-              <th>account / part</th>
-              <th>stage</th>
-              <th>priority</th>
-              <th>owes</th>
-              <th>due</th>
-              <th>last update</th>
-            </tr>
-          </thead>
+          <thead><tr><th>inq #</th><th>account / part</th><th>stage</th><th>priority</th><th>owes</th><th>due</th><th>last update</th></tr></thead>
           <tbody>
-            {filtered.map(inq => {
-              const owed = owD(inq);
-              return (
-                <tr key={inq.id} className={odD(inq) ? 'overdue-row' : ''} onClick={() => onOpenInquiry(inq)}>
+            {filtered.map(inq=>{
+              const owed=owD(inq);
+              return(
+                <tr key={inq.id} className={odD(inq)?'overdue-row':''} onClick={()=>onOpenInquiry(inq)}>
                   <td className="mono">#{inq.id}</td>
-                  <td>
-                    <div style={{fontWeight:700}}>{inq.accountName}</div>
-                    <div className="mono-sm">{inq.part} · qty {inq.qty}</div>
-                  </td>
-                  <td><SPD stageId={inq.stage} /></td>
-                  <td><PPD priority={inq.priority} /></td>
-                  <td>{owed ? <div style={{display:'flex',alignItems:'center',gap:6}}><AvD personId={owed} size="sm" /><span>{persD(owed)?.name}</span></div> : (inq.waitingOn === 'client' ? <span className="mono-sm">customer</span> : '—')}</td>
-                  <td className={odD(inq) ? 'note' : ''}>{window.Wire.dueLabel(inq.due)}</td>
+                  <td><div style={{fontWeight:700}}>{inq.accountName}</div><div className="mono-sm">{inq.rfqName||inq.part||inq.projectTitle||inq.subject||'—'}</div></td>
+                  <td><SPD stageId={inq.stage}/></td>
+                  <td><PPD priority={inq.priority}/></td>
+                  <td>{owed?<div style={{display:'flex',alignItems:'center',gap:6}}><AvD personId={owed} size="sm"/><span>{persD(owed)?.name}</span></div>:(inq.waitingOn==='client'?<span className="mono-sm">customer</span>:'—')}</td>
+                  <td className={odD(inq)?'note':''}>{window.Wire.dueLabel(inq.due)}</td>
                   <td className="mono-sm">{inq.updated} · {persD(inq.updatedBy)?.name}</td>
                 </tr>
               );
@@ -1113,131 +1012,297 @@ function DashboardList({ onOpenInquiry }) {
           </tbody>
         </table>
       </div>
+      <RevenuePipeline onOpenInquiry={onOpenInquiry}/>
     </div>
   );
 }
 
-function FilterBtn({ active, onClick, children }) {
-  return (
-    <button className={clsD('btn', 'sm')}
-            style={active ? {background: '#1a1713', color:'#fffef5'} : {}}
-            onClick={onClick}>
-      <span style={{display:'inline-flex', gap:4, alignItems:'center'}}>{children}</span>
+function FilterBtn({active,onClick,children}){
+  return(
+    <button className={clsD('btn','sm')} style={active?{background:'#1a1713',color:'#fffef5'}:{}} onClick={onClick}>
+      <span style={{display:'inline-flex',gap:4,alignItems:'center'}}>{children}</span>
     </button>
   );
 }
 
-// ========== DASHBOARD V3: Pipeline kanban ==========
-function DashboardKanban({ onOpenInquiry }) {
-  const all = useMemoD(() => window.DATA_UTILS.allInquiries(), []);
-  const active = all.filter(i => i.stage !== 'po');
-
-  const byStage = useMemoD(() => {
-    const m = {};
-    for (const s of window.STAGES) m[s.id] = [];
-    for (const inq of active) m[inq.stage]?.push(inq);
-    for (const k of Object.keys(m)) {
-      m[k].sort((a,b) => dsD(a.due) > dsD(b.due) ? -1 : 1);
-    }
+function DashboardKanban({onOpenInquiry}){
+  const all=useMemoD(()=>window.DATA_UTILS.allInquiries(),[]);
+  const active=all.filter(i=>!icD(i)&&(i.type==='rfq'||!i.type));
+  const byStage=useMemoD(()=>{
+    const m={};for(const s of window.STAGES)m[s.id]=[];
+    for(const inq of active)m[inq.stage]?.push(inq);
+    for(const k of Object.keys(m))m[k].sort((a,b)=>dsD(a.due)>dsD(b.due)?-1:1);
     return m;
-  }, [active]);
-
-  const recentActivity = useMemoD(() => {
-    const items = [];
-    for (const inq of all) for (const a of inq.activity || []) items.push({ ...a, inq });
-    items.sort((a,b) => a.at < b.at ? 1 : -1);
-    return items.slice(0, 6);
-  }, [all]);
-
-  return (
+  },[active]);
+  const recentActivity=useMemoD(()=>{
+    const items=[];for(const inq of all)for(const a of inq.activity||[])items.push({...a,inq});
+    items.sort((a,b)=>a.at<b.at?1:-1);return items.slice(0,6);
+  },[all]);
+  return(
     <div className="col">
       <div className="grid-4">
-        <KPI big={all.filter(i => odD(i)).length} lbl="overdue" accent />
-        <KPI big={all.filter(i => i.stage === 'new').length} lbl="new · needs triage" />
-        <KPI big={all.filter(i => stkD(i)).length} lbl="stuck > 5 days" />
-        <KPI big={all.filter(i => i.stage === 'po').length} lbl="PO received" />
+        <KPI big={all.filter(i=>odD(i)).length} lbl="overdue" accent/>
+        <KPI big={all.filter(i=>i.stage==='new').length} lbl="new · needs triage"/>
+        <KPI big={all.filter(i=>stkD(i)).length} lbl="stuck > 5 days"/>
+        <KPI big={all.filter(i=>i.stage==='po').length} lbl="PO received"/>
       </div>
-
       <div className="sketch">
         <h3>Pipeline — by stage</h3>
-        <div className="mono-sm" style={{marginBottom: 10}}>Click a card to open the inquiry.</div>
         <div className="kanban">
-          {window.STAGES.filter(s => s.id !== 'po').map(s => (
+          {window.STAGES.filter(s=>s.id!=='po').map(s=>(
             <div key={s.id} className="kanban-col">
-              <div className="col-head">
-                <div className="lbl">{s.label}</div>
-                <div className="ct">{byStage[s.id].length}</div>
-              </div>
-              <div className="mono-sm" style={{marginBottom: 4, fontSize: 9}}>owner: {s.owner}</div>
-              {byStage[s.id].length === 0
-                ? <div className="empty" style={{padding: 12, fontSize: 13}}>—</div>
-                : byStage[s.id].map(inq => <ICD key={inq.id} inq={inq} onClick={() => onOpenInquiry(inq)} />)}
+              <div className="col-head"><div className="lbl">{s.label}</div><div className="ct">{byStage[s.id].length}</div></div>
+              <div className="mono-sm" style={{marginBottom:4,fontSize:9}}>owner: {s.owner}</div>
+              {byStage[s.id].length===0?<div className="empty" style={{padding:12,fontSize:13}}>—</div>
+                :byStage[s.id].map(inq=><ICD key={inq.id} inq={inq} onClick={()=>onOpenInquiry(inq)}/>)}
             </div>
           ))}
         </div>
       </div>
-
       <div className="sketch">
         <h3>Recent activity</h3>
-        {recentActivity.map((a, i) => (
+        {recentActivity.map((a,i)=>(
           <div key={i} className="activity-item">
-            <AvD personId={a.by} size="sm" />
+            <AvD personId={a.by} size="sm"/>
             <div className="body">
-              <div className="meta">
-                {persD(a.by)?.name || a.by} · {a.at} · <a className="scribble" onClick={() => onOpenInquiry(a.inq)}>
-                  {a.inq.accountName} / {a.inq.id}
-                </a>
-              </div>
+              <div className="meta">{persD(a.by)?.name||a.by} · {a.at} · <a className="scribble" onClick={()=>onOpenInquiry(a.inq)}>{a.inq.accountName} / {a.inq.id}</a></div>
               <div className="text">{a.text}</div>
             </div>
           </div>
         ))}
       </div>
+      <RevenuePipeline onOpenInquiry={onOpenInquiry}/>
     </div>
   );
 }
 
-window.Dashboards = { DashboardLanes, DashboardList, DashboardKanban };
-
-  </script>
-
+window.Dashboards={DashboardLanes,DashboardList,DashboardKanban};
+</script>
   <script type="text/babel">
-
-const { useState: useStateA, useMemo: useMemoA } = React;
+const { useState: useStateA, useMemo: useMemoA, useEffect: useEffectA } = React;
 const { Avatar: Av2, StagePill: SP2, PriorityPill: PP2, TierPill: TP2,
-        InquiryCard: IC2, StageTrack: ST2, ActivityThread: AT2,
-        cls: cls2, daysSince: ds2, isOverdue: od2, isStuck: stk2, owedBy: ow2,
+        InquiryCard: IC2, StageTrack: ST2, ActivityThread: AT2, Modal,
+        cls: cls2, daysSince: ds2, isComplete: ic2, isOverdue: od2, isStuck: stk2, owedBy: ow2,
         person: pers2, stage: stg2, dueLabel: dl2 } = window.Wire;
 
-function AccountCard({ acc, onOpenAccount }) {
-  const allInq = acc.projects.filter(p=>!p.archived).flatMap(p=>p.inquiries.filter(i=>!i.archived));
-  const active  = allInq.filter(i=>i.stage!=='po');
-  const overdue = allInq.filter(i=>od2(i)).length;
-  const newCt   = allInq.filter(i=>i.stage==='new').length;
-  const stageCounts = {};
-  for (const i of active) stageCounts[i.stage] = (stageCounts[i.stage]||0)+1;
-  return (
-    <div className="account-card" onClick={()=>onOpenAccount(acc.id)}>
-      <div className="head">
-        <div className="name">{acc.name}</div>
-        <TP2 tier={acc.tier} />
+// ── shared form helpers ────────────────────────────────────────────────────────
+function FRow({label,children}){
+  return<div className="form-row"><label className="form-label">{label}</label>{children}</div>;
+}
+function EditableField({k,v,onSave,mono,multiline,readOnly,placeholder}){
+  const [editing,setEditing]=useStateA(false);
+  const [val,setVal]=useStateA(v||'');
+  useEffectA(()=>{if(!editing)setVal(v||'');},[v,editing]);
+  function save(){setEditing(false);const trimmed=val.trim();if(trimmed!==(v||'').trim())onSave(trimmed);}
+  function cancel(){setEditing(false);setVal(v||'');}
+  if(readOnly)return<div className="field"><div className="k">{k}</div><div className={cls2('v',mono&&'mono')}>{v||'—'}</div></div>;
+  if(editing){
+    const inputStyle={fontSize:13,fontFamily:mono?'var(--mono)':'var(--hand)',width:'100%',border:'1.5px solid var(--accent-2)',borderRadius:4,padding:'4px 6px',background:'var(--paper)',color:'var(--ink)',boxSizing:'border-box'};
+    return(
+      <div className="field">
+        <div className="k">{k}</div>
+        {multiline
+          ?<textarea style={{...inputStyle,minHeight:64,resize:'vertical'}} value={val} onChange={e=>setVal(e.target.value)} onBlur={save} onKeyDown={e=>{if(e.key==='Escape')cancel();}} autoFocus/>
+          :<input style={inputStyle} value={val} onChange={e=>setVal(e.target.value)} onBlur={save} onKeyDown={e=>{if(e.key==='Enter')save();if(e.key==='Escape')cancel();}} autoFocus/>
+        }
       </div>
+    );
+  }
+  return(
+    <div className="field" onClick={()=>setEditing(true)} style={{cursor:'text'}} title="Click to edit">
+      <div className="k">{k} <span style={{fontSize:9,opacity:.5}}>✎</span></div>
+      <div className={cls2('v',mono&&'mono')} style={{borderBottom:'1px dashed var(--ink-3)',minHeight:18}}>
+        {v||<span style={{color:'var(--ink-3)',fontStyle:'italic',fontSize:12}}>{placeholder||'click to add…'}</span>}
+      </div>
+    </div>
+  );
+}
+
+// ── Add Account Modal ──────────────────────────────────────────────────────────
+function AddAccountModal({onClose,onAdd}){
+  const [form,setForm]=useStateA({name:'',location:'',tier:'B',type:'prospect',notes:''});
+  const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
+  function submit(e){
+    e.preventDefault();
+    if(!form.name.trim())return;
+    onAdd(form);onClose();
+  }
+  return(
+    <Modal title="New Account" onClose={onClose}>
+      <form onSubmit={submit}>
+        <FRow label="Company name *"><input className="form-input" value={form.name} onChange={set('name')} placeholder="e.g. Acme Transformers" required autoFocus/></FRow>
+        <FRow label="Location"><input className="form-input" value={form.location} onChange={set('location')} placeholder="City, Province/State"/></FRow>
+        <div className="form-grid-2">
+          <FRow label="Tier">
+            <select className="form-select" value={form.tier} onChange={set('tier')}>
+              <option value="A">A — Strategic</option>
+              <option value="B">B — Regular</option>
+              <option value="C">C — Occasional</option>
+            </select>
+          </FRow>
+          <FRow label="Status">
+            <select className="form-select" value={form.type} onChange={set('type')}>
+              <option value="prospect">Prospect</option>
+              <option value="active">Active Customer</option>
+            </select>
+          </FRow>
+        </div>
+        <FRow label="Notes"><textarea className="form-textarea" value={form.notes} onChange={set('notes')} placeholder="Key contacts, preferences, anything to know…"/></FRow>
+        <div className="form-actions">
+          <button type="button" className="btn" onClick={onClose}>cancel</button>
+          <button type="submit" className="btn primary">create account</button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+// ── Add Project Modal ──────────────────────────────────────────────────────────
+function AddProjectModal({accountName,onClose,onAdd}){
+  const [name,setName]=useStateA('');
+  function submit(e){e.preventDefault();if(!name.trim())return;onAdd(name.trim());onClose();}
+  return(
+    <Modal title={`New Project — ${accountName}`} onClose={onClose}>
+      <form onSubmit={submit}>
+        <FRow label="Project name *"><input className="form-input" value={name} onChange={e=>setName(e.target.value)} placeholder="e.g. 138 kV Qualification Program" required autoFocus/></FRow>
+        <div className="form-actions">
+          <button type="button" className="btn" onClick={onClose}>cancel</button>
+          <button type="submit" className="btn primary">create project</button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
+// ── Add Inquiry Modal ──────────────────────────────────────────────────────────
+const INQ_TYPES=[
+  {id:'rfq',    icon:'📋', name:'Request for Quote',          desc:'Customer requests a part — goes through engineering, drawing, costing, and quoting.'},
+  {id:'info',   icon:'💬', name:'Information Inquiry',        desc:'Generic question or action item from a customer. Assign, action, and close.'},
+  {id:'project',icon:'🏆', name:'Key Project / Opportunity',  desc:'Strategic multi-phase opportunity — track volume, revenue potential, meetings, and project stage.'},
+];
+function AddInquiryModal({accountName,projectName,onClose,onAdd}){
+  const in30=new Date(Date.now()+30*86400000).toISOString().slice(0,10);
+  const [type,setType]=useStateA(null);
+  // RFQ form state
+  const [rfq,setRfq]=useStateA({rfqName:'',priority:'med',due:in30,specs:''});
+  const [rfqParts,setRfqParts]=useStateA([]);
+  const setR=k=>e=>setRfq(f=>({...f,[k]:e.target.value}));
+  // Info form state
+  const [info,setInfo]=useStateA({subject:'',assignedTo:'fahim',priority:'med',due:''});
+  const setI=k=>e=>setInfo(f=>({...f,[k]:e.target.value}));
+  // Project form state
+  const [proj,setProj]=useStateA({projectTitle:'',potentialVolume:'',potentialRevenue:'',priority:'med',notes:''});
+  const setP=k=>e=>setProj(f=>({...f,[k]:e.target.value}));
+
+  function submitRfq(e){e.preventDefault();if(!rfq.rfqName.trim())return;onAdd({type:'rfq',rfqName:rfq.rfqName,parts:rfqParts,priority:rfq.priority,due:rfq.due,specs:rfq.specs});onClose();}
+  function submitInfo(e){e.preventDefault();if(!info.subject.trim())return;onAdd({type:'info',status:'open',...info});onClose();}
+  function submitProj(e){e.preventDefault();if(!proj.projectTitle.trim())return;onAdd({type:'project',projectStage:'discovery',...proj});onClose();}
+
+  if(!type) return(
+    <Modal title={`New Inquiry — ${projectName}`} onClose={onClose} width={640}>
+      <div className="mono-sm" style={{marginBottom:14,color:'var(--ink-3)'}}>Choose the type of inquiry to create:</div>
+      <div className="type-pick-grid">
+        {INQ_TYPES.map(t=>(
+          <div key={t.id} className="type-pick-card" onClick={()=>setType(t.id)}>
+            <div className="tpc-icon">{t.icon}</div>
+            <div className="tpc-name">{t.name}</div>
+            <div className="tpc-desc">{t.desc}</div>
+          </div>
+        ))}
+      </div>
+      <div className="form-actions" style={{borderTop:'none',marginTop:8}}>
+        <button className="btn" onClick={onClose}>cancel</button>
+      </div>
+    </Modal>
+  );
+
+  if(type==='rfq') return(
+    <Modal title={`New RFQ — ${projectName||accountName}`} onClose={onClose} width={560}>
+      <form onSubmit={submitRfq}>
+        <FRow label="RFQ name / description *"><input className="form-input" value={rfq.rfqName} onChange={setR('rfqName')} placeholder="e.g. 138 kV HV Bushing Request, Silicone Bushing Program…" required autoFocus/></FRow>
+        <div className="form-grid-2">
+          <FRow label="Priority"><select className="form-select" value={rfq.priority} onChange={setR('priority')}><option value="high">High</option><option value="med">Medium</option><option value="low">Low</option></select></FRow>
+          <FRow label="Due date"><input className="form-input" type="date" value={rfq.due} onChange={setR('due')}/></FRow>
+        </div>
+        <FRow label="Specs / notes"><textarea className="form-textarea" value={rfq.specs} onChange={setR('specs')} placeholder="Voltage class, standards, special requirements…"/></FRow>
+        <div style={{marginBottom:14}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
+            <label className="form-label" style={{margin:0}}>PART NUMBERS</label>
+            <button type="button" className="btn sm" onClick={()=>setRfqParts(p=>[...p,{partNum:'',qty:''}])}>+ add part</button>
+          </div>
+          {rfqParts.length===0&&<div className="mono-sm" style={{color:'var(--ink-3)',paddingBottom:2}}>No parts yet — engineering will confirm part numbers later.</div>}
+          {rfqParts.map((pt,i)=>(
+            <div key={i} style={{display:'flex',gap:6,marginBottom:6,alignItems:'center'}}>
+              <input className="form-input" value={pt.partNum} onChange={e=>setRfqParts(p=>p.map((r,j)=>j===i?{...r,partNum:e.target.value}:r))} placeholder="Part #" style={{flex:2}}/>
+              <input className="form-input" value={pt.qty} onChange={e=>setRfqParts(p=>p.map((r,j)=>j===i?{...r,qty:e.target.value}:r))} placeholder="Qty or N/A" style={{flex:1}}/>
+              <button type="button" className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f',flexShrink:0}} onClick={()=>setRfqParts(p=>p.filter((_,j)=>j!==i))}>✕</button>
+            </div>
+          ))}
+        </div>
+        <div className="form-actions"><button type="button" className="btn" onClick={()=>setType(null)}>← back</button><button type="submit" className="btn primary">create RFQ</button></div>
+      </form>
+    </Modal>
+  );
+
+  if(type==='info') return(
+    <Modal title={`New Info Inquiry — ${projectName}`} onClose={onClose}>
+      <form onSubmit={submitInfo}>
+        <FRow label="Subject / question *"><textarea className="form-textarea" value={info.subject} onChange={setI('subject')} placeholder="What did the customer ask or request?" required autoFocus style={{minHeight:80}}/></FRow>
+        <div className="form-grid-2">
+          <FRow label="Assign to"><select className="form-select" value={info.assignedTo} onChange={setI('assignedTo')}>{window.TEAM.map(t=><option key={t.id} value={t.id}>{t.name} — {t.role}</option>)}</select></FRow>
+          <FRow label="Priority"><select className="form-select" value={info.priority} onChange={setI('priority')}><option value="high">High</option><option value="med">Medium</option><option value="low">Low</option></select></FRow>
+        </div>
+        <FRow label="Due / target response date (optional)"><input className="form-input" type="date" value={info.due} onChange={setI('due')}/></FRow>
+        <div className="form-actions"><button type="button" className="btn" onClick={()=>setType(null)}>← back</button><button type="submit" className="btn primary">create inquiry</button></div>
+      </form>
+    </Modal>
+  );
+
+  if(type==='project') return(
+    <Modal title={`New Key Project — ${projectName||accountName}`} onClose={onClose}>
+      <form onSubmit={submitProj}>
+        <FRow label="Project title *"><input className="form-input" value={proj.projectTitle} onChange={setP('projectTitle')} placeholder="e.g. 345 kV Qualification Program" required autoFocus/></FRow>
+        <div className="form-grid-2">
+          <FRow label="Potential volume"><input className="form-input" value={proj.potentialVolume} onChange={setP('potentialVolume')} placeholder="e.g. 200 units/yr"/></FRow>
+          <FRow label="Potential revenue"><input className="form-input" value={proj.potentialRevenue} onChange={setP('potentialRevenue')} placeholder="e.g. $500K"/></FRow>
+        </div>
+        <FRow label="Priority"><select className="form-select" value={proj.priority} onChange={setP('priority')}><option value="high">High</option><option value="med">Medium</option><option value="low">Low</option></select></FRow>
+        <FRow label="Notes / context"><textarea className="form-textarea" value={proj.notes} onChange={setP('notes')} placeholder="Key contacts, background, what's driving this project…" style={{minHeight:70}}/></FRow>
+        <div className="form-actions"><button type="button" className="btn" onClick={()=>setType(null)}>← back</button><button type="submit" className="btn primary">create project inquiry</button></div>
+      </form>
+    </Modal>
+  );
+
+  return null;
+}
+
+// ── AccountsList ───────────────────────────────────────────────────────────────
+function AccountCard({acc,onOpenAccount}){
+  const allInq=acc.projects.filter(p=>!p.archived).flatMap(p=>p.inquiries.filter(i=>!i.archived));
+  const active=allInq.filter(i=>!ic2(i));
+  const overdue=allInq.filter(i=>od2(i)).length;
+  const newCt=allInq.filter(i=>i.stage==='new').length;
+  const stageCounts={};
+  for(const i of active)stageCounts[i.stage]=(stageCounts[i.stage]||0)+1;
+  return(
+    <div className="account-card" onClick={()=>onOpenAccount(acc.id)}>
+      <div className="head"><div className="name">{acc.name}</div><TP2 tier={acc.tier}/></div>
       <div className="loc">
         {acc.location}
-        {acc.type==='prospect' && <span className="pill" style={{background:'#fffef5',borderColor:'#b9562f',color:'#b9562f',fontSize:9,marginLeft:8}}>PROSPECT</span>}
+        {acc.type==='prospect'&&<span className="pill" style={{background:'#fffef5',borderColor:'#b9562f',color:'#b9562f',fontSize:9,marginLeft:8}}>PROSPECT</span>}
       </div>
       <div className="stats">
         <div><b>{acc.projects.filter(p=>!p.archived).length}</b> projects</div>
         <div><b>{allInq.length}</b> inquiries</div>
-        {overdue>0 && <div style={{color:'#b9562f'}}><b>{overdue}</b> overdue</div>}
-        {newCt>0   && <div><b>{newCt}</b> new</div>}
+        {overdue>0&&<div style={{color:'#b9562f'}}><b>{overdue}</b> overdue</div>}
+        {newCt>0&&<div><b>{newCt}</b> new</div>}
       </div>
       <div>
         <div className="mono-sm" style={{marginBottom:4}}>active pipeline</div>
         <div className="stage-bar">
           {window.STAGES.filter(s=>s.id!=='po').map(s=>{
-            const c = stageCounts[s.id]||0;
-            return <div key={s.id} className={cls2('seg',c>0&&'filled',c>0&&overdue>0&&'accent')} title={`${s.label}: ${c}`} />;
+            const c=stageCounts[s.id]||0;
+            return<div key={s.id} className={cls2('seg',c>0&&'filled',c>0&&overdue>0&&'accent')} title={`${s.label}: ${c}`}/>;
           })}
         </div>
       </div>
@@ -1245,88 +1310,125 @@ function AccountCard({ acc, onOpenAccount }) {
   );
 }
 
-function AccountsList({ onOpenAccount }) {
-  const [seg, setSeg] = useStateA('all');
-  const accounts = window.ACCOUNTS;
-  const activeAccounts = accounts.filter(a=>a.type==='active');
-  const prospects      = accounts.filter(a=>a.type==='prospect');
-  const showActive   = seg==='all'||seg==='active';
-  const showProspects= seg==='all'||seg==='prospects';
-  return (
+function AccountsList({onOpenAccount,onAddAccount}){
+  const [seg,setSeg]=useStateA('all');
+  const [showAdd,setShowAdd]=useStateA(false);
+  const accounts=window.ACCOUNTS;
+  const activeAccounts=accounts.filter(a=>a.type==='active');
+  const prospects=accounts.filter(a=>a.type==='prospect');
+  const showActive=seg==='all'||seg==='active';
+  const showProspects=seg==='all'||seg==='prospects';
+  return(
     <div className="col">
+      {showAdd&&<AddAccountModal onClose={()=>setShowAdd(false)} onAdd={data=>{onAddAccount(data);setShowAdd(false)}}/>}
       <div className="sketch paper-2">
         <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
           <div style={{flex:1,minWidth:200}}>
             <h3>Accounts & Prospects</h3>
-            <div className="mono-sm">Prospects have open inquiries but no PO yet. Active = PO received.</div>
+            <div className="mono-sm">Prospects = inquiring/quoting, no PO yet. Active = PO received.</div>
           </div>
-          <div className="seg" style={{display:'flex',border:'1.5px solid #2a2420',borderRadius:4,overflow:'hidden'}}>
-            {[{id:'all',lbl:`All (${accounts.length})`},{id:'active',lbl:`Active (${activeAccounts.length})`},{id:'prospects',lbl:`Prospects (${prospects.length})`}].map(o=>(
-              <button key={o.id} onClick={()=>setSeg(o.id)} style={{background:seg===o.id?'#1a1713':'#fffef5',color:seg===o.id?'#fffef5':'#1a1713',border:'none',padding:'6px 14px',cursor:'pointer',fontSize:12,fontWeight:600,fontFamily:'inherit',borderRight:'1px solid #2a2420'}}>{o.lbl}</button>
-            ))}
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <div className="seg" style={{display:'flex',border:'1.5px solid #2a2420',borderRadius:4,overflow:'hidden'}}>
+              {[{id:'all',lbl:`All (${accounts.length})`},{id:'active',lbl:`Active (${activeAccounts.length})`},{id:'prospects',lbl:`Prospects (${prospects.length})`}].map(o=>(
+                <button key={o.id} onClick={()=>setSeg(o.id)} style={{background:seg===o.id?'#1a1713':'#fffef5',color:seg===o.id?'#fffef5':'#1a1713',border:'none',padding:'6px 14px',cursor:'pointer',fontSize:12,fontWeight:600,fontFamily:'inherit',borderRight:'1px solid #2a2420'}}>{o.lbl}</button>
+              ))}
+            </div>
+            <button className="btn sm primary" onClick={()=>setShowAdd(true)}>+ new account</button>
           </div>
         </div>
       </div>
-      {showActive && (
+      {showActive&&(
         <div>
           <div style={{display:'flex',alignItems:'baseline',gap:10,marginBottom:10}}>
             <h3 style={{margin:0,fontSize:15,fontWeight:700,letterSpacing:'-0.01em'}}>Active accounts</h3>
             <span className="mono-sm">customers with a PO on record</span>
           </div>
-          {activeAccounts.length===0
-            ? <div className="empty">No active accounts yet.</div>
-            : <div className="grid-auto">{activeAccounts.map(acc=><AccountCard key={acc.id} acc={acc} onOpenAccount={onOpenAccount}/>)}</div>}
+          {activeAccounts.length===0?<div className="empty">No active accounts yet.</div>
+            :<div className="grid-auto">{activeAccounts.map(acc=><AccountCard key={acc.id} acc={acc} onOpenAccount={onOpenAccount}/>)}</div>}
         </div>
       )}
-      {showProspects && (
+      {showProspects&&(
         <div style={{marginTop:showActive?16:0}}>
           <div style={{display:'flex',alignItems:'baseline',gap:10,marginBottom:10}}>
             <h3 style={{margin:0,fontSize:15,fontWeight:700,letterSpacing:'-0.01em'}}>Prospects</h3>
             <span className="mono-sm">inquiring / quoting — no PO yet</span>
           </div>
-          {prospects.length===0
-            ? <div className="empty">No prospects.</div>
-            : <div className="grid-auto">{prospects.map(acc=><AccountCard key={acc.id} acc={acc} onOpenAccount={onOpenAccount}/>)}</div>}
+          {prospects.length===0?<div className="empty">No prospects.</div>
+            :<div className="grid-auto">{prospects.map(acc=><AccountCard key={acc.id} acc={acc} onOpenAccount={onOpenAccount}/>)}</div>}
         </div>
       )}
     </div>
   );
 }
 
-function AccountDetail({ accountId, onOpenInquiry, onDeleteInquiry, onArchiveInquiry, onDeleteProject, onArchiveProject }) {
-  const acc = window.ACCOUNTS.find(a=>a.id===accountId);
-  if (!acc) return <div className="empty">Account not found</div>;
-  const [showArchivedProjs,  setShowArchivedProjs]  = useStateA(false);
-  const [showArchivedInqMap, setShowArchivedInqMap] = useStateA({});
-  const toggleInqArchived = (projId) => setShowArchivedInqMap(m=>({...m,[projId]:!m[projId]}));
-  const activeProjects  = acc.projects.filter(p=>!p.archived);
-  const archivedProjects= acc.projects.filter(p=> p.archived);
-  const allActiveInq    = activeProjects.flatMap(p=>p.inquiries.filter(i=>!i.archived));
-  const overdue         = allActiveInq.filter(i=>od2(i));
-  return (
+// ── AccountDetail ─────────────────────────────────────────────────────────────
+function AccountDetail({accountId,onOpenInquiry,onAddProject,onAddInquiry,onPromoteAccount,onDeleteAccount,onChangeTier,onDeleteInquiry,onArchiveInquiry,onDeleteProject,onArchiveProject}){
+  const acc=window.ACCOUNTS.find(a=>a.id===accountId);
+  if(!acc)return<div className="empty">Account not found</div>;
+  const [showAddProject,setShowAddProject]=useStateA(false);
+  const [showAddInquiry,setShowAddInquiry]=useStateA(false);
+  const [addInquiryProj,setAddInquiryProj]=useStateA(null);
+  const [showArchivedProjs,setShowArchivedProjs]=useStateA(false);
+  const [showArchivedInqMap,setShowArchivedInqMap]=useStateA({});
+  const toggleInqArchived=projId=>setShowArchivedInqMap(m=>({...m,[projId]:!m[projId]}));
+  const activeProjects=acc.projects.filter(p=>!p.archived);
+  const archivedProjects=acc.projects.filter(p=>p.archived);
+  const allActiveInq=activeProjects.flatMap(p=>p.inquiries.filter(i=>!i.archived));
+  const overdue=allActiveInq.filter(i=>od2(i));
+  const totalInqCount=acc.projects.flatMap(p=>p.inquiries).length;
+  return(
     <div className="col">
+      {showAddProject&&<AddProjectModal accountName={acc.name} onClose={()=>setShowAddProject(false)} onAdd={name=>onAddProject(acc.id,name)}/>}
+      {showAddInquiry&&<AddInquiryModal accountName={acc.name} onClose={()=>setShowAddInquiry(false)} onAdd={data=>onAddInquiry(acc.id,null,data)}/>}
+      {addInquiryProj&&<AddInquiryModal accountName={acc.name} projectName={addInquiryProj.name} onClose={()=>setAddInquiryProj(null)} onAdd={data=>onAddInquiry(acc.id,addInquiryProj.id,data)}/>}
+
       <div className="sketch">
-        <div style={{display:'flex',alignItems:'baseline',gap:16,flexWrap:'wrap'}}>
+        <div style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap',marginBottom:4}}>
           <h3 style={{fontSize:24,margin:0,fontWeight:700,letterSpacing:'-0.02em'}}>{acc.name}</h3>
           <TP2 tier={acc.tier}/>
-          {acc.type==='prospect' && <span className="pill" style={{background:'#fffef5',borderColor:'#b9562f',color:'#b9562f'}}>PROSPECT</span>}
-          {acc.type==='active'   && <span className="pill" style={{background:'#1a1713',color:'#fffef5',borderColor:'#1a1713'}}>ACTIVE</span>}
+          {acc.type==='prospect'&&<span className="pill" style={{background:'#fffef5',borderColor:'#b9562f',color:'#b9562f'}}>PROSPECT</span>}
+          {acc.type==='active'&&<span className="pill" style={{background:'#1a1713',color:'#fffef5',borderColor:'#1a1713'}}>ACTIVE</span>}
           <span className="mono">{acc.location}</span>
         </div>
-        <div className="note" style={{marginTop:8,maxWidth:800}}>"{acc.notes}"</div>
+        <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap',marginBottom:4}}>
+          <span className="mono-sm" style={{color:'var(--ink-3)'}}>tier:</span>
+          {['A','B','C'].map(t=>(
+            <button key={t} className="btn sm"
+              style={acc.tier===t?{background:'#1a1713',color:'#fffef5',borderColor:'#1a1713'}:{}}
+              onClick={()=>{if(acc.tier!==t&&window.confirm(`Change ${acc.name} to Tier ${t}?`))onChangeTier(acc.id,t);}}>
+              Tier {t}
+            </button>
+          ))}
+          <span style={{width:16}}/>
+          {acc.type==='prospect'&&(
+            <button className="btn sm primary" onClick={()=>{if(window.confirm(`Mark ${acc.name} as an Active Customer?\nThis moves them from Prospects to Active Accounts.`))onPromoteAccount(acc.id);}}>
+              → mark as active customer
+            </button>
+          )}
+          <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f',marginLeft:'auto'}}
+            onClick={()=>{if(window.confirm(`Delete account "${acc.name}" and ALL its projects and inquiries (${totalInqCount} total)?\n\nThis cannot be undone.`))onDeleteAccount(acc.id);}}>
+            ✕ delete account
+          </button>
+        </div>
+        <div className="note" style={{marginTop:4,maxWidth:800}}>"{acc.notes}"</div>
         <div className="grid-4" style={{marginTop:16}}>
           <KPIsm big={activeProjects.length} lbl="projects"/>
           <KPIsm big={allActiveInq.length} lbl="active inquiries"/>
-          <KPIsm big={allActiveInq.filter(i=>i.stage!=='po').length} lbl="open"/>
+          <KPIsm big={allActiveInq.filter(i=>!ic2(i)).length} lbl="open"/>
           <KPIsm big={overdue.length} lbl="overdue" accent={overdue.length>0}/>
         </div>
       </div>
 
+      <div style={{display:'flex',gap:10,alignItems:'center',alignSelf:'flex-start'}}>
+        <button className="btn primary" onClick={()=>setShowAddInquiry(true)}>+ new inquiry</button>
+        <button className="btn sm" onClick={()=>setShowAddProject(true)}>+ project folder</button>
+      </div>
+
       {activeProjects.map(proj=>{
-        const activeInqs  = proj.inquiries.filter(i=>!i.archived);
-        const archivedInqs= proj.inquiries.filter(i=> i.archived);
-        const showArchInqs= showArchivedInqMap[proj.id];
-        return (
+        const activeInqs=proj.inquiries.filter(i=>!i.archived);
+        const archivedInqs=proj.inquiries.filter(i=>i.archived);
+        const showArchInqs=showArchivedInqMap[proj.id];
+        return(
           <div key={proj.id} className="project-block">
             <div className="phead">
               <div>
@@ -1334,58 +1436,38 @@ function AccountDetail({ accountId, onOpenInquiry, onDeleteInquiry, onArchiveInq
                 <div className="pmeta">opened {proj.opened} · {activeInqs.length} active{archivedInqs.length>0?`, ${archivedInqs.length} archived`:''}</div>
               </div>
               <div style={{display:'flex',gap:6,flexWrap:'wrap',alignItems:'center'}}>
-                <button className="btn sm">+ inquiry</button>
-                <button className="btn sm"
-                  onClick={()=>{if(window.confirm(`Archive project "${proj.name}"?\nAll its inquiries will be archived too.`))onArchiveProject(proj.id);}}>
-                  ✓ archive project
-                </button>
-                <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f'}}
-                  onClick={()=>{if(window.confirm(`Delete project "${proj.name}" and all ${proj.inquiries.length} inquiries?\nCannot be undone.`))onDeleteProject(proj.id);}}>
-                  ✕ delete project
-                </button>
+                <button className="btn sm primary" onClick={()=>setAddInquiryProj(proj)}>+ inquiry</button>
+                <button className="btn sm" onClick={()=>{if(window.confirm(`Archive project "${proj.name}"?\nAll its inquiries will be archived too.`))onArchiveProject(proj.id);}}>✓ archive</button>
+                <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f'}} onClick={()=>{if(window.confirm(`Delete project "${proj.name}" and all ${proj.inquiries.length} inquiries?\nCannot be undone.`))onDeleteProject(proj.id);}}>✕ delete</button>
               </div>
             </div>
-
-            {activeInqs.length===0 && archivedInqs.length===0 && <div className="empty">No inquiries in this project.</div>}
-
-            {activeInqs.length>0 && (
+            {activeInqs.length===0&&archivedInqs.length===0&&<div className="empty">No inquiries yet — add one above.</div>}
+            {activeInqs.length>0&&(
               <div className="grid-auto">
                 {activeInqs.map(inq=>(
                   <div key={inq.id}>
-                    <IC2 inq={{...inq,accountName:acc.name}}
-                         onClick={()=>onOpenInquiry({...inq,accountName:acc.name,accountId:acc.id,projectName:proj.name,projectId:proj.id})}/>
+                    <IC2 inq={{...inq,accountName:acc.name}} onClick={()=>onOpenInquiry({...inq,accountName:acc.name,accountId:acc.id,projectName:proj.name,projectId:proj.id})}/>
                     <div style={{display:'flex',gap:4,marginTop:4}}>
-                      <button className="btn sm" style={{flex:1,fontSize:11}}
-                        onClick={()=>{if(window.confirm(`Archive inquiry #${inq.id} as complete?`))onArchiveInquiry(inq.id);}}>
-                        ✓ archive
-                      </button>
-                      <button className="btn sm" style={{flex:1,fontSize:11,color:'#b9562f',borderColor:'#b9562f'}}
-                        onClick={()=>{if(window.confirm(`Delete inquiry #${inq.id}?\nCannot be undone.`))onDeleteInquiry(inq.id);}}>
-                        ✕ delete
-                      </button>
+                      <button className="btn sm" style={{flex:1,fontSize:11}} onClick={()=>{if(window.confirm(`Archive inquiry #${inq.id} as complete?`))onArchiveInquiry(inq.id);}}>✓ archive</button>
+                      <button className="btn sm" style={{flex:1,fontSize:11,color:'#b9562f',borderColor:'#b9562f'}} onClick={()=>{if(window.confirm(`Delete inquiry #${inq.id}?\nCannot be undone.`))onDeleteInquiry(inq.id);}}>✕ delete</button>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-
-            {archivedInqs.length>0 && (
+            {archivedInqs.length>0&&(
               <div style={{marginTop:10}}>
                 <button className="btn sm" onClick={()=>toggleInqArchived(proj.id)}>
-                  {showArchInqs?'▴ hide archived':`▾ ${archivedInqs.length} archived inquiry${archivedInqs.length!==1?'s':''}`}
+                  {showArchInqs?'▴ hide archived':`▾ ${archivedInqs.length} archived`}
                 </button>
-                {showArchInqs && (
+                {showArchInqs&&(
                   <div className="grid-auto" style={{marginTop:8,opacity:0.65}}>
                     {archivedInqs.map(inq=>(
                       <div key={inq.id}>
                         <div style={{marginBottom:3}}><span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72',fontSize:9}}>ARCHIVED</span></div>
-                        <IC2 inq={{...inq,accountName:acc.name}}
-                             onClick={()=>onOpenInquiry({...inq,accountName:acc.name,accountId:acc.id,projectName:proj.name,projectId:proj.id})}/>
+                        <IC2 inq={{...inq,accountName:acc.name}} onClick={()=>onOpenInquiry({...inq,accountName:acc.name,accountId:acc.id,projectName:proj.name,projectId:proj.id})}/>
                         <div style={{display:'flex',gap:4,marginTop:4}}>
-                          <button className="btn sm" style={{flex:1,fontSize:11,color:'#b9562f',borderColor:'#b9562f'}}
-                            onClick={()=>{if(window.confirm(`Permanently delete archived inquiry #${inq.id}?`))onDeleteInquiry(inq.id);}}>
-                            ✕ delete permanently
-                          </button>
+                          <button className="btn sm" style={{flex:1,fontSize:11,color:'#b9562f',borderColor:'#b9562f'}} onClick={()=>{if(window.confirm(`Permanently delete archived inquiry #${inq.id}?`))onDeleteInquiry(inq.id);}}>✕ delete permanently</button>
                         </div>
                       </div>
                     ))}
@@ -1397,12 +1479,12 @@ function AccountDetail({ accountId, onOpenInquiry, onDeleteInquiry, onArchiveInq
         );
       })}
 
-      {archivedProjects.length>0 && (
+      {archivedProjects.length>0&&(
         <div>
           <button className="btn sm" onClick={()=>setShowArchivedProjs(v=>!v)} style={{marginBottom:8}}>
             {showArchivedProjs?'▴ hide archived projects':`▾ ${archivedProjects.length} archived project${archivedProjects.length!==1?'s':''}`}
           </button>
-          {showArchivedProjs && archivedProjects.map(proj=>(
+          {showArchivedProjs&&archivedProjects.map(proj=>(
             <div key={proj.id} className="project-block" style={{opacity:0.6}}>
               <div className="phead">
                 <div>
@@ -1410,10 +1492,7 @@ function AccountDetail({ accountId, onOpenInquiry, onDeleteInquiry, onArchiveInq
                   <span className="pname" style={{fontSize:15}}>{proj.name}</span>
                   <div className="pmeta">{proj.inquiries.length} inquiries</div>
                 </div>
-                <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f'}}
-                  onClick={()=>{if(window.confirm(`Permanently delete archived project "${proj.name}"?`))onDeleteProject(proj.id);}}>
-                  ✕ delete permanently
-                </button>
+                <button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f'}} onClick={()=>{if(window.confirm(`Permanently delete archived project "${proj.name}"?`))onDeleteProject(proj.id);}}>✕ delete permanently</button>
               </div>
             </div>
           ))}
@@ -1423,8 +1502,8 @@ function AccountDetail({ accountId, onOpenInquiry, onDeleteInquiry, onArchiveInq
   );
 }
 
-function KPIsm({ big, lbl, accent }) {
-  return (
+function KPIsm({big,lbl,accent}){
+  return(
     <div className="kpi" style={accent?{background:'#d97757',color:'white',borderColor:'#b9562f'}:{}}>
       <div className="big" style={{fontSize:32}}>{big}</div>
       <div className="lbl" style={accent?{color:'rgba(255,255,255,0.85)'}:{}}>{lbl}</div>
@@ -1432,185 +1511,369 @@ function KPIsm({ big, lbl, accent }) {
   );
 }
 
-function InquiryDetail({ inquiry, onOpenAccount, onDeleteInquiry, onArchiveInquiry, onPostActivity }) {
-  const inq     = inquiry;
-  const s       = stg2(inq.stage);
-  const owed    = ow2(inq);
-  const overdue = od2(inq);
-  const [draft, setDraft] = useStateA('');
-
-  function postUpdate() {
-    if (!draft.trim()) return;
-    const today = new Date().toISOString().slice(0,10);
-    const item  = { by: window.CURRENT_USER?.id||'fahim', at: today, text: draft.trim() };
-    onPostActivity(inq.id, item);
+// ── InquiryDetail ─────────────────────────────────────────────────────────────
+function InquiryDetail({inquiry,onOpenAccount,onDeleteInquiry,onArchiveInquiry,onPostActivity,onUpdateInquiry}){
+  const inq=inquiry;
+  const type=inq.type||'rfq';
+  const [draft,setDraft]=useStateA('');
+  function postUpdate(){
+    if(!draft.trim())return;
+    const today=new Date().toISOString().slice(0,10);
+    onPostActivity(inq.id,{by:window.CURRENT_USER?.id||'fahim',at:today,text:draft.trim()});
     setDraft('');
   }
+  const ActionSidebar=(
+    <div className="col">
+      <div className="sketch paper-2">
+        <h4>Quick actions</h4>
+        <div className="col" style={{gap:8}}>
+          {!inq.archived?(
+            <>
+              <button className="btn primary" style={{background:'#5d7a3a',borderColor:'#3d5a1a'}}
+                onClick={()=>{if(window.confirm('Archive this inquiry?\nHidden from active pipeline but kept for reference.'))onArchiveInquiry(inq.id);}}>
+                ✓ archive as complete
+              </button>
+              <button className="btn" style={{color:'#b9562f',borderColor:'#b9562f'}}
+                onClick={()=>{if(window.confirm(`Permanently delete inquiry #${inq.id}?\nCannot be undone.`))onDeleteInquiry(inq.id);}}>
+                ✕ delete inquiry
+              </button>
+            </>
+          ):(
+            <>
+              <div className="mono-sm" style={{padding:'8px 0',color:'#8a7f72'}}>This inquiry is archived.</div>
+              <button className="btn" style={{color:'#b9562f',borderColor:'#b9562f'}}
+                onClick={()=>{if(window.confirm(`Permanently delete archived inquiry #${inq.id}?`))onDeleteInquiry(inq.id);}}>
+                ✕ delete permanently
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="sketch"><h4>Related on this account</h4><RelatedInquiries accountId={inq.accountId} currentId={inq.id}/></div>
+    </div>
+  );
+  const ActivityPanel=(
+    <div className="sketch">
+      <h4>Updates & discussion</h4>
+      <div className="composer">
+        <Av2 personId={window.CURRENT_USER?.id||'fahim'} size="sm"/>
+        <textarea placeholder="post an update… (Cmd/Ctrl+Enter to submit)" value={draft} onChange={e=>setDraft(e.target.value)}
+          onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))postUpdate()}}/>
+        <button className="btn primary" onClick={postUpdate}>post</button>
+      </div>
+      <div style={{marginTop:12}}><AT2 activity={inq.activity||[]}/></div>
+    </div>
+  );
 
-  return (
+  if(type==='rfq') return <RFQDetail inq={inq} onOpenAccount={onOpenAccount} onUpdateInquiry={onUpdateInquiry} ActionSidebar={ActionSidebar} ActivityPanel={ActivityPanel}/>;
+  if(type==='info') return <InfoDetail inq={inq} onOpenAccount={onOpenAccount} onUpdateInquiry={onUpdateInquiry} ActionSidebar={ActionSidebar} ActivityPanel={ActivityPanel}/>;
+  if(type==='project') return <ProjectDetail inq={inq} onOpenAccount={onOpenAccount} onUpdateInquiry={onUpdateInquiry} ActionSidebar={ActionSidebar} ActivityPanel={ActivityPanel}/>;
+  return null;
+}
+
+// Inline-editable title (used in h3 headers)
+function InlineEditTitle({value,onSave,readOnly}){
+  const [editing,setEditing]=useStateA(false);
+  const [val,setVal]=useStateA(value||'');
+  useEffectA(()=>{if(!editing)setVal(value||'');},[value,editing]);
+  function save(){setEditing(false);const t=val.trim();if(t&&t!==value)onSave(t);}
+  if(readOnly||!editing)return<span style={readOnly?{}:{cursor:'text',borderBottom:'1px dashed var(--ink-3)'}} onClick={()=>!readOnly&&setEditing(true)} title={readOnly?'':'Click to rename'}>{value}</span>;
+  return<input value={val} onChange={e=>setVal(e.target.value)} onBlur={save} onKeyDown={e=>{if(e.key==='Enter')save();if(e.key==='Escape'){setEditing(false);setVal(value||'');}}} autoFocus style={{fontSize:'inherit',fontWeight:'inherit',fontFamily:'inherit',border:'none',borderBottom:'2px solid var(--accent)',background:'transparent',color:'inherit',outline:'none',minWidth:200}}/>;
+}
+
+// ── RFQ Parts Panel ──────────────────────────────────────────────────────────
+function RFQPartsPanel({inq,onUpdateInquiry}){
+  const [showAdd,setShowAdd]=useStateA(false);
+  const [newPart,setNewPart]=useStateA({partNum:'',qty:''});
+  const parts=inq.parts||[];
+  const legacy=!parts.length&&(inq.part||inq.qty);
+  function addPart(e){
+    e.preventDefault();
+    onUpdateInquiry(inq.id,{parts:[...parts,{partNum:newPart.partNum.trim(),qty:newPart.qty.trim()||'N/A'}]});
+    setNewPart({partNum:'',qty:''});setShowAdd(false);
+  }
+  function removePart(i){onUpdateInquiry(inq.id,{parts:parts.filter((_,j)=>j!==i)});}
+  return(
+    <div className="sketch">
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+        <h4 style={{margin:0}}>Part Numbers</h4>
+        {!inq.archived&&<button className="btn sm primary" onClick={()=>setShowAdd(v=>!v)}>{showAdd?'cancel':'+ add part'}</button>}
+      </div>
+      {showAdd&&(
+        <form onSubmit={addPart} style={{display:'flex',gap:8,marginBottom:12,padding:'10px 12px',background:'var(--paper-2)',border:'1.2px dashed #c0b8a8',borderRadius:6,alignItems:'flex-end',flexWrap:'wrap'}}>
+          <div style={{flex:2,minWidth:140}}>
+            <label className="form-label">PART #</label>
+            <input className="form-input" value={newPart.partNum} onChange={e=>setNewPart(p=>({...p,partNum:e.target.value}))} placeholder="e.g. HV-BSH-138-A" autoFocus/>
+          </div>
+          <div style={{flex:1,minWidth:100}}>
+            <label className="form-label">QTY</label>
+            <input className="form-input" value={newPart.qty} onChange={e=>setNewPart(p=>({...p,qty:e.target.value}))} placeholder="12 or N/A"/>
+          </div>
+          <button type="submit" className="btn primary" style={{flexShrink:0}}>save</button>
+        </form>
+      )}
+      {parts.length===0&&!legacy&&!showAdd&&<div className="empty" style={{paddingTop:4}}>No parts added yet — engineering will confirm part numbers.</div>}
+      {legacy&&<div className="mono-sm" style={{marginBottom:6,color:'var(--ink-3)'}}>{inq.part}{inq.qty&&inq.qty!=='N/A'?` · qty ${inq.qty}`:''}</div>}
+      {parts.length>0&&(
+        <table className="tbl">
+          <thead><tr><th>part #</th><th>qty</th>{!inq.archived&&<th style={{width:40}}></th>}</tr></thead>
+          <tbody>
+            {parts.map((p,i)=>(
+              <tr key={i}>
+                <td className="mono">{p.partNum||'—'}</td>
+                <td className="mono">{p.qty||'N/A'}</td>
+                {!inq.archived&&<td><button className="btn sm" style={{color:'#b9562f',borderColor:'#b9562f',padding:'2px 6px'}} onClick={()=>removePart(i)}>✕</button></td>}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+}
+
+// ── RFQ Detail ──────────────────────────────────────────────────────────────
+function RFQDetail({inq,onOpenAccount,onUpdateInquiry,ActionSidebar,ActivityPanel}){
+  const s=stg2(inq.stage),owed=ow2(inq),overdue=od2(inq);
+  function advanceStage(){
+    const idx=window.STAGES.findIndex(st=>st.id===inq.stage);
+    if(idx<window.STAGES.length-1)onUpdateInquiry(inq.id,{stage:window.STAGES[idx+1].id});
+  }
+  return(
     <div className="col">
       <div className="sketch">
         <div style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap',marginBottom:8}}>
-          <SP2 stageId={inq.stage}/>
-          <PP2 priority={inq.priority}/>
+          <SP2 stageId={inq.stage}/><span className="pill type-rfq" style={{fontSize:9}}>RFQ</span><PP2 priority={inq.priority}/>
           <span className="mono">#{inq.id}</span>
-          {inq.archived && <span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72'}}>ARCHIVED</span>}
-          {overdue && !inq.archived && <span className="pill overdue">{window.Wire.dueLabel(inq.due)}</span>}
-          {stk2(inq) && !inq.archived && <span className="pill prio-med">stuck {ds2(inq.updated)}d</span>}
+          {inq.archived&&<span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72'}}>ARCHIVED</span>}
+          {overdue&&!inq.archived&&<span className="pill overdue">{window.Wire.dueLabel(inq.due)}</span>}
+          {stk2(inq)&&!inq.archived&&<span className="pill prio-med">stuck {ds2(inq.updated)}d</span>}
         </div>
-        <h3 style={{fontSize:30,margin:'4px 0 2px'}}>{inq.part} — {inq.accountName}</h3>
+        <h3 style={{fontSize:28,margin:'4px 0 2px'}}><InlineEditTitle value={inq.rfqName||inq.part||'RFQ'} readOnly={!!inq.archived} onSave={v=>onUpdateInquiry(inq.id,{rfqName:v})}/> — {inq.accountName}</h3>
         <div className="mono" style={{marginBottom:16}}>
           <a className="scribble" onClick={()=>onOpenAccount(inq.accountId)}>{inq.accountName}</a>
           {' / '}{inq.projectName}
         </div>
         <ST2 currentStageId={inq.stage}/>
-        {!inq.archived && (
+        {!inq.archived&&(
           <div style={{marginTop:16,padding:12,background:'#faf8ec',border:'1.2px dashed #2a2420',borderRadius:6}}>
             <div className="mono-sm" style={{marginBottom:4}}>currently waiting on</div>
-            {inq.waitingOn==='client' ? (
+            {inq.waitingOn==='client'?(
               <div style={{display:'flex',alignItems:'center',gap:10}}>
                 <div className="avatar lg" style={{background:'#f3efde'}}>CX</div>
-                <div>
-                  <div style={{fontWeight:600,fontSize:15}}>Customer</div>
-                  <div className="mono-sm">nothing for us — follow up if stale</div>
-                </div>
+                <div><div style={{fontWeight:600,fontSize:15}}>Customer</div><div className="mono-sm">nothing for us — follow up if stale</div></div>
               </div>
-            ) : owed ? (
+            ):owed?(
               <div style={{display:'flex',alignItems:'center',gap:10}}>
                 <Av2 personId={owed} size="lg"/>
-                <div>
-                  <div style={{fontWeight:600,fontSize:15}}>{pers2(owed)?.name}</div>
-                  <div className="mono-sm">{pers2(owed)?.role} · stage owner: {s?.label}</div>
-                </div>
-                <div style={{marginLeft:'auto',display:'flex',gap:8}}>
-                  <button className="btn sm">reassign</button>
-                  <button className="btn sm primary">advance stage →</button>
-                </div>
+                <div><div style={{fontWeight:600,fontSize:15}}>{pers2(owed)?.name}</div><div className="mono-sm">{pers2(owed)?.role} · {s?.label}</div></div>
+                {inq.stage!=='po'&&<div style={{marginLeft:'auto'}}><button className="btn sm primary" onClick={advanceStage}>advance stage →</button></div>}
               </div>
-            ) : null}
+            ):null}
           </div>
         )}
       </div>
-
       <div className="inquiry-detail">
         <div className="col">
+          <RFQPartsPanel inq={inq} onUpdateInquiry={onUpdateInquiry}/>
           <div className="sketch">
             <h4>Inquiry details</h4>
             <div className="fields-grid">
-              <Field k="part #"            v={inq.part}         mono/>
-              <Field k="quantity"          v={inq.qty}/>
-              <Field k="specs"             v={inq.specs||'—'}/>
-              <Field k="drawing rev"       v={inq.drawing||'not yet issued'} mono/>
-              <Field k="target price"      v={inq.target||'—'}/>
-              <Field k="cost"              v={inq.cost||'—'}/>
-              <Field k="price to customer" v={inq.price||'—'}/>
-              <Field k="lead time"         v={inq.leadtime||'—'}/>
-              <Field k="due date"          v={inq.due} mono/>
-              <Field k="last updated"      v={`${inq.updated} · ${pers2(inq.updatedBy)?.name}`} mono/>
+              <EditableField k="specs / notes" v={inq.specs} onSave={v=>onUpdateInquiry(inq.id,{specs:v})} multiline readOnly={!!inq.archived} placeholder="voltage class, standards, special requirements…"/>
+              <EditableField k="drawing rev" v={inq.drawing} onSave={v=>onUpdateInquiry(inq.id,{drawing:v})} mono readOnly={!!inq.archived} placeholder="e.g. DWG-HV138-R2"/>
+              <EditableField k="cost" v={inq.cost} onSave={v=>onUpdateInquiry(inq.id,{cost:v})} mono readOnly={!!inq.archived} placeholder="e.g. $142/ea"/>
+              <EditableField k="price to customer" v={inq.price} onSave={v=>onUpdateInquiry(inq.id,{price:v})} mono readOnly={!!inq.archived} placeholder="e.g. $192/ea"/>
+              <EditableField k="lead time" v={inq.leadtime} onSave={v=>onUpdateInquiry(inq.id,{leadtime:v})} readOnly={!!inq.archived} placeholder="e.g. 8-10 wk"/>
+              <EditableField k="due date" v={inq.due} onSave={v=>onUpdateInquiry(inq.id,{due:v})} mono readOnly={!!inq.archived} placeholder="YYYY-MM-DD"/>
+              <Field k="last updated" v={`${inq.updated} · ${pers2(inq.updatedBy)?.name}`} mono/>
             </div>
           </div>
-          <div className="sketch">
-            <h4>Updates & discussion</h4>
-            <div className="composer">
-              <Av2 personId={window.CURRENT_USER?.id||'fahim'} size="sm"/>
-              <textarea placeholder="post an update…" value={draft} onChange={e=>setDraft(e.target.value)}
-                        onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))postUpdate();}}/>
-              <button className="btn primary" onClick={postUpdate}>post</button>
-            </div>
-            <div style={{marginTop:12}}>
-              <AT2 activity={inq.activity||[]}/>
-            </div>
-          </div>
+          {ActivityPanel}
         </div>
-
-        <div className="col">
-          <div className="sketch paper-2">
-            <h4>Quick actions</h4>
-            <div className="col" style={{gap:8}}>
-              {!inq.archived ? (
-                <>
-                  <button className="btn">@ mention teammate</button>
-                  <button className="btn">attach drawing / doc</button>
-                  <button className="btn">set priority</button>
-                  <button className="btn">change due date</button>
-                  <button className="btn">mark blocked</button>
-                  <hr className="hr-dashed"/>
-                  <button className="btn primary" style={{background:'#5d7a3a',borderColor:'#3d5a1a'}}
-                    onClick={()=>{if(window.confirm('Archive this inquiry as complete?\nIt will be hidden from the active pipeline but kept for reference.'))onArchiveInquiry(inq.id);}}>
-                    ✓ archive as complete
-                  </button>
-                  <button className="btn" style={{color:'#b9562f',borderColor:'#b9562f'}}
-                    onClick={()=>{if(window.confirm(`Permanently delete inquiry #${inq.id}?\nThis cannot be undone.`))onDeleteInquiry(inq.id);}}>
-                    ✕ delete inquiry
-                  </button>
-                </>
-              ) : (
-                <>
-                  <div className="mono-sm" style={{padding:'8px 0',color:'#8a7f72'}}>This inquiry has been archived.</div>
-                  <button className="btn" style={{color:'#b9562f',borderColor:'#b9562f'}}
-                    onClick={()=>{if(window.confirm(`Permanently delete archived inquiry #${inq.id}?`))onDeleteInquiry(inq.id);}}>
-                    ✕ delete permanently
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="sketch">
-            <h4>Who's here</h4>
-            <div className="mono-sm" style={{marginBottom:8}}>people currently on this inquiry</div>
-            <div style={{display:'flex',gap:6,alignItems:'center'}}>
-              <Av2 personId="fahim" viewing/><Av2 personId="mike" viewing/>
-              <span className="mono-sm" style={{marginLeft:8}}>+ 0 others</span>
-            </div>
-          </div>
-          <div className="sketch">
-            <h4>Related on this account</h4>
-            <RelatedInquiries accountId={inq.accountId} currentId={inq.id}/>
-          </div>
-        </div>
+        {ActionSidebar}
       </div>
     </div>
   );
 }
 
-function Field({ k, v, mono }) {
-  return (
-    <div className="field">
-      <div className="k">{k}</div>
-      <div className={cls2('v',mono&&'mono')}>{v}</div>
+// ── Info Inquiry Detail ──────────────────────────────────────────────────────
+function InfoDetail({inq,onOpenAccount,onUpdateInquiry,ActionSidebar,ActivityPanel}){
+  const status=inq.status||'open';
+  function setStatus(s){onUpdateInquiry(inq.id,{status:s});}
+  function setAssigned(e){onUpdateInquiry(inq.id,{assignedTo:e.target.value});}
+  return(
+    <div className="col">
+      <div className="sketch">
+        <div style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap',marginBottom:8}}>
+          <SP2 stageId={status}/><span className="pill type-info" style={{fontSize:9}}>INFO</span><PP2 priority={inq.priority||'med'}/>
+          <span className="mono">#{inq.id}</span>
+          {inq.archived&&<span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72'}}>ARCHIVED</span>}
+        </div>
+        <h3 style={{fontSize:24,margin:'4px 0 2px',fontStyle:'italic',color:'var(--ink-2)'}}><InlineEditTitle value={inq.subject||'(no subject)'} readOnly={!!inq.archived} onSave={v=>onUpdateInquiry(inq.id,{subject:v})}/></h3>
+        <div className="mono" style={{marginBottom:12}}>
+          <a className="scribble" onClick={()=>onOpenAccount(inq.accountId)}>{inq.accountName}</a>
+          {' / '}{inq.projectName}
+        </div>
+        {!inq.archived&&(
+          <div style={{padding:12,background:'#faf8ec',border:'1.2px dashed #2a2420',borderRadius:6}}>
+            <div className="mono-sm" style={{marginBottom:6}}>status — click to advance</div>
+            <div className="status-bar">
+              {window.INFO_STAGES.map(st=>(
+                <button key={st.id} className={`sbtn${status===st.id?' active':''}`}
+                  style={status===st.id?{background:'var(--ink)',color:'var(--paper)',border:'1.5px solid var(--ink)'}:{padding:'6px 14px',fontSize:12,border:'1.5px solid var(--line)',borderRadius:'4px 8px 4px 8px',background:'var(--paper-2)',cursor:'pointer',fontWeight:600}}
+                  onClick={()=>setStatus(st.id)}>{st.label}</button>
+              ))}
+            </div>
+            <div style={{marginTop:10,display:'flex',alignItems:'center',gap:10}}>
+              <div className="mono-sm">assigned to:</div>
+              <select className="form-select" style={{width:'auto',flex:1,maxWidth:220}} value={inq.assignedTo||'fahim'} onChange={setAssigned}>
+                {window.TEAM.map(t=><option key={t.id} value={t.id}>{t.name} — {t.role}</option>)}
+              </select>
+              <Av2 personId={inq.assignedTo||'fahim'} size="sm"/>
+              <span style={{fontSize:13,fontWeight:600}}>{pers2(inq.assignedTo||'fahim')?.name}</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="inquiry-detail">
+        <div className="col">
+          <div className="sketch">
+            <h4>Customer inquiry / question</h4>
+            <EditableField k="subject / details" v={inq.subject} onSave={v=>onUpdateInquiry(inq.id,{subject:v})} multiline readOnly={!!inq.archived} placeholder="what did the customer ask or need?"/>
+            <div className="fields-grid" style={{marginTop:4}}>
+              <EditableField k="response by" v={inq.due} onSave={v=>onUpdateInquiry(inq.id,{due:v})} mono readOnly={!!inq.archived} placeholder="YYYY-MM-DD"/>
+              <Field k="last updated" v={`${inq.updated} · ${pers2(inq.updatedBy)?.name}`} mono/>
+            </div>
+          </div>
+          {ActivityPanel}
+        </div>
+        {ActionSidebar}
+      </div>
     </div>
   );
 }
 
-function RelatedInquiries({ accountId, currentId }) {
-  const acc = window.ACCOUNTS.find(a=>a.id===accountId);
-  if (!acc) return null;
-  const other = acc.projects.flatMap(p=>p.inquiries.map(i=>({...i,projectName:p.name}))).filter(i=>i.id!==currentId&&!i.archived).slice(0,4);
-  if (!other.length) return <div className="empty">none</div>;
-  return (
+// ── Large Project Detail ─────────────────────────────────────────────────────
+function ProjectDetail({inq,onOpenAccount,onUpdateInquiry,ActionSidebar,ActivityPanel}){
+  const pstage=inq.projectStage||'discovery';
+  const [showMeetingForm,setShowMeetingForm]=useStateA(false);
+  const [mtg,setMtg]=useStateA({date:'',notes:'',attendees:''});
+  const setM=k=>e=>setMtg(m=>({...m,[k]:e.target.value}));
+  function addMeeting(e){
+    e.preventDefault();
+    if(!mtg.date&&!mtg.notes)return;
+    const newMtg={date:mtg.date||new Date().toISOString().slice(0,10),notes:mtg.notes.trim(),attendees:mtg.attendees.trim()};
+    onUpdateInquiry(inq.id,{meetings:[newMtg,...(inq.meetings||[])]});
+    setMtg({date:'',notes:'',attendees:''});setShowMeetingForm(false);
+  }
+  function setStage(s){onUpdateInquiry(inq.id,{projectStage:s});}
+  return(
+    <div className="col">
+      <div className="sketch">
+        <div style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap',marginBottom:8}}>
+          <SP2 stageId={pstage}/><span className="pill type-project" style={{fontSize:9}}>KEY OPP</span><PP2 priority={inq.priority||'med'}/>
+          <span className="mono">#{inq.id}</span>
+          {inq.archived&&<span className="pill" style={{background:'#8a7f72',color:'white',borderColor:'#8a7f72'}}>ARCHIVED</span>}
+        </div>
+        <h3 style={{fontSize:28,margin:'4px 0 2px'}}><InlineEditTitle value={inq.projectTitle||'Key Project'} readOnly={!!inq.archived} onSave={v=>onUpdateInquiry(inq.id,{projectTitle:v})}/></h3>
+        <div className="mono" style={{marginBottom:12}}>
+          <a className="scribble" onClick={()=>onOpenAccount(inq.accountId)}>{inq.accountName}</a>
+          {' / '}{inq.projectName}
+        </div>
+        <div className="grid-4" style={{marginBottom:14}}>
+          <KPIsm2 big={inq.potentialRevenue||'—'} lbl="potential revenue"/>
+          <KPIsm2 big={inq.potentialVolume||'—'} lbl="potential volume"/>
+          <KPIsm2 big={(inq.meetings||[]).length} lbl="meetings logged"/>
+          <KPIsm2 big={window.PROJECT_STAGES.find(s=>s.id===pstage)?.label||pstage} lbl="current stage"/>
+        </div>
+        {!inq.archived&&(
+          <div style={{padding:12,background:'#faf8ec',border:'1.2px dashed #2a2420',borderRadius:6}}>
+            <div className="mono-sm" style={{marginBottom:8}}>project stage — click to update</div>
+            <ST2 currentStageId={pstage} stages={window.PROJECT_STAGES}/>
+            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:10}}>
+              {window.PROJECT_STAGES.map(s=>(
+                <button key={s.id} onClick={()=>setStage(s.id)}
+                  style={pstage===s.id?{padding:'4px 12px',fontSize:11,fontWeight:700,background:'var(--ink)',color:'var(--paper)',border:'1.5px solid var(--ink)',borderRadius:'4px 8px 4px 8px',cursor:'pointer'}:{padding:'4px 12px',fontSize:11,background:'var(--paper-2)',border:'1.5px solid var(--line)',borderRadius:'4px 8px 4px 8px',cursor:'pointer'}}>
+                  {s.short}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="inquiry-detail">
+        <div className="col">
+          <div className="sketch">
+            <h4>Project details</h4>
+            <div className="fields-grid">
+              <EditableField k="potential volume" v={inq.potentialVolume} onSave={v=>onUpdateInquiry(inq.id,{potentialVolume:v})} readOnly={!!inq.archived} placeholder="e.g. 200 units/yr"/>
+              <EditableField k="potential revenue" v={inq.potentialRevenue} onSave={v=>onUpdateInquiry(inq.id,{potentialRevenue:v})} readOnly={!!inq.archived} placeholder="e.g. $500K"/>
+              <Field k="priority" v={inq.priority||'med'}/>
+              <Field k="last updated" v={`${inq.updated} · ${pers2(inq.updatedBy)?.name}`} mono/>
+            </div>
+            <EditableField k="notes / context" v={inq.notes} onSave={v=>onUpdateInquiry(inq.id,{notes:v})} multiline readOnly={!!inq.archived} placeholder="key contacts, background, what's driving this project…"/>
+          </div>
+          <div className="sketch">
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+              <h4 style={{margin:0}}>Meetings</h4>
+              {!inq.archived&&<button className="btn sm primary" onClick={()=>setShowMeetingForm(v=>!v)}>{showMeetingForm?'cancel':'+ log meeting'}</button>}
+            </div>
+            {showMeetingForm&&(
+              <form onSubmit={addMeeting} style={{marginBottom:14,padding:12,background:'var(--paper-2)',border:'1.2px dashed #c0b8a8',borderRadius:6}}>
+                <div className="form-grid-2">
+                  <FRow label="Date"><input className="form-input" type="date" value={mtg.date} onChange={setM('date')}/></FRow>
+                  <FRow label="Attendees"><input className="form-input" value={mtg.attendees} onChange={setM('attendees')} placeholder="e.g. Mike, Dave (VanTran)"/></FRow>
+                </div>
+                <FRow label="Notes *"><textarea className="form-textarea" value={mtg.notes} onChange={setM('notes')} placeholder="What was discussed, decisions, action items…" required/></FRow>
+                <div style={{display:'flex',gap:8,justifyContent:'flex-end'}}><button type="submit" className="btn primary">save meeting</button></div>
+              </form>
+            )}
+            {(inq.meetings||[]).length===0&&!showMeetingForm&&<div className="empty">No meetings logged yet.</div>}
+            {(inq.meetings||[]).map((m,i)=>(
+              <div key={i} className="meeting-item">
+                <div className="mdate">{m.date}</div>
+                <div><div className="mnotes">{m.notes}</div>{m.attendees&&<div className="mono-sm" style={{marginTop:4,color:'var(--ink-3)'}}>attendees: {m.attendees}</div>}</div>
+              </div>
+            ))}
+          </div>
+          {ActivityPanel}
+        </div>
+        {ActionSidebar}
+      </div>
+    </div>
+  );
+}
+function KPIsm2({big,lbl}){return<div className="kpi"><div className="big" style={{fontSize:18,wordBreak:'break-word'}}>{big}</div><div className="lbl">{lbl}</div></div>;}
+
+function Field({k,v,mono}){return<div className="field"><div className="k">{k}</div><div className={cls2('v',mono&&'mono')}>{v}</div></div>}
+
+function RelatedInquiries({accountId,currentId}){
+  const acc=window.ACCOUNTS.find(a=>a.id===accountId);if(!acc)return null;
+  const other=acc.projects.flatMap(p=>p.inquiries.map(i=>({...i,projectName:p.name}))).filter(i=>i.id!==currentId&&!i.archived).slice(0,4);
+  if(!other.length)return<div className="empty">none</div>;
+  return(
     <div className="col" style={{gap:6}}>
       {other.map(i=>(
         <div key={i.id} style={{display:'flex',gap:8,alignItems:'center',padding:'6px 0',borderBottom:'1px dashed #8a7f72'}}>
           <SP2 stageId={i.stage}/><span className="mono-sm">#{i.id}</span>
-          <span style={{flex:1,fontSize:13}}>{i.part}</span>
-          <span className="mono-sm">{dl2(i.due)}</span>
+          <span style={{flex:1,fontSize:13}}>{i.rfqName||i.part||i.projectTitle||i.subject||'—'}</span><span className="mono-sm">{dl2(i.due)}</span>
         </div>
       ))}
     </div>
   );
 }
 
-function AllInquiries({ onOpenInquiry }) {
-  const all = useMemoA(()=>window.DATA_UTILS.allInquiries(),[]);
-  const [stageF, setStageF] = useStateA('all');
-  const [ownerF, setOwnerF] = useStateA('all');
-  const filtered = all.filter(i=>{
-    if (stageF!=='all'&&i.stage!==stageF) return false;
-    if (ownerF==='all') return true;
-    if (ownerF==='client') return i.waitingOn==='client';
+function AllInquiries({onOpenInquiry}){
+  const all=useMemoA(()=>window.DATA_UTILS.allInquiries(),[]);
+  const [stageF,setStageF]=useStateA('all');
+  const [ownerF,setOwnerF]=useStateA('all');
+  const filtered=all.filter(i=>{
+    if(stageF!=='all'&&i.stage!==stageF)return false;
+    if(ownerF==='all')return true;
+    if(ownerF==='client')return i.waitingOn==='client';
     return ow2(i)===ownerF;
   });
-  return (
+  return(
     <div className="col">
       <div className="sketch">
         <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center'}}>
@@ -1635,13 +1898,12 @@ function AllInquiries({ onOpenInquiry }) {
           <tbody>
             {filtered.map(inq=>{
               const owed=ow2(inq);
-              return (
+              return(
                 <tr key={inq.id} className={od2(inq)?'overdue-row':''} onClick={()=>onOpenInquiry(inq)}>
                   <td className="mono">#{inq.id}</td>
                   <td style={{fontWeight:700}}>{inq.accountName}</td>
-                  <td><span className="mono-sm">{inq.part} · {inq.qty}</span></td>
-                  <td><SP2 stageId={inq.stage}/></td>
-                  <td><PP2 priority={inq.priority}/></td>
+                  <td><span className="mono-sm">{inq.rfqName||inq.part||inq.projectTitle||inq.subject||'—'}</span></td>
+                  <td><SP2 stageId={inq.stage}/></td><td><PP2 priority={inq.priority}/></td>
                   <td>{owed?<div style={{display:'flex',alignItems:'center',gap:6}}><Av2 personId={owed} size="sm"/><span>{pers2(owed)?.name}</span></div>:(inq.waitingOn==='client'?<span className="mono-sm">customer</span>:'—')}</td>
                   <td className={od2(inq)?'note':''}>{dl2(inq.due)}</td>
                   <td className="mono-sm">{inq.updated}</td>
@@ -1655,331 +1917,354 @@ function AllInquiries({ onOpenInquiry }) {
   );
 }
 
-window.Views = { AccountsList, AccountDetail, InquiryDetail, AllInquiries };
-
-  </script>
-
-  <script type="text/babel">
-
-function LoginScreen({ onLogin }) {
-  const [selected, setSelected] = React.useState(null);
-  const [pin,      setPin]      = React.useState('');
-  const [shake,    setShake]    = React.useState(false);
-
-  // ── CHANGE PINS HERE ──────────────────────────────────────────────────────
-  const PINS = { mike:'1111', fahim:'2222', ahmad:'3333', jianming:'4444' };
-  // ─────────────────────────────────────────────────────────────────────────
-
-  function handleDigit(d) {
-    if (pin.length >= 4) return;
-    const next = pin + d;
-    setPin(next);
-    if (next.length === 4) {
-      if (next === PINS[selected.id]) {
-        onLogin(selected);
-      } else {
-        setShake(true);
-        setTimeout(() => { setPin(''); setShake(false); }, 650);
-      }
-    }
-  }
-
-  return (
-    <div className="login-wrap">
-      <div style={{textAlign:'center'}}>
-        <div style={{fontFamily:'var(--title)',fontSize:30,fontWeight:700,letterSpacing:'-0.02em'}}>CrossLink</div>
-        <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'2px',marginTop:4}}>Cast Parts · Bushing Pipeline</div>
-      </div>
-
-      {!selected ? (
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:20}}>
-          <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'1px'}}>who are you?</div>
-          <div className="profile-grid">
-            {window.TEAM.map(t => (
-              <button key={t.id} className="profile-card" onClick={() => setSelected(t)}>
-                <div className={`avatar lg ${t.id}`}>{t.initials}</div>
-                <div style={{fontFamily:'var(--title)',fontWeight:700,fontSize:15}}>{t.name}</div>
-                <div style={{fontFamily:'var(--mono)',fontSize:10,color:'var(--ink-3)',textTransform:'uppercase'}}>{t.role}</div>
+// ── Key Projects / Opportunities ──────────────────────────────────────────────
+function KeyProjects({onOpenInquiry,onAddInquiry}){
+  const all=useMemoA(()=>window.DATA_UTILS.allInquiries().filter(i=>i.type==='project'),[]);
+  const [showAdd,setShowAdd]=useStateA(false);
+  const [stageF,setStageF]=useStateA('all');
+  const [acctF,setAcctF]=useStateA('all');
+  const active=all.filter(i=>!i.archived);
+  const filtered=active.filter(i=>{
+    if(stageF!=='all'&&i.projectStage!==stageF)return false;
+    if(acctF!=='all'&&i.accountId!==acctF)return false;
+    return true;
+  });
+  // KPIs
+  const totalRev=active.reduce((s,i)=>{const n=parseFloat(String(i.potentialRevenue||'').replace(/[^0-9.KMkm]/g,''));if(!n)return s;const v=String(i.potentialRevenue||'').toUpperCase();return s+(v.includes('M')?n*1000000:v.includes('K')?n*1000:n);},0);
+  function fmtRev(n){if(!n)return'$0';if(n>=1000000)return`$${(n/1000000).toFixed(1)}M`;if(n>=1000)return`$${(n/1000).toFixed(0)}K`;return`$${Math.round(n)}`;}
+  const accounts=window.ACCOUNTS.filter(a=>a.projects.flatMap(p=>p.inquiries).some(i=>i.type==='project'&&!i.archived));
+  // Add from Key Projects tab — needs account + project selection
+  const [addAcct,setAddAcct]=useStateA(null);
+  const acctProjects=addAcct?window.ACCOUNTS.find(a=>a.id===addAcct)?.projects.filter(p=>!p.archived)||[]:[];
+  return(
+    <div className="col">
+      {showAdd&&(
+        addAcct?<AddInquiryModal accountName={window.ACCOUNTS.find(a=>a.id===addAcct)?.name||''} onClose={()=>{setShowAdd(false);setAddAcct(null);}} onAdd={data=>onAddInquiry(addAcct,null,{...data,type:'project'})}/>
+        :<Modal title="New Key Project / Opportunity" onClose={()=>setShowAdd(false)} width={480}>
+          <div className="mono-sm" style={{marginBottom:10}}>Which account is this for?</div>
+          <div className="col" style={{gap:6}}>
+            {window.ACCOUNTS.map(a=>(
+              <button key={a.id} className="btn" style={{justifyContent:'flex-start',textAlign:'left'}} onClick={()=>setAddAcct(a.id)}>
+                <strong>{a.name}</strong><span className="mono-sm" style={{marginLeft:8,color:'var(--ink-3)'}}>{a.location}</span>
               </button>
             ))}
           </div>
-        </div>
-      ) : (
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:22}}>
-          <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <div className={`avatar lg ${selected.id}`}>{selected.initials}</div>
-            <div>
-              <div style={{fontFamily:'var(--title)',fontWeight:700,fontSize:18}}>{selected.name}</div>
-              <button onClick={() => { setSelected(null); setPin(''); }}
-                      style={{fontFamily:'var(--mono)',fontSize:10,color:'var(--ink-3)',background:'none',border:'none',cursor:'pointer',padding:0,textDecoration:'underline'}}>
-                not you?
-              </button>
-            </div>
+          <div className="form-actions" style={{borderTop:'none',marginTop:8}}>
+            <button className="btn" onClick={()=>setShowAdd(false)}>cancel</button>
           </div>
-
-          <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'1px'}}>enter your pin</div>
-
-          <div className="pin-dots" style={{animation: shake ? 'shake 0.5s' : 'none'}}>
-            {[0,1,2,3].map(i => (
-              <div key={i} className={`pin-dot${i < pin.length ? ' filled' : ''}`} />
-            ))}
-          </div>
-
-          <div className="pin-pad">
-            {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d, i) => (
-              <button key={i}
-                      className={`pin-key${d===''?' empty':''} ${d==='⌫'?'del':''}`}
-                      onClick={() => d === '⌫' ? setPin(p => p.slice(0,-1)) : d !== '' ? handleDigit(d) : null}>
-                {d}
-              </button>
-            ))}
-          </div>
-        </div>
+        </Modal>
       )}
+      <div className="grid-4">
+        <div className="kpi"><div className="big">{active.length}</div><div className="lbl">key projects</div></div>
+        <div className="kpi accent"><div className="big">{fmtRev(totalRev)}</div><div className="lbl">total potential revenue</div></div>
+        <div className="kpi"><div className="big">{active.filter(i=>i.projectStage==='proposal'||i.projectStage==='negotiation').length}</div><div className="lbl">in proposal / negotiation</div></div>
+        <div className="kpi"><div className="big">{active.filter(i=>i.projectStage==='closed-won').length}</div><div className="lbl">closed — won</div></div>
+      </div>
+      <div className="sketch">
+        <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center',marginBottom:14}}>
+          <h3 style={{margin:0}}>Key Projects & Opportunities</h3>
+          <button className="btn primary" onClick={()=>setShowAdd(true)}>+ new key project</button>
+          <div style={{marginLeft:'auto',display:'flex',gap:6,flexWrap:'wrap'}}>
+            <select value={stageF} onChange={e=>setStageF(e.target.value)} style={{fontSize:12,padding:'4px 8px',border:'1.5px solid #2a2420',borderRadius:4,background:'#fffef5'}}>
+              <option value="all">all stages</option>
+              {window.PROJECT_STAGES.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}
+            </select>
+            <select value={acctF} onChange={e=>setAcctF(e.target.value)} style={{fontSize:12,padding:'4px 8px',border:'1.5px solid #2a2420',borderRadius:4,background:'#fffef5'}}>
+              <option value="all">all accounts</option>
+              {accounts.map(a=><option key={a.id} value={a.id}>{a.name}</option>)}
+            </select>
+          </div>
+        </div>
+        {filtered.length===0?(
+          <div className="empty">No active key projects — click "+ new key project" to add one.</div>
+        ):(
+          <table className="tbl">
+            <thead><tr><th>id</th><th>project title</th><th>account</th><th>stage</th><th>potential revenue</th><th>potential volume</th><th>meetings</th><th>updated</th></tr></thead>
+            <tbody>
+              {filtered.sort((a,b)=>{
+                const order=['discovery','engaged','proposal','negotiation','closed-won','closed-lost'];
+                return order.indexOf(a.projectStage||'discovery')-order.indexOf(b.projectStage||'discovery');
+              }).map(inq=>(
+                <tr key={inq.id} style={{cursor:'pointer'}} onClick={()=>onOpenInquiry(inq)}>
+                  <td className="mono">#{inq.id}</td>
+                  <td style={{fontWeight:700}}>{inq.projectTitle||'—'}</td>
+                  <td>{inq.accountName}</td>
+                  <td><SP2 stageId={inq.projectStage||'discovery'}/></td>
+                  <td style={{fontFamily:'var(--mono)',fontWeight:600,color:inq.projectStage==='closed-won'?'var(--ok)':'var(--ink)'}}>{inq.potentialRevenue||'—'}</td>
+                  <td className="mono-sm">{inq.potentialVolume||'—'}</td>
+                  <td className="mono">{(inq.meetings||[]).length}</td>
+                  <td className="mono-sm">{inq.updated}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
 
-  </script>
-
+window.Views={AccountsList,AccountDetail,InquiryDetail,AllInquiries,KeyProjects};
+</script>
   <script type="text/babel">
-
+function LoginScreen({onLogin}){
+  const [selected,setSelected]=React.useState(null);
+  const [pin,setPin]=React.useState('');
+  const [shake,setShake]=React.useState(false);
+  // ── CHANGE PINS HERE ──
+  const PINS={mike:'1111',fahim:'2222',ahmad:'3333',jianming:'4444'};
+  // ─────────────────────
+  function handleDigit(d){
+    if(pin.length>=4)return;
+    const next=pin+d;setPin(next);
+    if(next.length===4){
+      if(next===PINS[selected.id]){onLogin(selected);}
+      else{setShake(true);setTimeout(()=>{setPin('');setShake(false)},650);}
+    }
+  }
+  return(<div className="login-wrap">
+    <div style={{textAlign:'center'}}>
+      <div style={{fontFamily:'var(--title)',fontSize:30,fontWeight:700,letterSpacing:'-0.02em'}}>CrossLink</div>
+      <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'2px',marginTop:4}}>Cast Parts · Bushing Pipeline</div>
+    </div>
+    {!selected?(
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:20}}>
+        <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'1px'}}>who are you?</div>
+        <div className="profile-grid">
+          {window.TEAM.map(t=>(<button key={t.id} className="profile-card" onClick={()=>setSelected(t)}><div className={`avatar lg ${t.id}`}>{t.initials}</div><div style={{fontFamily:'var(--title)',fontWeight:700,fontSize:15}}>{t.name}</div><div style={{fontFamily:'var(--mono)',fontSize:10,color:'var(--ink-3)',textTransform:'uppercase'}}>{t.role}</div></button>))}
+        </div>
+      </div>
+    ):(
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:22}}>
+        <div style={{display:'flex',alignItems:'center',gap:12}}>
+          <div className={`avatar lg ${selected.id}`}>{selected.initials}</div>
+          <div><div style={{fontFamily:'var(--title)',fontWeight:700,fontSize:18}}>{selected.name}</div><button onClick={()=>{setSelected(null);setPin('');}} style={{fontFamily:'var(--mono)',fontSize:10,color:'var(--ink-3)',background:'none',border:'none',cursor:'pointer',padding:0,textDecoration:'underline'}}>not you?</button></div>
+        </div>
+        <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)',textTransform:'uppercase',letterSpacing:'1px'}}>enter your pin</div>
+        <div className="pin-dots" style={{animation:shake?'shake 0.5s':'none'}}>
+          {[0,1,2,3].map(i=><div key={i} className={`pin-dot${i<pin.length?' filled':''}`}/>)}
+        </div>
+        <div className="pin-pad">
+          {['1','2','3','4','5','6','7','8','9','','0','⌫'].map((d,i)=>(
+            <button key={i} className={`pin-key${d===''?' empty':''} ${d==='⌫'?'del':''}`}
+              onClick={()=>d==='⌫'?setPin(p=>p.slice(0,-1)):d!==''?handleDigit(d):null}>{d}</button>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>);
+}
+</script>
+  <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 const { TopBar, NavTabs } = window.Wire;
 const { DashboardLanes, DashboardList, DashboardKanban } = window.Dashboards;
-const { AccountsList, AccountDetail, InquiryDetail, AllInquiries } = window.Views;
+const { AccountsList, AccountDetail, InquiryDetail, AllInquiries, KeyProjects } = window.Views;
 
-const LS_KEY    = 'bushingTracker.route.v1';
-const USER_KEY  = 'bushingTracker.user.v1';
-const DOC_REF   = window.db.collection('tracker').doc('main');
-const PRES_COL  = () => window.db.collection('presence');
+const LS_KEY='bushingTracker.route.v1', USER_KEY='bushingTracker.user.v1';
+const DOC_REF=window.db.collection('tracker').doc('main');
+const PRES_COL=()=>window.db.collection('presence');
 
-function loadRoute()   { try { return JSON.parse(localStorage.getItem(LS_KEY)) || null; } catch { return null; } }
-function saveRoute(r)  { localStorage.setItem(LS_KEY, JSON.stringify(r)); }
-function loadUser()    { try { return JSON.parse(localStorage.getItem(USER_KEY)) || null; } catch { return null; } }
+function loadRoute(){try{return JSON.parse(localStorage.getItem(LS_KEY))||null}catch{return null}}
+function saveRoute(r){localStorage.setItem(LS_KEY,JSON.stringify(r))}
+function loadUser(){try{return JSON.parse(localStorage.getItem(USER_KEY))||null}catch{return null}}
 
-function App() {
-  const [currentUser,  setCurrentUser]  = useState(loadUser);
-  const [accounts,     setAccounts]     = useState(window.ACCOUNTS);
-  const [loading,      setLoading]      = useState(true);
-  const [onlineUsers,  setOnlineUsers]  = useState({});
-  const [revision,     setRevision]     = useState(0);
-  const skipNextSnap   = useRef(false);
+function App(){
+  const [currentUser,setCurrentUser]=useState(loadUser);
+  const [accounts,setAccounts]=useState(window.ACCOUNTS);
+  const [loading,setLoading]=useState(true);
+  const [onlineUsers,setOnlineUsers]=useState({});
+  const [revision,setRevision]=useState(0);
+  const skipNextSnap=useRef(false);
+  const init=loadRoute()||{view:window.TWEAK_DEFAULTS.startView,accountId:null,inquiry:null};
+  const [route,setRoute]=useState(init);
+  const [tweaks,setTweaks]=useState({...window.TWEAK_DEFAULTS});
+  const [tweaksOpen,setTweaksOpen]=useState(false);
 
-  const init   = loadRoute() || { view: window.TWEAK_DEFAULTS.startView, accountId: null, inquiry: null };
-  const [route,      setRoute]      = useState(init);
-  const [tweaks,     setTweaks]     = useState({ ...window.TWEAK_DEFAULTS });
-  const [tweaksOpen, setTweaksOpen] = useState(false);
+  useEffect(()=>{
+    const unsub=DOC_REF.onSnapshot(snap=>{
+      if(snap.metadata.hasPendingWrites)return;
+      if(skipNextSnap.current){skipNextSnap.current=false;return}
+      if(!snap.exists){DOC_REF.set({accounts:window.ACCOUNTS_SEED});setLoading(false);return}
+      const d=snap.data();window.ACCOUNTS=d.accounts;setAccounts(d.accounts);setRevision(r=>r+1);setLoading(false);
+    },err=>{console.error(err);setLoading(false)});
+    return()=>unsub();
+  },[]);
 
-  // ── Firestore: accounts real-time listener ─────────────────────────────────
-  useEffect(() => {
-    const unsub = DOC_REF.onSnapshot(snap => {
-      if (snap.metadata.hasPendingWrites) return;
-      if (skipNextSnap.current) { skipNextSnap.current = false; return; }
-      if (!snap.exists) {
-        DOC_REF.set({ accounts: window.ACCOUNTS_SEED });
-        setLoading(false);
-        return;
-      }
-      const data = snap.data();
-      window.ACCOUNTS = data.accounts;
-      setAccounts(data.accounts);
-      setRevision(r => r + 1);
-      setLoading(false);
-    }, err => { console.error('Firestore error:', err); setLoading(false); });
-    return () => unsub();
-  }, []);
+  useEffect(()=>{
+    if(!currentUser)return;
+    const ref=PRES_COL().doc(currentUser.id);
+    const write=()=>ref.set({userId:currentUser.id,lastSeen:new Date().toISOString(),view:route.view});
+    write();const iv=setInterval(write,90000);
+    const unsubs=window.TEAM.map(t=>PRES_COL().doc(t.id).onSnapshot(snap=>{
+      if(!snap.exists)return;const d=snap.data();
+      setOnlineUsers(p=>({...p,[t.id]:d.lastSeen&&(Date.now()-new Date(d.lastSeen).getTime())<3*60*1000}));
+    }));
+    return()=>{unsubs.forEach(u=>u());clearInterval(iv)};
+  },[currentUser,route.view]);
 
-  // ── Presence: write ours, read everyone's ─────────────────────────────────
-  useEffect(() => {
-    if (!currentUser) return;
-    const presRef = PRES_COL().doc(currentUser.id);
-    const write   = () => presRef.set({ userId: currentUser.id, lastSeen: new Date().toISOString(), view: route.view });
-    write();
-    const interval = setInterval(write, 90000);
+  useEffect(()=>{saveRoute(route)},[route]);
+  useEffect(()=>{document.body.classList.toggle('dense',tweaks.density==='dense');document.body.classList.toggle('hide-presence',!tweaks.showPresence)},[tweaks]);
 
-    const unsubs = window.TEAM.map(t =>
-      PRES_COL().doc(t.id).onSnapshot(snap => {
-        if (!snap.exists) return;
-        const d  = snap.data();
-        const ok = d.lastSeen && (Date.now() - new Date(d.lastSeen).getTime()) < 3 * 60 * 1000;
-        setOnlineUsers(p => ({ ...p, [t.id]: ok }));
-      })
-    );
-    return () => { unsubs.forEach(u => u()); clearInterval(interval); };
-  }, [currentUser, route.view]);
+  function login(user){window.CURRENT_USER=user;setCurrentUser(user);localStorage.setItem(USER_KEY,JSON.stringify(user))}
+  function logout(){if(currentUser)PRES_COL().doc(currentUser.id).delete();window.CURRENT_USER=null;setCurrentUser(null);localStorage.removeItem(USER_KEY)}
 
-  useEffect(() => { saveRoute(route); }, [route]);
-  useEffect(() => {
-    document.body.classList.toggle('dense',         tweaks.density === 'dense');
-    document.body.classList.toggle('hide-presence', !tweaks.showPresence);
-  }, [tweaks]);
-
-  function login(user) {
-    window.CURRENT_USER = user;
-    setCurrentUser(user);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
-  }
-  function logout() {
-    if (currentUser) PRES_COL().doc(currentUser.id).delete();
-    window.CURRENT_USER = null;
-    setCurrentUser(null);
-    localStorage.removeItem(USER_KEY);
+  function mutate(fn){
+    setAccounts(prev=>{const next=fn(prev);window.ACCOUNTS=next;skipNextSnap.current=true;DOC_REF.set({accounts:next});return next});
+    setRevision(r=>r+1);
   }
 
-  function mutate(updaterFn) {
-    setAccounts(prev => {
-      const next = updaterFn(prev);
-      window.ACCOUNTS = next;
-      skipNextSnap.current = true;
-      DOC_REF.set({ accounts: next });
-      return next;
-    });
-    setRevision(r => r + 1);
+  // ── mutations ────────────────────────────────────────────────────────────────
+  function deleteInquiry(id){
+    mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>({...p,inquiries:p.inquiries.filter(i=>i.id!==id)}))})));
+    if(route.view==='inquiry'&&route.inquiry?.id===id)setRoute({view:'account',accountId:route.inquiry.accountId,inquiry:null});
+  }
+  function archiveInquiry(id){
+    mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>({...p,inquiries:p.inquiries.map(i=>i.id===id?{...i,archived:true,archivedAt:new Date().toISOString().slice(0,10)}:i)}))})));
+    if(route.view==='inquiry'&&route.inquiry?.id===id)setRoute({view:'account',accountId:route.inquiry.accountId,inquiry:null});
+  }
+  function deleteProject(id){mutate(a=>a.map(ac=>({...ac,projects:ac.projects.filter(p=>p.id!==id)})))}
+  function archiveProject(id){mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>p.id===id?{...p,archived:true,inquiries:p.inquiries.map(i=>({...i,archived:true}))}:p)})))}
+  function postActivity(inquiryId,item){
+    mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>({...p,inquiries:p.inquiries.map(i=>i.id===inquiryId?{...i,activity:[item,...(i.activity||[])],updated:item.at,updatedBy:item.by}:i)}))})));
+  }
+  function updateInquiry(id,fields){
+    const today=new Date().toISOString().slice(0,10);
+    mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>({...p,inquiries:p.inquiries.map(i=>i.id===id?{...i,...fields,updated:today,updatedBy:currentUser?.id||'fahim'}:i)}))})));
+  }
+  function promoteAccount(accountId){mutate(a=>a.map(ac=>ac.id===accountId?{...ac,type:'active'}:ac))}
+  function deleteAccount(accountId){
+    mutate(a=>a.filter(ac=>ac.id!==accountId));
+    setRoute({view:'accounts',accountId:null,inquiry:null});
+  }
+  function changeTier(accountId,tier){mutate(a=>a.map(ac=>ac.id===accountId?{...ac,tier}:ac))}
+
+  function addAccount(formData){
+    const id=formData.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    const safeId=window.ACCOUNTS.find(a=>a.id===id)?id+'-'+Date.now().toString(36):id;
+    const newAcc={id:safeId,name:formData.name.trim(),tier:formData.tier,type:formData.type,location:formData.location.trim(),notes:formData.notes.trim(),projects:[]};
+    mutate(a=>[...a,newAcc]);
   }
 
-  function deleteInquiry(inquiryId) {
-    mutate(accts => accts.map(a => ({
-      ...a, projects: a.projects.map(p => ({
-        ...p, inquiries: p.inquiries.filter(i => i.id !== inquiryId)
-      }))
-    })));
-    if (route.view === 'inquiry' && route.inquiry?.id === inquiryId)
-      setRoute({ view: 'account', accountId: route.inquiry.accountId, inquiry: null });
-  }
-  function archiveInquiry(inquiryId) {
-    mutate(accts => accts.map(a => ({
-      ...a, projects: a.projects.map(p => ({
-        ...p, inquiries: p.inquiries.map(i => i.id === inquiryId
-          ? { ...i, archived: true, archivedAt: new Date().toISOString().slice(0,10) } : i)
-      }))
-    })));
-    if (route.view === 'inquiry' && route.inquiry?.id === inquiryId)
-      setRoute({ view: 'account', accountId: route.inquiry.accountId, inquiry: null });
-  }
-  function deleteProject(projectId) {
-    mutate(accts => accts.map(a => ({ ...a, projects: a.projects.filter(p => p.id !== projectId) })));
-  }
-  function archiveProject(projectId) {
-    mutate(accts => accts.map(a => ({
-      ...a, projects: a.projects.map(p => p.id === projectId
-        ? { ...p, archived: true, inquiries: p.inquiries.map(i => ({...i, archived:true})) } : p)
-    })));
-  }
-  function postActivity(inquiryId, item) {
-    mutate(accts => accts.map(a => ({
-      ...a, projects: a.projects.map(p => ({
-        ...p, inquiries: p.inquiries.map(i => i.id === inquiryId
-          ? { ...i, activity: [item, ...(i.activity||[])], updated: item.at, updatedBy: item.by } : i)
-      }))
-    })));
+  function addProject(accountId,projName){
+    const id=`${accountId}-${Date.now().toString(36)}`;
+    const newProj={id,name:projName,opened:new Date().toISOString().slice(0,10),inquiries:[]};
+    mutate(a=>a.map(ac=>ac.id===accountId?{...ac,projects:[...ac.projects,newProj]}:ac));
   }
 
-  function updateTweak(k, v) { setTweaks(t => ({ ...t, [k]: v })); }
-  function goDashboard() { setRoute({ view:'dashboard', accountId:null, inquiry:null }); }
-  function goAccounts()  { setRoute({ view:'accounts',  accountId:null, inquiry:null }); }
-  function goAll()       { setRoute({ view:'all',       accountId:null, inquiry:null }); }
-  function openAccount(id){ setRoute({ view:'account', accountId:id, inquiry:null }); }
-  function openInquiry(inq) {
-    let full = inq;
-    if (!inq.accountName) {
-      outer: for (const a of window.ACCOUNTS) for (const p of a.projects) for (const i of p.inquiries)
-        if (i.id === inq.id) { full = {...i, accountId:a.id, accountName:a.name, projectId:p.id, projectName:p.name}; break outer; }
+  function addInquiry(accountId,projectId,formData){
+    const acc=window.ACCOUNTS.find(a=>a.id===accountId);
+    const existingIds=acc?acc.projects.flatMap(p=>p.inquiries.map(i=>i.id)):[];
+    let prefix;
+    if(existingIds.length>0){prefix=existingIds[0].split('-')[0]}
+    else{prefix=acc.name.replace(/([a-z])([A-Z])/g,'$1 $2').trim().split(/\s+/).map(w=>w[0]?.toUpperCase()||'').join('').slice(0,3)||'INQ'}
+    const nums=existingIds.filter(id=>id.startsWith(prefix+'-')).map(id=>parseInt(id.split('-').slice(1).join(''))).filter(n=>!isNaN(n));
+    const nextNum=nums.length>0?Math.max(...nums)+1:1001;
+    const today=new Date().toISOString().slice(0,10);
+    const base={id:`${prefix}-${nextNum}`,updated:today,updatedBy:currentUser?.id||'fahim',
+      activity:[{by:currentUser?.id||'fahim',at:today,text:'New inquiry created.'}]};
+    let newInq;
+    if(formData.type==='info'){
+      newInq={...base,type:'info',subject:formData.subject||'',status:formData.status||'open',
+        assignedTo:formData.assignedTo||'fahim',priority:formData.priority||'med',due:formData.due||''};
+    } else if(formData.type==='project'){
+      newInq={...base,type:'project',projectTitle:formData.projectTitle||'',projectStage:formData.projectStage||'discovery',
+        potentialVolume:formData.potentialVolume||'',potentialRevenue:formData.potentialRevenue||'',
+        priority:formData.priority||'med',notes:formData.notes||'',meetings:[]};
+    } else {
+      const parts=formData.parts||[];
+      const firstNumQty=parseInt((parts[0]?.qty||'').replace(/[^0-9]/g,''))||0;
+      newInq={...base,type:'rfq',rfqName:formData.rfqName||'',parts,
+        qty:firstNumQty||null,
+        stage:'new',priority:formData.priority||'med',
+        due:formData.due||new Date(Date.now()+30*86400000).toISOString().slice(0,10),
+        specs:formData.specs||'',cost:'',price:'',leadtime:''};
     }
-    setRoute({ view:'inquiry', accountId:full.accountId, inquiry:full });
+    if(projectId){
+      mutate(a=>a.map(ac=>ac.id===accountId?{...ac,projects:ac.projects.map(p=>p.id===projectId?{...p,inquiries:[...p.inquiries,newInq]}:p)}:ac));
+    } else {
+      const firstActive=acc?.projects.find(p=>!p.archived);
+      if(firstActive){
+        mutate(a=>a.map(ac=>ac.id===accountId?{...ac,projects:ac.projects.map(p=>p.id===firstActive.id?{...p,inquiries:[...p.inquiries,newInq]}:p)}:ac));
+      } else {
+        const genProj={id:`${accountId}-${Date.now().toString(36)}`,name:'General Inquiries',opened:today,inquiries:[newInq]};
+        mutate(a=>a.map(ac=>ac.id===accountId?{...ac,projects:[...ac.projects,genProj]}:ac));
+      }
+    }
   }
 
-  // Resolve current inquiry from live accounts (keeps it fresh)
-  function resolveInquiry(routeInquiry) {
-    if (!routeInquiry) return null;
-    for (const a of accounts) for (const p of a.projects) for (const i of p.inquiries)
-      if (i.id === routeInquiry.id)
-        return { ...i, accountId:a.id, accountName:a.name, projectId:p.id, projectName:p.name };
-    return routeInquiry; // fallback
+  // ── nav ───────────────────────────────────────────────────────────────────────
+  function updateTweak(k,v){setTweaks(t=>({...t,[k]:v}))}
+  function goDashboard(){setRoute({view:'dashboard',accountId:null,inquiry:null})}
+  function goAccounts(){setRoute({view:'accounts',accountId:null,inquiry:null})}
+  function goAll(){setRoute({view:'all',accountId:null,inquiry:null})}
+  function goKeyProjects(){setRoute({view:'keyprojects',accountId:null,inquiry:null})}
+  function openAccount(id){setRoute({view:'account',accountId:id,inquiry:null})}
+  function openInquiry(inq){
+    let full=inq;
+    if(!inq.accountName){outer:for(const a of window.ACCOUNTS)for(const p of a.projects)for(const i of p.inquiries)if(i.id===inq.id){full={...i,accountId:a.id,accountName:a.name,projectId:p.id,projectName:p.name};break outer}}
+    setRoute({view:'inquiry',accountId:full.accountId,inquiry:full});
+  }
+  function resolveInquiry(ri){
+    if(!ri)return null;
+    for(const a of accounts)for(const p of a.projects)for(const i of p.inquiries)if(i.id===ri.id)return{...i,accountId:a.id,accountName:a.name,projectId:p.id,projectName:p.name};
+    return ri;
   }
 
-  const crumbs = [];
-  if (route.view==='dashboard') { crumbs.push({label:'Dashboard'}); }
-  else if (route.view==='accounts') { crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Accounts'}); }
-  else if (route.view==='all')      { crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'All Inquiries'}); }
-  else if (route.view==='account')  {
-    const acc = accounts.find(a=>a.id===route.accountId);
-    crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Accounts',onClick:goAccounts},{label:acc?.name||'—'});
-  } else if (route.view==='inquiry') {
-    const acc = accounts.find(a=>a.id===route.inquiry?.accountId);
-    crumbs.push(
-      {label:'Dashboard',onClick:goDashboard},{label:'Accounts',onClick:goAccounts},
-      {label:acc?.name||'—',onClick:()=>openAccount(acc?.id)},
-      {label:'#'+route.inquiry?.id}
-    );
+  const crumbs=[];
+  if(route.view==='dashboard'){crumbs.push({label:'Dashboard'})}
+  else if(route.view==='accounts'){crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Accounts'})}
+  else if(route.view==='all'){crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'All Inquiries'})}
+  else if(route.view==='keyprojects'){crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Key Projects'})}
+  else if(route.view==='account'){const acc=accounts.find(a=>a.id===route.accountId);crumbs.push({label:'Dashboard',onClick:goDashboard},{label:'Accounts',onClick:goAccounts},{label:acc?.name||'—'})}
+  else if(route.view==='inquiry'){
+    const acc=accounts.find(a=>a.id===route.inquiry?.accountId);
+    const isKp=route.inquiry?.type==='project';
+    crumbs.push({label:'Dashboard',onClick:goDashboard});
+    if(isKp)crumbs.push({label:'Key Projects',onClick:goKeyProjects});
+    else crumbs.push({label:'Accounts',onClick:goAccounts},{label:acc?.name||'—',onClick:()=>openAccount(acc?.id)});
+    crumbs.push({label:'#'+route.inquiry?.id});
   }
 
-  const navCurrent = route.view==='dashboard'?'dashboard':(route.view==='accounts'||route.view==='account')?'accounts':'all';
-  function onNav(id) {
-    if (id==='dashboard') goDashboard(); else if (id==='accounts') goAccounts(); else goAll();
-  }
+  const navCurrent=route.view==='dashboard'?'dashboard'
+    :(route.view==='accounts'||route.view==='account')?'accounts'
+    :route.view==='keyprojects'?'keyprojects'
+    :'all';
+  function onNav(id){if(id==='dashboard')goDashboard();else if(id==='accounts')goAccounts();else if(id==='keyprojects')goKeyProjects();else goAll()}
 
-  const mutations = { onDeleteInquiry:deleteInquiry, onArchiveInquiry:archiveInquiry,
-                      onDeleteProject:deleteProject,  onArchiveProject:archiveProject,
-                      onPostActivity:postActivity };
+  const mutations={onDeleteInquiry:deleteInquiry,onArchiveInquiry:archiveInquiry,onDeleteProject:deleteProject,onArchiveProject:archiveProject,onPostActivity:postActivity,onAddProject:addProject,onAddInquiry:addInquiry,onPromoteAccount:promoteAccount,onDeleteAccount:deleteAccount,onChangeTier:changeTier,onUpdateInquiry:updateInquiry};
 
-  if (!currentUser) return <LoginScreen onLogin={login} />;
-  if (loading) return <div className="loader">connecting…</div>;
+  if(!currentUser)return<LoginScreen onLogin={login}/>;
+  if(loading)return<div className="loader">connecting to firebase…</div>;
+  const liveInquiry=resolveInquiry(route.inquiry);
 
-  const liveInquiry = resolveInquiry(route.inquiry);
-
-  return (
-    <div>
-      <TopBar crumbs={crumbs} currentUser={currentUser} onlineUsers={onlineUsers} onLogout={logout}/>
-      <NavTabs current={navCurrent} onChange={onNav}/>
-      <div className="content">
-        {route.view==='dashboard' && (
-          <React.Fragment key={`dash-${revision}`}>
-            {tweaks.dashboardVariant==='lanes'  ? <DashboardLanes  onOpenInquiry={openInquiry}/> :
-             tweaks.dashboardVariant==='list'   ? <DashboardList   onOpenInquiry={openInquiry}/> :
-                                                  <DashboardKanban onOpenInquiry={openInquiry}/>}
-          </React.Fragment>
-        )}
-        {route.view==='accounts' && <AccountsList onOpenAccount={openAccount}/>}
-        {route.view==='all'      && <AllInquiries key={`all-${revision}`} onOpenInquiry={openInquiry}/>}
-        {route.view==='account'  && <AccountDetail accountId={route.accountId} onOpenInquiry={openInquiry} {...mutations}/>}
-        {route.view==='inquiry'  && liveInquiry && <InquiryDetail key={liveInquiry.id} inquiry={liveInquiry} onOpenAccount={openAccount} {...mutations}/>}
-      </div>
-
-      <div style={{position:'fixed',bottom:16,right:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8}}>
-        <button className="btn sm" onClick={()=>setTweaksOpen(o=>!o)}>{tweaksOpen?'✕ close':'⚙ tweaks'}</button>
-        {tweaksOpen && (
-          <div style={{background:'var(--paper)',border:'2px solid var(--line)',borderRadius:'6px 14px 6px 14px',padding:'14px 16px',boxShadow:'4px 4px 0 #8a7f72',width:260}}>
-            <h4 style={{fontFamily:'var(--title)',fontSize:15,fontWeight:700,margin:'0 0 8px',letterSpacing:'-0.01em',color:'var(--ink)'}}>Tweaks</h4>
-            <div className="mono-sm" style={{marginBottom:4,marginTop:8}}>DASHBOARD LAYOUT</div>
-            <div className="seg">
-              {['lanes','list','kanban'].map(v=>(
-                <button key={v} className={tweaks.dashboardVariant===v?'active':''} onClick={()=>updateTweak('dashboardVariant',v)}>
-                  {v==='lanes'?'by person':v==='list'?'priority list':'by stage'}
-                </button>
-              ))}
-            </div>
-            <div className="mono-sm" style={{marginBottom:4,marginTop:10}}>DENSITY</div>
-            <div className="seg">
-              {['comfortable','dense'].map(v=>(
-                <button key={v} className={tweaks.density===v?'active':''} onClick={()=>updateTweak('density',v)}>{v}</button>
-              ))}
-            </div>
-            <div className="mono-sm" style={{marginBottom:4,marginTop:10}}>PRESENCE</div>
-            <div className="seg">
-              <button className={tweaks.showPresence?'active':''} onClick={()=>updateTweak('showPresence',true)}>shown</button>
-              <button className={!tweaks.showPresence?'active':''} onClick={()=>updateTweak('showPresence',false)}>hidden</button>
-            </div>
-            <div className="mono-sm" style={{marginTop:14,paddingTop:10,borderTop:'1px dashed #8a7f72'}}>live · firebase · crosslink</div>
-          </div>
-        )}
-      </div>
+  return(<div>
+    <TopBar crumbs={crumbs} currentUser={currentUser} onlineUsers={onlineUsers} onLogout={logout}/>
+    <NavTabs current={navCurrent} onChange={onNav}/>
+    <div className="content">
+      {route.view==='dashboard'&&(<React.Fragment key={`dash-${revision}`}>{tweaks.dashboardVariant==='lanes'?<DashboardLanes onOpenInquiry={openInquiry}/>:tweaks.dashboardVariant==='list'?<DashboardList onOpenInquiry={openInquiry}/>:<DashboardKanban onOpenInquiry={openInquiry}/>}</React.Fragment>)}
+      {route.view==='accounts'&&<AccountsList onOpenAccount={openAccount} onAddAccount={addAccount}/>}
+      {route.view==='all'&&<AllInquiries key={`all-${revision}`} onOpenInquiry={openInquiry}/>}
+      {route.view==='keyprojects'&&<KeyProjects key={`kp-${revision}`} onOpenInquiry={openInquiry} onAddInquiry={addInquiry}/>}
+      {route.view==='account'&&<AccountDetail accountId={route.accountId} onOpenInquiry={openInquiry} {...mutations}/>}
+      {route.view==='inquiry'&&liveInquiry&&<InquiryDetail key={liveInquiry.id} inquiry={liveInquiry} onOpenAccount={openAccount} {...mutations}/>}
     </div>
-  );
+    <div style={{position:'fixed',bottom:16,right:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8}}>
+      <button className="btn sm" onClick={()=>setTweaksOpen(o=>!o)}>{tweaksOpen?'✕ close':'⚙ tweaks'}</button>
+      {tweaksOpen&&(<div style={{background:'var(--paper)',border:'2px solid var(--line)',borderRadius:'6px 14px 6px 14px',padding:'14px 16px',boxShadow:'4px 4px 0 #8a7f72',width:260}}>
+        <h4 style={{fontFamily:'var(--title)',fontSize:15,fontWeight:700,margin:'0 0 8px',letterSpacing:'-0.01em',color:'var(--ink)'}}>Tweaks</h4>
+        <div className="mono-sm" style={{marginBottom:4,marginTop:8}}>DASHBOARD LAYOUT</div>
+        <div className="seg">{['lanes','list','kanban'].map(v=>(<button key={v} className={tweaks.dashboardVariant===v?'active':''} onClick={()=>updateTweak('dashboardVariant',v)}>{v==='lanes'?'by person':v==='list'?'priority list':'by stage'}</button>))}</div>
+        <div className="mono-sm" style={{marginBottom:4,marginTop:10}}>DENSITY</div>
+        <div className="seg">{['comfortable','dense'].map(v=>(<button key={v} className={tweaks.density===v?'active':''} onClick={()=>updateTweak('density',v)}>{v}</button>))}</div>
+        <div className="mono-sm" style={{marginBottom:4,marginTop:10}}>PRESENCE</div>
+        <div className="seg"><button className={tweaks.showPresence?'active':''} onClick={()=>updateTweak('showPresence',true)}>shown</button><button className={!tweaks.showPresence?'active':''} onClick={()=>updateTweak('showPresence',false)}>hidden</button></div>
+        <div className="mono-sm" style={{marginTop:14,paddingTop:10,borderTop:'1px dashed #8a7f72'}}>live · firebase · crosslink</div>
+      </div>)}
+    </div>
+  </div>);
 }
-
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-
-  </script>
+</script>
 </body>
 </html>
