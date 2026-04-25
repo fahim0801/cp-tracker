@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Crosslink CP Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -462,6 +463,160 @@ a.scribble:hover { background: rgba(217,119,87,0.1); }
 .mention-item .mn{font-family:var(--hand);font-weight:600;font-size:13px}
 .mention-item .mr{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
 
+/* Tab icon layout — desktop: icon hidden, label shown; mobile: icon above label */
+.tab-icon { display: none; }
+.tab-label { display: inline; }
+.tb-back { display: none; }
+.tb-username { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+/* ── Mobile responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+
+  /* Topbar — single compact row */
+  .topbar { padding: 10px 14px; gap: 8px; flex-wrap: nowrap; min-height: 50px; }
+  .topbar .brand { font-size: 15px; white-space: nowrap; }
+  .topbar .brand span { display: none; }
+  .topbar .crumbs { display: none; }
+  .topbar .presence { display: none; }
+  .topbar .presence-label { display: none; }
+
+  /* NavTabs → fixed bottom nav bar */
+  .navtabs {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+    padding: 0; border-top: 1.5px solid var(--line); border-bottom: none;
+    justify-content: space-around; background: var(--paper);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .navtab {
+    flex: 1; text-align: center; padding: 10px 4px 10px;
+    font-size: 10px; letter-spacing: 0;
+    border: none; border-top: 2px solid transparent;
+    border-radius: 0; margin-bottom: 0; color: var(--ink-3);
+  }
+  .navtab:hover { color: var(--ink); }
+  .navtab.active {
+    background: var(--paper-2); color: var(--ink);
+    border-top: 2px solid var(--accent);
+    border-left: none; border-right: none; border-bottom: none;
+    border-radius: 0;
+  }
+  .navtab.active::after { display: none; }
+
+  /* Main content — full width, padded for bottom nav */
+  .content { padding: 14px 14px 90px; max-width: 100%; }
+
+  /* All multi-column grids collapse to 1 column */
+  .grid-2, .grid-3, .grid-4, .fields-grid { grid-template-columns: 1fr; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+
+  /* Row → stack */
+  .row { flex-direction: column; }
+
+  /* Inquiry detail sidebar stacks below main content */
+  .inquiry-detail { grid-template-columns: 1fr; }
+
+  /* Type picker — 1 column on mobile */
+  .type-pick-grid { grid-template-columns: 1fr; }
+
+  /* Kanban — smaller cols, horizontal scroll */
+  .kanban-col { min-width: 180px; }
+
+  /* Stage track — smaller labels */
+  .stage-track .step { min-width: 60px; }
+  .stage-track .dot { width: 22px; height: 22px; font-size: 9px; }
+  .stage-track .lbl { font-size: 8px; max-width: 60px; }
+  .stage-track .connector { width: 12px; }
+
+  /* Cards full width */
+  .account-card, .sketch, .project-block { border-radius: 6px; }
+
+  /* KPI numbers slightly smaller */
+  .kpi .big { font-size: 26px; }
+
+  /* Modal → bottom sheet */
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal-box {
+    border-radius: 14px 14px 0 0;
+    max-height: 88vh;
+    width: 100%; max-width: 100%;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  /* Chat panel → full-screen overlay */
+  .chat-panel { top: 0; left: 0; width: 100%; z-index: 500; }
+
+  /* Alerts dropdown → full width */
+  .alerts-drop { left: 8px; right: 8px; width: auto; top: 54px; }
+
+  /* Thread items — tighter */
+  .thread-item { padding: 8px 0; }
+  .thread-item .txt { font-size: 13px; }
+
+  /* Tables — hide less important columns via utility; make scrollable */
+  .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tbl { min-width: 520px; }
+
+  /* Back button — only visible on mobile */
+  .tb-back { display: flex; align-items: center; justify-content: center; background: transparent; border: none; font-size: 26px; font-weight: 300; color: var(--ink); cursor: pointer; padding: 0 6px 0 0; line-height: 1; flex-shrink: 0; }
+
+  /* Nav tab icons stacked above label */
+  .tab-icon { display: block; font-size: 16px; line-height: 1; }
+  .tab-label { display: block; font-size: 9px; margin-top: 2px; }
+
+  /* Hide username text, keep avatar */
+  .tb-username { display: none; }
+
+  /* Override chat-open right padding on mobile (chat is full-screen) */
+  .content { padding-right: 14px !important; }
+
+  /* Hide tweaks button on mobile (not needed on phone) */
+  .tweaks-wrap { display: none !important; }
+
+  /* Activity composer */
+  .composer { flex-wrap: wrap; }
+  .composer .mention-wrap textarea { min-height: 60px; }
+  .composer .btn { align-self: flex-end; }
+
+  /* Reduce font sizes on lane headers */
+  .lane-header .name { font-size: 14px; }
+
+  /* Pill text stays readable */
+  .pill { font-size: 9px; padding: 2px 6px; }
+
+  /* Part numbers / mono text */
+  .inquiry-card .part { font-size: 11px; }
+  .inquiry-card .bottom { font-size: 10px; }
+
+  /* Section headings */
+  .sketch h3 { font-size: 16px; }
+  .sketch h4 { font-size: 11px; }
+
+  /* Account card padding tighter */
+  .account-card { padding: 12px; }
+  .account-card .name { font-size: 16px; }
+
+  /* Project block */
+  .project-block { padding: 12px; }
+  .project-block .pname { font-size: 15px; }
+
+  /* Status bar wrap */
+  .status-bar { flex-wrap: wrap; gap: 4px; }
+  .status-bar .sbtn { font-size: 11px; padding: 5px 10px; }
+
+  /* Meeting items */
+  .meeting-item { flex-direction: column; gap: 4px; }
+  .meeting-item .mdate { min-width: auto; }
+
+  /* Revenue pipeline table hidden on mobile — too wide */
+  .pipeline-tbl-wrap { display: none; }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .topbar .brand { font-size: 13px; }
+  .navtab { font-size: 9px; padding: 10px 2px; }
+  .content { padding: 10px 10px 86px; }
+}
   </style>
 </head>
 <body>
@@ -834,8 +989,9 @@ function Modal({title,onClose,children,width=520}){
   useEffect(()=>{const h=e=>{if(e.key==='Escape')onClose()};document.addEventListener('keydown',h);return()=>document.removeEventListener('keydown',h);},[]);
   return(<div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}><div className="modal-box" style={{maxWidth:width}}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}><h3 style={{margin:0,fontSize:18}}>{title}</h3><button className="btn sm" onClick={onClose}>✕</button></div>{children}</div></div>);
 }
-function TopBar({crumbs,currentUser,onlineUsers,onLogout,alertCount,chatUnread,onAlertsToggle,onChatToggle}){
+function TopBar({crumbs,currentUser,onlineUsers,onLogout,alertCount,chatUnread,onAlertsToggle,onChatToggle,onBack}){
   return(<div className="topbar">
+    {onBack&&<button className="tb-back" onClick={onBack}>‹</button>}
     <div className="brand">Crosslink <span>CP Tracker</span></div>
     <div className="crumbs">{crumbs.map((c,i)=>(<React.Fragment key={i}>{i>0&&<span> / </span>}{c.onClick?<a onClick={c.onClick}>{c.label}</a>:<span>{c.label}</span>}</React.Fragment>))}</div>
     <div className="presence"><span className="presence-label">online</span>{window.TEAM.map(t=><Avatar key={t.id} personId={t.id} size="sm" viewing={!!(onlineUsers&&onlineUsers[t.id])}/>)}</div>
@@ -843,12 +999,12 @@ function TopBar({crumbs,currentUser,onlineUsers,onLogout,alertCount,chatUnread,o
       <div className="tb-icon-btn"><button onClick={onAlertsToggle} title="Mentions &amp; alerts">🔔</button>{alertCount>0&&<span className="tb-badge">{alertCount}</span>}</div>
       <div className="tb-icon-btn"><button onClick={onChatToggle} title="Team chat">💬</button>{chatUnread>0&&<span className="tb-badge">{chatUnread}</span>}</div>
     </div>
-    {currentUser&&(<div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8,paddingLeft:12,borderLeft:'1px dashed var(--ink-3)'}}><Avatar personId={currentUser.id} size="sm"/><span style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)'}}>{currentUser.name}</span><button className="btn sm" onClick={onLogout} style={{fontSize:10,padding:'2px 8px'}}>sign out</button></div>)}
+    {currentUser&&(<div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8,paddingLeft:12,borderLeft:'1px dashed var(--ink-3)'}}><Avatar personId={currentUser.id} size="sm"/><span className="tb-username">{currentUser.name}</span><button className="btn sm" onClick={onLogout} style={{fontSize:10,padding:'2px 8px'}}>sign out</button></div>)}
   </div>);
 }
 function NavTabs({current,onChange}){
-  const tabs=[{id:'dashboard',label:'Dashboard'},{id:'accounts',label:'Accounts'},{id:'all',label:'All Inquiries'},{id:'keyprojects',label:'Key Projects'}];
-  return(<div className="navtabs">{tabs.map(t=><button key={t.id} className={cls('navtab',current===t.id&&'active')} onClick={()=>onChange(t.id)}>{t.label}</button>)}</div>);
+  const tabs=[{id:'dashboard',label:'Dashboard',icon:'◉'},{id:'accounts',label:'Accounts',icon:'🏢'},{id:'all',label:'All',icon:'📋'},{id:'keyprojects',label:'Key Opp',icon:'⭐'}];
+  return(<div className="navtabs">{tabs.map(t=><button key={t.id} className={cls('navtab',current===t.id&&'active')} onClick={()=>onChange(t.id)}><span className="tab-icon">{t.icon}</span><span className="tab-label">{t.label}</span></button>)}</div>);
 }
 window.Wire={cls,daysSince,stage,person,dueLabel,isComplete,isOverdue,isStuck,owedBy,Avatar,StagePill,PriorityPill,TierPill,InquiryCard,StageTrack,ActivityThread,Modal,TopBar,NavTabs};
 </script>
@@ -904,7 +1060,7 @@ function RevenuePipeline({onOpenInquiry}){
       {withRev.length===0?(
         <div className="empty">No priced inquiries yet — pipeline value appears once a price is entered on an inquiry.</div>
       ):(
-        <table className="tbl">
+        <div style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}><table className="tbl">
           <thead>
             <tr><th>inquiry</th><th>account / rfq</th><th>stage</th><th>qty</th><th>unit price</th><th style={{textAlign:'right'}}>potential</th></tr>
           </thead>
@@ -920,7 +1076,7 @@ function RevenuePipeline({onOpenInquiry}){
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       )}
     </div>
   );
@@ -1035,7 +1191,7 @@ function DashboardList({onOpenInquiry}){
           ))}
           <FilterBtn active={filter==='client'} onClick={()=>setFilter('client')}>customer</FilterBtn>
         </div>
-        <table className="tbl">
+        <div style={{overflowX:'auto',WebkitOverflowScrolling:'touch'}}><table className="tbl" style={{minWidth:560}}>
           <thead><tr><th>inq #</th><th>account / part</th><th>stage</th><th>priority</th><th>owes</th><th>due</th><th>last update</th></tr></thead>
           <tbody>
             {filtered.map(inq=>{
@@ -1053,7 +1209,7 @@ function DashboardList({onOpenInquiry}){
               );
             })}
           </tbody>
-        </table>
+        </table></div>
       </div>
       <RevenuePipeline onOpenInquiry={onOpenInquiry}/>
     </div>
@@ -2465,11 +2621,16 @@ function App(){
     setAlertsOpen(false);
   }
 
+  const mobileBack=route.view==='account'?goAccounts
+    :route.view==='inquiry'?(route.inquiry?.type==='project'?goKeyProjects:()=>openAccount(route.inquiry?.accountId))
+    :null;
+
   return(<div>
     <TopBar crumbs={crumbs} currentUser={currentUser} onlineUsers={onlineUsers} onLogout={logout}
       alertCount={alertCount} chatUnread={chatUnread}
       onAlertsToggle={()=>{setAlertsOpen(o=>!o);setChatOpen(false);}}
       onChatToggle={()=>{const opening=!chatOpen;setChatOpen(opening);setAlertsOpen(false);if(opening){const now=new Date().toISOString();setChatLastSeen(now);localStorage.setItem('bushingTracker.chatLastSeen',now);}}}
+      onBack={mobileBack}
     />
     <NavTabs current={navCurrent} onChange={onNav}/>
     <div className="content" style={chatOpen?{paddingRight:336}:{}}>
@@ -2483,7 +2644,7 @@ function App(){
     {alertsOpen&&<div style={{position:'fixed',inset:0,zIndex:599}} onClick={()=>setAlertsOpen(false)}/>}
     {alertsOpen&&<AlertsDropdown alerts={alerts} onClose={()=>setAlertsOpen(false)} onMarkAllRead={markAllAlertsRead} onClickAlert={handleAlertClick}/>}
     {chatOpen&&<ChatPanel messages={chatMessages} currentUser={currentUser} onSend={sendChatMessage} onClose={()=>setChatOpen(false)}/>}
-    <div style={{position:'fixed',bottom:16,right:chatOpen?336:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8,transition:'right .15s'}}>
+    <div className="tweaks-wrap" style={{position:'fixed',bottom:16,right:chatOpen?336:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8,transition:'right .15s'}}>
       <button className="btn sm" onClick={()=>setTweaksOpen(o=>!o)}>{tweaksOpen?'✕ close':'⚙ tweaks'}</button>
       {tweaksOpen&&(<div style={{background:'var(--paper)',border:'2px solid var(--line)',borderRadius:'6px 14px 6px 14px',padding:'14px 16px',boxShadow:'4px 4px 0 #8a7f72',width:260}}>
         <h4 style={{fontFamily:'var(--title)',fontSize:15,fontWeight:700,margin:'0 0 8px',letterSpacing:'-0.01em',color:'var(--ink)'}}>Tweaks</h4>
