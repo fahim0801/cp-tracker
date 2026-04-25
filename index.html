@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>CrossLink — Bushing Pipeline</title>
+  <title>Crosslink CP Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -500,7 +500,7 @@ window.PROJECT_STAGES = [
 ];
 
 window.TEAM = [
-  { id: 'mike',     name: 'Mike',     role: 'Sales (Senior)',   initials: 'MK', hue: 28  },
+  { id: 'mike',     name: 'Mike',     role: 'Sales',            initials: 'MK', hue: 28  },
   { id: 'fahim',    name: 'Fahim',    role: 'Sales / Service',  initials: 'FH', hue: 195 },
   { id: 'ahmad',    name: 'Ahmad',    role: 'Engineering',      initials: 'AH', hue: 135 },
   { id: 'jianming', name: 'Jianming', role: 'Purchasing',       initials: 'JM', hue: 280 }
@@ -836,7 +836,7 @@ function Modal({title,onClose,children,width=520}){
 }
 function TopBar({crumbs,currentUser,onlineUsers,onLogout,alertCount,chatUnread,onAlertsToggle,onChatToggle}){
   return(<div className="topbar">
-    <div className="brand">CrossLink <span>Bushing Pipeline</span></div>
+    <div className="brand">Crosslink <span>CP Tracker</span></div>
     <div className="crumbs">{crumbs.map((c,i)=>(<React.Fragment key={i}>{i>0&&<span> / </span>}{c.onClick?<a onClick={c.onClick}>{c.label}</a>:<span>{c.label}</span>}</React.Fragment>))}</div>
     <div className="presence"><span className="presence-label">online</span>{window.TEAM.map(t=><Avatar key={t.id} personId={t.id} size="sm" viewing={!!(onlineUsers&&onlineUsers[t.id])}/>)}</div>
     <div style={{display:'flex',gap:6,marginLeft:8}}>
