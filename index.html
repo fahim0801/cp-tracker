@@ -422,6 +422,45 @@ a.scribble:hover { background: rgba(217,119,87,0.1); }
 .status-bar{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap}
 .status-bar .sbtn{padding:6px 14px;font-size:12px;border-radius:4px 8px 4px 8px;border:1.5px solid var(--line);background:var(--paper-2);cursor:pointer;font-family:var(--hand);font-weight:600}
 .status-bar .sbtn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* Chat panel */
+.chat-panel{position:fixed;right:0;top:52px;bottom:0;width:320px;background:var(--paper);border-left:1.5px solid var(--line);z-index:350;display:flex;flex-direction:column;box-shadow:-4px 0 16px rgba(26,23,19,0.1)}
+.chat-hdr{padding:12px 16px;border-bottom:1.5px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.chat-hdr h4{font-family:var(--title);font-size:14px;font-weight:700;margin:0;letter-spacing:-.01em}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.chat-msg{display:flex;gap:8px}
+.chat-msg .cmb{flex:1;min-width:0}
+.chat-msg .who{font-family:var(--hand);font-weight:600;font-size:12px}
+.chat-msg .when{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-left:6px}
+.chat-msg .txt{font-family:var(--hand);font-size:13px;margin-top:2px;line-height:1.5;word-break:break-word}
+.chat-msg .txt .mtn{color:var(--accent-2);font-weight:600}
+.chat-cmp{padding:10px 14px;border-top:1.5px solid var(--line);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.chat-cmp textarea{flex:1;font-family:var(--hand);font-size:13px;border:1.5px solid var(--line);border-radius:4px 8px 4px 8px;padding:7px 9px;background:var(--paper-2);resize:none;min-height:36px;max-height:90px;line-height:1.4}
+.chat-cmp textarea:focus{outline:none;border-color:var(--accent-2)}
+/* Topbar icon buttons */
+.tb-icon-btn{position:relative;display:inline-flex}
+.tb-icon-btn button{background:transparent;border:1.5px solid var(--line);border-radius:6px 10px 6px 10px;padding:4px 9px;cursor:pointer;font-size:14px;color:var(--ink-2);transition:background .1s;line-height:1}
+.tb-icon-btn button:hover{background:var(--paper-2)}
+.tb-badge{position:absolute;top:-5px;right:-5px;background:var(--accent);color:white;font-family:var(--mono);font-size:9px;font-weight:700;padding:0 4px;border-radius:8px;min-width:15px;height:15px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+/* Alerts dropdown */
+.alerts-drop{position:fixed;top:54px;right:16px;width:300px;background:var(--paper);border:1.5px solid var(--line);border-radius:6px 14px 6px 14px;box-shadow:4px 4px 0 var(--ink-3);z-index:600;overflow:hidden;max-height:400px;display:flex;flex-direction:column}
+.alerts-drop .adh{padding:10px 14px;border-bottom:1.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.alerts-drop .adh-title{font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.alerts-drop .adlist{overflow-y:auto;flex:1}
+.alert-item{padding:9px 14px;border-bottom:1px dashed var(--ink-3);cursor:pointer;transition:background .08s}
+.alert-item:last-child{border-bottom:none}
+.alert-item:hover{background:var(--paper-2)}
+.alert-item.unread{border-left:3px solid var(--accent);padding-left:11px}
+.alert-item .ai-who{font-family:var(--hand);font-weight:600;font-size:12px;color:var(--ink)}
+.alert-item .ai-ctx{font-family:var(--mono);font-size:10px;color:var(--ink-3);margin-left:6px}
+.alert-item .ai-text{font-size:12px;margin-top:3px;color:var(--ink-2);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+/* Mention autocomplete */
+.mention-wrap{position:relative;flex:1;display:flex}
+.mention-wrap textarea{width:100%}
+.mention-list{position:absolute;bottom:calc(100% + 2px);left:0;background:var(--paper);border:1.5px solid var(--line);border-radius:4px 10px 4px 10px;box-shadow:3px 3px 0 var(--ink-3);z-index:700;overflow:hidden;min-width:180px}
+.mention-item{padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.mention-item:hover,.mention-item.sel{background:var(--paper-2)}
+.mention-item .mn{font-family:var(--hand);font-weight:600;font-size:13px}
+.mention-item .mr{font-family:var(--mono);font-size:10px;color:var(--ink-3)}
 
   </style>
 </head>
@@ -795,11 +834,15 @@ function Modal({title,onClose,children,width=520}){
   useEffect(()=>{const h=e=>{if(e.key==='Escape')onClose()};document.addEventListener('keydown',h);return()=>document.removeEventListener('keydown',h);},[]);
   return(<div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose()}}><div className="modal-box" style={{maxWidth:width}}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}><h3 style={{margin:0,fontSize:18}}>{title}</h3><button className="btn sm" onClick={onClose}>✕</button></div>{children}</div></div>);
 }
-function TopBar({crumbs,currentUser,onlineUsers,onLogout}){
+function TopBar({crumbs,currentUser,onlineUsers,onLogout,alertCount,chatUnread,onAlertsToggle,onChatToggle}){
   return(<div className="topbar">
     <div className="brand">CrossLink <span>Bushing Pipeline</span></div>
     <div className="crumbs">{crumbs.map((c,i)=>(<React.Fragment key={i}>{i>0&&<span> / </span>}{c.onClick?<a onClick={c.onClick}>{c.label}</a>:<span>{c.label}</span>}</React.Fragment>))}</div>
     <div className="presence"><span className="presence-label">online</span>{window.TEAM.map(t=><Avatar key={t.id} personId={t.id} size="sm" viewing={!!(onlineUsers&&onlineUsers[t.id])}/>)}</div>
+    <div style={{display:'flex',gap:6,marginLeft:8}}>
+      <div className="tb-icon-btn"><button onClick={onAlertsToggle} title="Mentions &amp; alerts">🔔</button>{alertCount>0&&<span className="tb-badge">{alertCount}</span>}</div>
+      <div className="tb-icon-btn"><button onClick={onChatToggle} title="Team chat">💬</button>{chatUnread>0&&<span className="tb-badge">{chatUnread}</span>}</div>
+    </div>
     {currentUser&&(<div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8,paddingLeft:12,borderLeft:'1px dashed var(--ink-3)'}}><Avatar personId={currentUser.id} size="sm"/><span style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--ink-3)'}}>{currentUser.name}</span><button className="btn sm" onClick={onLogout} style={{fontSize:10,padding:'2px 8px'}}>sign out</button></div>)}
   </div>);
 }
@@ -1079,7 +1122,7 @@ function DashboardKanban({onOpenInquiry}){
 window.Dashboards={DashboardLanes,DashboardList,DashboardKanban};
 </script>
   <script type="text/babel">
-const { useState: useStateA, useMemo: useMemoA, useEffect: useEffectA } = React;
+const { useState: useStateA, useMemo: useMemoA, useEffect: useEffectA, useRef: useRefA } = React;
 const { Avatar: Av2, StagePill: SP2, PriorityPill: PP2, TierPill: TP2,
         InquiryCard: IC2, StageTrack: ST2, ActivityThread: AT2, Modal,
         cls: cls2, daysSince: ds2, isComplete: ic2, isOverdue: od2, isStuck: stk2, owedBy: ow2,
@@ -1557,8 +1600,7 @@ function InquiryDetail({inquiry,onOpenAccount,onDeleteInquiry,onArchiveInquiry,o
       <h4>Updates & discussion</h4>
       <div className="composer">
         <Av2 personId={window.CURRENT_USER?.id||'fahim'} size="sm"/>
-        <textarea placeholder="post an update… (Cmd/Ctrl+Enter to submit)" value={draft} onChange={e=>setDraft(e.target.value)}
-          onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))postUpdate()}}/>
+        <MentionTextarea value={draft} onChange={setDraft} onSubmit={postUpdate} placeholder="post an update… @ to mention someone"/>
         <button className="btn primary" onClick={postUpdate}>post</button>
       </div>
       <div style={{marginTop:12}}><AT2 activity={inq.activity||[]}/></div>
@@ -1657,7 +1699,16 @@ function RFQDetail({inq,onOpenAccount,onUpdateInquiry,ActionSidebar,ActivityPane
         <ST2 currentStageId={inq.stage}/>
         {!inq.archived&&(
           <div style={{marginTop:16,padding:12,background:'#faf8ec',border:'1.2px dashed #2a2420',borderRadius:6}}>
-            <div className="mono-sm" style={{marginBottom:4}}>currently waiting on</div>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,flexWrap:'wrap'}}>
+              <div className="mono-sm">assign to</div>
+              <select className="form-select" style={{width:'auto',flex:1,maxWidth:240,fontSize:12}}
+                value={inq.waitingOn||''}
+                onChange={e=>onUpdateInquiry(inq.id,{waitingOn:e.target.value||null})}>
+                <option value="">stage default — {pers2(s?.owner?.toLowerCase())?.name||s?.owner||'—'}</option>
+                {window.TEAM.map(t=><option key={t.id} value={t.id}>{t.name} — {t.role}</option>)}
+                <option value="client">Customer</option>
+              </select>
+            </div>
             {inq.waitingOn==='client'?(
               <div style={{display:'flex',alignItems:'center',gap:10}}>
                 <div className="avatar lg" style={{background:'#f3efde'}}>CX</div>
@@ -1808,6 +1859,18 @@ function ProjectDetail({inq,onOpenAccount,onUpdateInquiry,ActionSidebar,Activity
             <div className="fields-grid">
               <EditableField k="potential volume" v={inq.potentialVolume} onSave={v=>onUpdateInquiry(inq.id,{potentialVolume:v})} readOnly={!!inq.archived} placeholder="e.g. 200 units/yr"/>
               <EditableField k="potential revenue" v={inq.potentialRevenue} onSave={v=>onUpdateInquiry(inq.id,{potentialRevenue:v})} readOnly={!!inq.archived} placeholder="e.g. $500K"/>
+              <div className="field">
+                <div className="k">assigned to</div>
+                <div style={{display:'flex',alignItems:'center',gap:6,marginTop:2}}>
+                  {inq.assignedTo&&<Av2 personId={inq.assignedTo} size="sm"/>}
+                  {!inq.archived
+                    ?<select className="form-select" style={{fontSize:12,flex:1}} value={inq.assignedTo||''} onChange={e=>onUpdateInquiry(inq.id,{assignedTo:e.target.value||null})}>
+                        <option value="">unassigned</option>
+                        {window.TEAM.map(t=><option key={t.id} value={t.id}>{t.name} — {t.role}</option>)}
+                      </select>
+                    :<span className="v">{pers2(inq.assignedTo)?.name||'unassigned'}</span>}
+                </div>
+              </div>
               <Field k="priority" v={inq.priority||'med'}/>
               <Field k="last updated" v={`${inq.updated} · ${pers2(inq.updatedBy)?.name}`} mono/>
             </div>
@@ -2004,7 +2067,111 @@ function KeyProjects({onOpenInquiry,onAddInquiry}){
   );
 }
 
-window.Views={AccountsList,AccountDetail,InquiryDetail,AllInquiries,KeyProjects};
+// ── Mention / Chat / Alerts components ───────────────────────────────────────
+function renderMentions(text){
+  return(text||'').split(/(@\w+)/g).map((p,i)=>{
+    if(/^@\w+$/.test(p)){const nm=p.slice(1).toLowerCase();const t=window.TEAM.find(m=>m.name.toLowerCase()===nm||m.id===nm);if(t)return<span key={i} className="mtn">{p}</span>;}
+    return<React.Fragment key={i}>{p}</React.Fragment>;
+  });
+}
+function MentionTextarea({value,onChange,onSubmit,placeholder,minHeight=60}){
+  const [mSearch,setMSearch]=useStateA(null);
+  const [selIdx,setSelIdx]=useStateA(0);
+  const ref=useRefA(null);
+  const filtered=mSearch!=null?window.TEAM.filter(t=>t.name.toLowerCase().startsWith(mSearch.toLowerCase())||t.id.startsWith(mSearch.toLowerCase())):[];
+  function handleChange(e){
+    const v=e.target.value;onChange(v);
+    const pos=e.target.selectionStart;const before=v.slice(0,pos);
+    const m=before.match(/@(\w*)$/);
+    if(m){setMSearch(m[1]);setSelIdx(0);}else{setMSearch(null);}
+  }
+  function insertMention(t){
+    if(!ref.current)return;
+    const pos=ref.current.selectionStart;const before=value.slice(0,pos);const after=value.slice(pos);
+    const m=before.match(/@(\w*)$/);if(!m)return;
+    const nb=before.slice(0,before.length-m[0].length)+`@${t.name} `;
+    onChange(nb+after);setMSearch(null);
+    setTimeout(()=>{if(ref.current){ref.current.focus();ref.current.setSelectionRange(nb.length,nb.length);}},0);
+  }
+  function handleKeyDown(e){
+    if(mSearch!=null&&filtered.length>0){
+      if(e.key==='ArrowDown'){e.preventDefault();setSelIdx(i=>(i+1)%filtered.length);return;}
+      if(e.key==='ArrowUp'){e.preventDefault();setSelIdx(i=>(i-1+filtered.length)%filtered.length);return;}
+      if(e.key==='Tab'||(e.key==='Enter'&&!e.metaKey&&!e.ctrlKey)){e.preventDefault();insertMention(filtered[selIdx]||filtered[0]);return;}
+      if(e.key==='Escape'){setMSearch(null);return;}
+    }
+    if(onSubmit&&e.key==='Enter'&&(e.metaKey||e.ctrlKey)){onSubmit();}
+  }
+  return(
+    <div className="mention-wrap">
+      {mSearch!=null&&filtered.length>0&&(
+        <div className="mention-list">
+          {filtered.map((t,i)=>(
+            <div key={t.id} className={cls2('mention-item',i===selIdx&&'sel')} onMouseDown={ev=>{ev.preventDefault();insertMention(t);}}>
+              <Av2 personId={t.id} size="sm"/>
+              <span className="mn">{t.name}</span><span className="mr">{t.role}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      <textarea ref={ref} placeholder={placeholder} value={value}
+        style={{minHeight,resize:'vertical',width:'100%',fontFamily:'var(--hand)',fontSize:13,border:'1.5px solid var(--line)',borderRadius:'4px 8px 4px 10px',padding:'8px 10px',background:'var(--paper)'}}
+        onChange={handleChange} onKeyDown={handleKeyDown}/>
+    </div>
+  );
+}
+function ChatPanel({messages,currentUser,onSend,onClose}){
+  const [draft,setDraft]=useStateA('');
+  const bottomRef=useRefA(null);
+  useEffectA(()=>{bottomRef.current?.scrollIntoView({behavior:'smooth'});},[messages.length]);
+  function send(){if(!draft.trim())return;onSend(draft.trim());setDraft('');}
+  return(
+    <div className="chat-panel">
+      <div className="chat-hdr">
+        <h4>💬 Team Chat</h4>
+        <button className="btn sm" onClick={onClose}>✕</button>
+      </div>
+      <div className="chat-msgs">
+        {messages.length===0&&<div className="empty" style={{marginTop:20}}>No messages yet — say hi!</div>}
+        {messages.map((m,i)=>{const p=pers2(m.by);return(
+          <div key={m.id||i} className="chat-msg">
+            <Av2 personId={m.by} size="sm"/>
+            <div className="cmb">
+              <div><span className="who">{p?.name||m.by}</span><span className="when">{(m.at||'').slice(0,16).replace('T',' ')}</span></div>
+              <div className="txt">{renderMentions(m.text)}</div>
+            </div>
+          </div>
+        );})}
+        <div ref={bottomRef}/>
+      </div>
+      <div className="chat-cmp">
+        <MentionTextarea value={draft} onChange={setDraft} onSubmit={send} placeholder="message the team… @ to mention" minHeight={36}/>
+        <button className="btn primary sm" onClick={send} style={{flexShrink:0}}>→</button>
+      </div>
+    </div>
+  );
+}
+function AlertsDropdown({alerts,onClose,onMarkAllRead,onClickAlert}){
+  const unread=alerts.filter(a=>!a.read).length;
+  return(
+    <div className="alerts-drop">
+      <div className="adh">
+        <span className="adh-title">Mentions {unread>0&&`(${unread} new)`}</span>
+        {unread>0&&<button className="btn sm" style={{fontSize:10,padding:'2px 8px'}} onClick={onMarkAllRead}>mark all read</button>}
+      </div>
+      <div className="adlist">
+        {alerts.length===0&&<div className="empty" style={{padding:'16px 14px'}}>No mentions yet.</div>}
+        {alerts.map(a=>{const from=pers2(a.fromUser);return(
+          <div key={a.id} className={cls2('alert-item',!a.read&&'unread')} onClick={()=>onClickAlert(a)}>
+            <div><span className="ai-who">{from?.name||a.fromUser}</span><span className="ai-ctx">in {a.inquiryRef||'Team Chat'}</span></div>
+            <div className="ai-text">{a.text}</div>
+          </div>
+        );})}
+      </div>
+    </div>
+  );
+}
+window.Views={AccountsList,AccountDetail,InquiryDetail,AllInquiries,KeyProjects,ChatPanel,AlertsDropdown};
 </script>
   <script type="text/babel">
 function LoginScreen({onLogin}){
@@ -2059,11 +2226,13 @@ function LoginScreen({onLogin}){
 const { useState, useEffect, useRef } = React;
 const { TopBar, NavTabs } = window.Wire;
 const { DashboardLanes, DashboardList, DashboardKanban } = window.Dashboards;
-const { AccountsList, AccountDetail, InquiryDetail, AllInquiries, KeyProjects } = window.Views;
+const { AccountsList, AccountDetail, InquiryDetail, AllInquiries, KeyProjects, ChatPanel, AlertsDropdown } = window.Views;
 
 const LS_KEY='bushingTracker.route.v1', USER_KEY='bushingTracker.user.v1';
 const DOC_REF=window.db.collection('tracker').doc('main');
 const PRES_COL=()=>window.db.collection('presence');
+const CHAT_COL=()=>window.db.collection('chat');
+const ALERTS_COL=()=>window.db.collection('alerts');
 
 function loadRoute(){try{return JSON.parse(localStorage.getItem(LS_KEY))||null}catch{return null}}
 function saveRoute(r){localStorage.setItem(LS_KEY,JSON.stringify(r))}
@@ -2080,6 +2249,11 @@ function App(){
   const [route,setRoute]=useState(init);
   const [tweaks,setTweaks]=useState({...window.TWEAK_DEFAULTS});
   const [tweaksOpen,setTweaksOpen]=useState(false);
+  const [chatMessages,setChatMessages]=useState([]);
+  const [alerts,setAlerts]=useState([]);
+  const [chatOpen,setChatOpen]=useState(false);
+  const [alertsOpen,setAlertsOpen]=useState(false);
+  const [chatLastSeen,setChatLastSeen]=useState(()=>localStorage.getItem('bushingTracker.chatLastSeen')||'');
 
   useEffect(()=>{
     const unsub=DOC_REF.onSnapshot(snap=>{
@@ -2097,7 +2271,8 @@ function App(){
     const write=()=>ref.set({userId:currentUser.id,lastSeen:new Date().toISOString(),view:route.view});
     write();const iv=setInterval(write,90000);
     const unsubs=window.TEAM.map(t=>PRES_COL().doc(t.id).onSnapshot(snap=>{
-      if(!snap.exists)return;const d=snap.data();
+      if(!snap.exists){setOnlineUsers(p=>({...p,[t.id]:false}));return;}
+      const d=snap.data();
       setOnlineUsers(p=>({...p,[t.id]:d.lastSeen&&(Date.now()-new Date(d.lastSeen).getTime())<3*60*1000}));
     }));
     return()=>{unsubs.forEach(u=>u());clearInterval(iv)};
@@ -2106,13 +2281,51 @@ function App(){
   useEffect(()=>{saveRoute(route)},[route]);
   useEffect(()=>{document.body.classList.toggle('dense',tweaks.density==='dense');document.body.classList.toggle('hide-presence',!tweaks.showPresence)},[tweaks]);
 
+  useEffect(()=>{
+    if(!currentUser)return;
+    const unsub=CHAT_COL().orderBy('at').limitToLast(60).onSnapshot(snap=>{
+      const msgs=[];snap.forEach(d=>msgs.push({id:d.id,...d.data()}));setChatMessages(msgs);
+    },err=>console.error('chat listener:',err));
+    return()=>unsub();
+  },[currentUser?.id]);
+
+  useEffect(()=>{
+    if(!currentUser)return;
+    const unsub=ALERTS_COL().where('toUser','==',currentUser.id).onSnapshot(snap=>{
+      const als=[];snap.forEach(d=>als.push({id:d.id,...d.data()}));
+      als.sort((a,b)=>b.at>a.at?1:-1);setAlerts(als.slice(0,30));
+    },err=>console.error('alerts listener:',err));
+    return()=>unsub();
+  },[currentUser?.id]);
+
   function login(user){window.CURRENT_USER=user;setCurrentUser(user);localStorage.setItem(USER_KEY,JSON.stringify(user))}
-  function logout(){if(currentUser)PRES_COL().doc(currentUser.id).delete();window.CURRENT_USER=null;setCurrentUser(null);localStorage.removeItem(USER_KEY)}
+  function logout(){if(currentUser)PRES_COL().doc(currentUser.id).delete();window.CURRENT_USER=null;setCurrentUser(null);setOnlineUsers({});localStorage.removeItem(USER_KEY)}
 
   function mutate(fn){
     setAccounts(prev=>{const next=fn(prev);window.ACCOUNTS=next;skipNextSnap.current=true;DOC_REF.set({accounts:next});return next});
     setRevision(r=>r+1);
   }
+
+  // ── chat / mention helpers ────────────────────────────────────────────────────
+  function extractMentionedIds(text){
+    const matches=text.match(/@(\w+)/g)||[];
+    return[...new Set(matches.map(m=>m.slice(1).toLowerCase()).map(nm=>window.TEAM.find(t=>t.name.toLowerCase()===nm||t.id===nm)).filter(Boolean).map(t=>t.id))];
+  }
+  function createMentionAlerts(text,fromUserId,context){
+    const ids=extractMentionedIds(text).filter(id=>id!==fromUserId);
+    if(!ids.length)return;
+    const at=new Date().toISOString();
+    ids.forEach(toUser=>ALERTS_COL().add({toUser,fromUser:fromUserId,text,inquiryId:context.inquiryId||null,inquiryRef:context.inquiryRef||null,at,read:false}));
+  }
+  function sendChatMessage(text){
+    if(!text.trim()||!currentUser)return;
+    const at=new Date().toISOString();
+    CHAT_COL().add({by:currentUser.id,at,text:text.trim()});
+    createMentionAlerts(text.trim(),currentUser.id,{inquiryId:null,inquiryRef:'Team Chat'});
+    setChatLastSeen(at);localStorage.setItem('bushingTracker.chatLastSeen',at);
+  }
+  function markAlertRead(alertId){ALERTS_COL().doc(alertId).update({read:true});setAlerts(prev=>prev.map(a=>a.id===alertId?{...a,read:true}:a));}
+  function markAllAlertsRead(){alerts.filter(a=>!a.read).forEach(a=>ALERTS_COL().doc(a.id).update({read:true}));setAlerts(prev=>prev.map(a=>({...a,read:true})));}
 
   // ── mutations ────────────────────────────────────────────────────────────────
   function deleteInquiry(id){
@@ -2127,6 +2340,7 @@ function App(){
   function archiveProject(id){mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>p.id===id?{...p,archived:true,inquiries:p.inquiries.map(i=>({...i,archived:true}))}:p)})))}
   function postActivity(inquiryId,item){
     mutate(a=>a.map(ac=>({...ac,projects:ac.projects.map(p=>({...p,inquiries:p.inquiries.map(i=>i.id===inquiryId?{...i,activity:[item,...(i.activity||[])],updated:item.at,updatedBy:item.by}:i)}))})));
+    createMentionAlerts(item.text,item.by,{inquiryId,inquiryRef:'#'+inquiryId});
   }
   function updateInquiry(id,fields){
     const today=new Date().toISOString().slice(0,10);
@@ -2238,10 +2452,27 @@ function App(){
   if(loading)return<div className="loader">connecting to firebase…</div>;
   const liveInquiry=resolveInquiry(route.inquiry);
 
+  const alertCount=alerts.filter(a=>!a.read).length;
+  const chatUnread=chatMessages.filter(m=>m.by!==currentUser.id&&m.at>(chatLastSeen||'')).length;
+
+  function handleAlertClick(a){
+    markAlertRead(a.id);
+    if(a.inquiryId){
+      let found=null;
+      outer:for(const ac of accounts)for(const p of ac.projects)for(const i of p.inquiries)if(i.id===a.inquiryId){found={...i,accountId:ac.id,accountName:ac.name,projectId:p.id,projectName:p.name};break outer;}
+      if(found)setRoute({view:'inquiry',accountId:found.accountId,inquiry:found});
+    }
+    setAlertsOpen(false);
+  }
+
   return(<div>
-    <TopBar crumbs={crumbs} currentUser={currentUser} onlineUsers={onlineUsers} onLogout={logout}/>
+    <TopBar crumbs={crumbs} currentUser={currentUser} onlineUsers={onlineUsers} onLogout={logout}
+      alertCount={alertCount} chatUnread={chatUnread}
+      onAlertsToggle={()=>{setAlertsOpen(o=>!o);setChatOpen(false);}}
+      onChatToggle={()=>{const opening=!chatOpen;setChatOpen(opening);setAlertsOpen(false);if(opening){const now=new Date().toISOString();setChatLastSeen(now);localStorage.setItem('bushingTracker.chatLastSeen',now);}}}
+    />
     <NavTabs current={navCurrent} onChange={onNav}/>
-    <div className="content">
+    <div className="content" style={chatOpen?{paddingRight:336}:{}}>
       {route.view==='dashboard'&&(<React.Fragment key={`dash-${revision}`}>{tweaks.dashboardVariant==='lanes'?<DashboardLanes onOpenInquiry={openInquiry}/>:tweaks.dashboardVariant==='list'?<DashboardList onOpenInquiry={openInquiry}/>:<DashboardKanban onOpenInquiry={openInquiry}/>}</React.Fragment>)}
       {route.view==='accounts'&&<AccountsList onOpenAccount={openAccount} onAddAccount={addAccount}/>}
       {route.view==='all'&&<AllInquiries key={`all-${revision}`} onOpenInquiry={openInquiry}/>}
@@ -2249,7 +2480,10 @@ function App(){
       {route.view==='account'&&<AccountDetail accountId={route.accountId} onOpenInquiry={openInquiry} {...mutations}/>}
       {route.view==='inquiry'&&liveInquiry&&<InquiryDetail key={liveInquiry.id} inquiry={liveInquiry} onOpenAccount={openAccount} {...mutations}/>}
     </div>
-    <div style={{position:'fixed',bottom:16,right:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8}}>
+    {alertsOpen&&<div style={{position:'fixed',inset:0,zIndex:599}} onClick={()=>setAlertsOpen(false)}/>}
+    {alertsOpen&&<AlertsDropdown alerts={alerts} onClose={()=>setAlertsOpen(false)} onMarkAllRead={markAllAlertsRead} onClickAlert={handleAlertClick}/>}
+    {chatOpen&&<ChatPanel messages={chatMessages} currentUser={currentUser} onSend={sendChatMessage} onClose={()=>setChatOpen(false)}/>}
+    <div style={{position:'fixed',bottom:16,right:chatOpen?336:16,zIndex:200,display:'flex',flexDirection:'column',alignItems:'flex-end',gap:8,transition:'right .15s'}}>
       <button className="btn sm" onClick={()=>setTweaksOpen(o=>!o)}>{tweaksOpen?'✕ close':'⚙ tweaks'}</button>
       {tweaksOpen&&(<div style={{background:'var(--paper)',border:'2px solid var(--line)',borderRadius:'6px 14px 6px 14px',padding:'14px 16px',boxShadow:'4px 4px 0 #8a7f72',width:260}}>
         <h4 style={{fontFamily:'var(--title)',fontSize:15,fontWeight:700,margin:'0 0 8px',letterSpacing:'-0.01em',color:'var(--ink)'}}>Tweaks</h4>
